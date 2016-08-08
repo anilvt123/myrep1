@@ -1,0 +1,32 @@
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 200> sh cat ./dirmac/EXCEPTIONS.sql
+
+-- Create the Global Exception Table:
+CREATE TABLE oggadm1.EXCEPTIONS
+(
+ excp_date timestamp(6) default systimestamp,
+ rep_name varchar2(10),
+ table_name varchar2(56),
+ errno number,
+ dberrmsg varchar2(4000),
+ errtype varchar2(6),
+ optype varchar2(24),
+ transind varchar2(12),
+ transimgind varchar2(8),
+ committimestamp varchar2(26),
+ reccsn number,
+ recseqno number,
+ recrba number,
+ rectranspos number,
+ reclength number,
+ logrba number,
+ logposition number,
+ grouptype varchar2(12),
+ filename varchar2(50),
+ fileno number,
+ srcrowid varchar2(40),
+ srcdbcharset varchar2(40),
+ replag number,
+ cnt_cdr_conflicts number,
+ cnt_cdr_resolutions number,
+ cnt_cdr_failed number
+);

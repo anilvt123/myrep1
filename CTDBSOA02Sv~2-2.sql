@@ -1,0 +1,852 @@
+ select * from v$spparameter where name like '%process%'
+   select * from v$spparameter where name like '%target%'
+      select * from v$spparameter where name like '%cache%'
+select component, oper_type, parameter, initial_size, target_size, final_size from v$sga_resize_ops where component like '%streams%'
+select * from v$sga_resize_ops where component like '%streams%' order by start_time desc
+SELECT NAME, BYTES   FROM   v$sgainfo where name like '%Streams%';
+-- First make sure there is enough free space to increase the Streams pool
+ SELECT CURRENT_SIZE/1024/1024 FREESPACE_MB FROM V$SGA_DYNAMIC_FREE_MEMORY; 
+ Select current_size from v$sga_dynamic_components where component = 'streams pool';
+ select name, thread#, sequence# from v$archived_log order by 3 desc; 
+ select name, thread#, sequence# from v$archived_log  where 1855798 between first_change# and next_change#; 
+
+
+http://docs.oracle.com/goldengate/c1221/gg-winux/GWUAD/wu_adminops.htm#GWUAD982
+
+select START_DATE, LAST_START_DATE, NEXT_RUN_DATE 
+from dba_scheduler_jobs 
+Where job_name ='GG_UPDATE_HEARTBEATS';
+
+Configuration Views
+select * from   DBA_GOLDENGATE_PRIVILEGES
+select * from   DBA_GOLDENGATE_SUPPORT_MODE
+
+select * from   DBA_CAPTURE
+select * from     DBA_CAPTURE_PARAMETERS
+select * from    DBA_APPLY_PARAMETERS
+
+select * from   DBA_GOLDENGATE_INBOUND
+select * from   DBA_GG_INBOUND_PROGRESS
+select * from   DBA_APPLY
+
+select * from   DBA_APPLY_REPERROR_HANDLERS
+select * from   DBA_APPLY_HANDLE_COLLISIONS
+select * from   DBA_APPLY_DML_CONF_HANDLERS
+
+
+Run Time Views
+
+select * from   V$GOLDENGATE_CAPTURE
+select * from   V$GG_APPLY_RECEIVER
+select * from   V$GG_APPLY_READER
+select * from  V$GG_APPLY_COORDINATOR
+select * from  V$GG_APPLY_SERVER
+
+select * from   V$GOLDENGATE_TABLE_STATS
+select * from  V$GOLDENGATE_CAPABILITIES
+
+REGISTER EXTRACT eicx LOGRETENTION
+SELECT capture_name, start_scn, required_checkpoint_scn, capture_type FROM dba_capture
+https://community.oracle.com/thread/2476622?tstart=0
+INFO eicx, SHOWCH
+SELECT sequence#, first_change#, next_change# FROM v$archived_log ORDER BY sequence# DESC;
+
+select 'arch',sequence#,first_time,next_time,RESETLOGS_TIME from v$archived_log where &your_scn between first_change# and next_change#
+union all
+select 'log-hist',sequence#,first_time,null,RESETLOGS_TIME from v$log_history where &your_scn between first_change# and next_change#
+union all
+select 'log-current',sequence#,first_time,next_time,null from v$log where &your_scn between first_change# and next_change#
+
+select session_restart_scn from v$streams_capture;
+
+select 'arch',sequence#,first_time,next_time,RESETLOGS_TIME from v$archived_log order by 2 desc
+union all
+select 'log-hist',sequence#,first_time,null,RESETLOGS_TIME from v$log_history order by 2 desc
+union all
+select 'log-current',sequence#,first_time,next_time,null from v$log order by 2 desc
+
+------------------------------------------------------------------
+Test1_2.
+
+select * from c022427.Test_1_1to2
+
+create table c022427.Test_1_2to1 ( a number );
+insert into c022427.Test_1_2to1 values(1);
+commit;
+
+select * from c022427.Test_1_2to1
+
+
+create table c022427.Test_3_2to1 ( a number );
+insert into c022427.Test_3_2to1 values(1);
+commit;
+select * from c022427.Test_3_2to1
+
+create table c022427.Test_4_2to1 ( a number );
+insert into c022427.Test_4_2to1 values(1);
+commit;
+select * from c022427.Test_4_2to1
+select * from tab
+
+------------------------------------------------------------------
+
+create table big_table22
+as
+select rownum id,
+               OWNER, OBJECT_NAME, SUBOBJECT_NAME,
+               OBJECT_ID, DATA_OBJECT_ID,
+               OBJECT_TYPE, CREATED, LAST_DDL_TIME,
+               TIMESTAMP, STATUS, TEMPORARY,
+               GENERATED, SECONDARY
+  from all_objects a
+ where 1=0;
+ 
+ alter table big_table22 nologging;
+
+insert /*+ append */
+    into big_table
+    select rownum,
+               OWNER, OBJECT_NAME, SUBOBJECT_NAME,
+               OBJECT_ID, DATA_OBJECT_ID,
+               OBJECT_TYPE, CREATED, LAST_DDL_TIME,
+               TIMESTAMP, STATUS, TEMPORARY,
+               GENERATED, SECONDARY
+      from all_objects a
+     where rownum <= 3;
+     
+     commit;
+     
+  execute dbms_stats.gather_table_stats ( ownname => user,tabname => 'big_table22' , cascade => TRUE ); 
+
+select count(*) from big_table2;  
+select count(*) from big_table22;  
+
+--step2
+CREATE TABLE test_table_for_replication2 AS
+SELECT LEVEL id, SYSDATE+DBMS_RANDOM.VALUE(-1000, 1000) date_value, DBMS_RANDOM.string('A', 20) text_value
+FROM dual
+CONNECT BY LEVEL <= 100000;
+
+--alter table test_table_for_replication1 add constraint big_table_pk primary key(id)
+execute dbms_stats.gather_table_stats ( ownname => user,tabname => 'test_table_for_replication2' , cascade => TRUE ); 
+select count(*) from test_table_for_replication2;
+
+create table anil2to1 ( a number );
+insert into anil2to1 values(91);
+commit;
+
+create table anil2to1 ( a number );
+insert into anil1to2 values(98);
+commit;
+drop table anil1 purge;
+select * from anil1to2 order by 1 desc
+
+select * from tab 
+
+drop table big_table22 purge ;
+drop table anil1 purge ;
+drop table test_table_for_replication2 purge ;
+
+
+--Trigger test from source to target 
+
+CREATE TABLE Trig_test ( info VARCHAR2(100));
+
+--create trigger on both ends
+CREATE OR REPLACE TRIGGER big_table_after_insert
+AFTER INSERT
+   ON big_table
+   FOR EACH ROW
+DECLARE
+BEGIN
+   INSERT INTO Trig_test  VALUES ( 'Data Inserted') ;
+END;
+
+select count(*) from Trig_test;     
+select count(*) from big_table; 
+
+--------------------------Sequences--------------------------------------------------------------------
+select sequence_name, last_number from dba_sequences where sequence_owner='SOAINTERNAL' order by 2 desc;
+SELECT DBMS_METADATA.GET_DDL(upper('&OBJTYPE'), upper('&OBJNAME') , upper('&OWNER'))  ddl_string from dual
+SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('SOA_REQUEST_SEQ') , upper('SOAINTERNAL'))  ddl_string from dual
+
+ alter sequence SOAINTERNAL.SOA_REQUEST_SEQ increment by 5000000;
+ select SOAINTERNAL.SOA_REQUEST_SEQ.nextval from dual;
+ alter sequence SOAINTERNAL.SOA_REQUEST_SEQ increment by 1;
+
+SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('REQID_SEQ') , upper('SOAINTERNAL'))  ddl_string from dual
+ alter sequence SOAINTERNAL.REQID_SEQ increment by 5000000;
+ select SOAINTERNAL.REQID_SEQ.nextval from dual;
+ alter sequence SOAINTERNAL.REQID_SEQ increment by 1;
+ 
+ SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('TRANS_SEQ') , upper('SOAINTERNAL'))  ddl_string from dual
+
+  alter sequence SOAINTERNAL.TRANS_SEQ increment by 5000000;
+  select SOAINTERNAL.TRANS_SEQ.nextval from dual;
+ alter sequence SOAINTERNAL.TRANS_SEQ increment by 1;
+ 
+--------------------------Sequences--------------------------------------------------------------------
+
+select object_name,object_type,object_id from dba_objects where object_id=92697;
+select TABLE_NAME,COLUMN_NAME,GENERATION_TYPE,IDENTITY_OPTIONS from DBA_TAB_IDENTITY_COLS where table_name='IDENTITY_TST_TAB';
+
+select sequence_name, last_number from dba_sequences where sequence_owner='SOAINTERNAL' order by 2 desc;
+
+
+1.
+select SEQUENCE_NAME,MIN_VALUE,MAX_VALUE,INCREMENT_BY from dba_sequences where sequence_name='ISEQ$$_343857';
+select TABLE_NAME,COLUMN_NAME,GENERATION_TYPE,IDENTITY_OPTIONS from DBA_TAB_IDENTITY_COLS where SEQUENCE_NAME='ISEQ$$_343857';
+alter table SOAINTERNAL.SOA_COMPONENT_STATUS  modify COMP_STATUS_ID generated always as identity (start with 5000000 );  
+  select SOAINTERNAL.ISEQ$$_330312.nextval from dual;
+
+--
+select SEQUENCE_NAME,MIN_VALUE,MAX_VALUE,INCREMENT_BY from dba_sequences where sequence_name='ISEQ$$_343280';
+select TABLE_NAME,COLUMN_NAME,GENERATION_TYPE,IDENTITY_OPTIONS from DBA_TAB_IDENTITY_COLS where SEQUENCE_NAME='ISEQ$$_343280';
+alter table SOAINTERNAL.SOA_COMPONENT_STATUS  modify COMP_STATUS_ID generated always as identity (start with 5000000 );  
+  select SOAINTERNAL.ISEQ$$_344943.nextval from dual;
+  
+2.
+select SEQUENCE_NAME,MIN_VALUE,MAX_VALUE,INCREMENT_BY from dba_sequences where sequence_name='ISEQ$$_344943';
+select TABLE_NAME,COLUMN_NAME,GENERATION_TYPE,IDENTITY_OPTIONS from DBA_TAB_IDENTITY_COLS where SEQUENCE_NAME='ISEQ$$_344943';
+alter table SOAINTERNAL.WO_REQUEST_LOG  modify WO_REQ_LOG_ID generated always as identity (start with 5000000 );  
+  select SOAINTERNAL.ISEQ$$_344943.nextval from dual;
+
+3.
+select SEQUENCE_NAME,MIN_VALUE,MAX_VALUE,INCREMENT_BY from dba_sequences where sequence_name='ISEQ$$_343455';
+select TABLE_NAME,COLUMN_NAME,GENERATION_TYPE,IDENTITY_OPTIONS from DBA_TAB_IDENTITY_COLS where SEQUENCE_NAME='ISEQ$$_343455';
+alter table SOAINTERNAL.SOA_STATUS_MSG_AUDIT_LOG  modify STATUS_MSG_AUDIT_LOG_ID generated always as identity (start with 5000000 );  
+  select SOAINTERNAL.ISEQ$$_343455.nextval from dual;
+
+4.
+select SEQUENCE_NAME,MIN_VALUE,MAX_VALUE,INCREMENT_BY from dba_sequences where sequence_name='ISEQ$$_343889';
+select TABLE_NAME,COLUMN_NAME,GENERATION_TYPE,IDENTITY_OPTIONS from DBA_TAB_IDENTITY_COLS where SEQUENCE_NAME='ISEQ$$_343889';
+alter table SOAINTERNAL.WO_REQUEST  modify WO_REQ_ID generated always as identity (start with 5000000 );  
+  select SOAINTERNAL.ISEQ$$_343889.nextval from dual;
+  
+  5.ISEQ$$_318983
+  select SEQUENCE_NAME,MIN_VALUE,MAX_VALUE,INCREMENT_BY from dba_sequences where sequence_name='ISEQ$$_343455';
+select TABLE_NAME,COLUMN_NAME,GENERATION_TYPE,IDENTITY_OPTIONS from DBA_TAB_IDENTITY_COLS where SEQUENCE_NAME='ISEQ$$_343455';
+alter table SOAINTERNAL.SOA_USER_STATUS_MSG  modify USER_STATUS_MSG_ID generated always as identity (start with 5000000 );  
+  select SOAINTERNAL.ISEQ$$_343455.nextval from dual;
+  
+  6.ISEQ$$_318979
+    select SEQUENCE_NAME,MIN_VALUE,MAX_VALUE,INCREMENT_BY from dba_sequences where sequence_name='ISEQ$$_343702';
+select TABLE_NAME,COLUMN_NAME,GENERATION_TYPE,IDENTITY_OPTIONS from DBA_TAB_IDENTITY_COLS where SEQUENCE_NAME='ISEQ$$_343702';
+alter table SOAINTERNAL.SOA_STATUS_MSG  modify STATUS_MSG_ID generated always as identity (start with 5000000 );  
+  select SOAINTERNAL.ISEQ$$_343702.nextval from dual;
+
+7. ISEQ$$_318981
+    select SEQUENCE_NAME,MIN_VALUE,MAX_VALUE,INCREMENT_BY from dba_sequences where sequence_name='ISEQ$$_343440';
+select TABLE_NAME,COLUMN_NAME,GENERATION_TYPE,IDENTITY_OPTIONS from DBA_TAB_IDENTITY_COLS where SEQUENCE_NAME='ISEQ$$_343440';
+alter table SOAINTERNAL.SOA_COMPONENT_STATUS_MSG  modify COMP_STATUS_MSG_ID generated always as identity (start with 5000000 );  
+  select SOAINTERNAL.ISEQ$$_343440.nextval from dual;
+  
+8.ISEQ$$_318971
+    select SEQUENCE_NAME,MIN_VALUE,MAX_VALUE,INCREMENT_BY from dba_sequences where sequence_name='ISEQ$$_343646';
+select TABLE_NAME,COLUMN_NAME,GENERATION_TYPE,IDENTITY_OPTIONS from DBA_TAB_IDENTITY_COLS where SEQUENCE_NAME='ISEQ$$_343646';
+alter table SOAINTERNAL.SOA_STATUS_CODE  modify STATUS_ID generated always as identity (start with 5000000 );  
+  select SOAINTERNAL.ISEQ$$_343646.nextval from dual;
+
+select sequence_name, last_number from dba_sequences where sequence_owner='SOAINTERNAL' order by 2 desc;
+
+select TABLE_NAME,COLUMN_NAME,GENERATION_TYPE,IDENTITY_OPTIONS from DBA_TAB_IDENTITY_COLS where SEQUENCE_NAME='ISEQ$$_343646';
+
+
+--------------------------FMW1221_SOAINFRA--------------------------
+select sequence_name,INCREMENT_BY, last_number from dba_sequences where sequence_owner='FMW1221_SOAINFRA' order by 2 desc;
+
+AQ$_EDN_AQJMS_TOPIC_TABLE_N
+select SEQUENCE_NAME,MIN_VALUE,MAX_VALUE,INCREMENT_BY from dba_sequences where sequence_name='AQ$_EDN_AQJMS_TOPIC_TABLE_N';
+select TABLE_NAME,COLUMN_NAME,GENERATION_TYPE,IDENTITY_OPTIONS from DBA_TAB_IDENTITY_COLS where SEQUENCE_NAME='ISEQ$$_318973';
+
+select sequence_name, last_number from dba_sequences where sequence_owner='FMW1221_SOAINFRA' order by 2 desc;
+SELECT DBMS_METADATA.GET_DDL(upper('&OBJTYPE'), upper('&OBJNAME') , upper('&OWNER'))  ddl_string from dual
+SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('AQ$_EDN_AQJMS_TOPIC_TABLE_N') , upper('FMW1221_SOAINFRA'))  ddl_string from dual
+
+ alter sequence FMW1221_SOAINFRA.AQ$_EDN_AQJMS_TOPIC_TABLE_N increment by 5000000;
+ select FMW1221_SOAINFRA.AQ$_EDN_AQJMS_TOPIC_TABLE_N.nextval from dual;
+ alter sequence FMW1221_SOAINFRA.AQ$_EDN_AQJMS_TOPIC_TABLE_N increment by 1;
+ 
+  alter sequence 		FMW1221_SOAINFRA.ADAPTER_REPORT_SEQUENCE		increment by 5000000;
+ alter sequence 		FMW1221_SOAINFRA.AIA_ERROR_NOTIFICATIONS_S		increment by 5000000;
+ alter sequence 		FMW1221_SOAINFRA.AIA_MSG_ORDER_SEQ		increment by 5000000;
+ alter sequence 		FMW1221_SOAINFRA.AIA_OID_SEQ		increment by 5000000;
+ alter sequence 		FMW1221_SOAINFRA.AIA_SYSTEMS_S		increment by 5000000;
+ alter sequence 		FMW1221_SOAINFRA.AQ$_EDN_AQJMS_TOPIC_TABLE_N		increment by 5000000;
+ alter sequence 		FMW1221_SOAINFRA.AQ$_EDN_EVENT_QUEUE_TABLE_N		increment by 5000000;
+ alter sequence 		FMW1221_SOAINFRA.AQ$_EDN_OAOO_DELIVERY_TABLE_N		increment by 5000000;
+ alter sequence 		FMW1221_SOAINFRA.B2B_SEQUENCECOUNTER		increment by 5000000;
+ alter sequence 		FMW1221_SOAINFRA.CAVS_DEFINITION_ID		increment by 5000000;
+ alter sequence 		FMW1221_SOAINFRA.CAVS_GROUP_DEFINITION_ID		increment by 5000000;
+ alter sequence 		FMW1221_SOAINFRA.CAVS_GROUP_INSTANCE_ID		increment by 5000000;
+ alter sequence 		FMW1221_SOAINFRA.CAVS_INSTANCE_ID		increment by 5000000;
+ alter sequence 		FMW1221_SOAINFRA.CAVS_ROUTING_SETUP_DETAIL_ID		increment by 5000000;
+ alter sequence 		FMW1221_SOAINFRA.CAVS_ROUTING_SETUP_ID		increment by 5000000;
+ alter sequence 		FMW1221_SOAINFRA.EDN_LOG_EVENT_SEQ		increment by 5000000;
+ alter sequence 		FMW1221_SOAINFRA.EDN_LOG_SEQ		increment by 5000000;
+ alter sequence 		FMW1221_SOAINFRA.EDN_SUBSCRIPTION_SEQ		increment by 5000000;
+ alter sequence 		FMW1221_SOAINFRA.HIBERNATE_SEQUENCE		increment by 5000000;
+ alter sequence 		FMW1221_SOAINFRA.PC_TASKNUMBER_SQ		increment by 5000000;
+ alter sequence 		FMW1221_SOAINFRA.SEQ_RESOURCES		increment by 5000000;
+ alter sequence 		FMW1221_SOAINFRA.SEQ_ROLES		increment by 5000000;
+ alter sequence 		FMW1221_SOAINFRA.SEQ_SPACES		increment by 5000000;
+ alter sequence 		FMW1221_SOAINFRA.SEQ_TENANTCATEGORIES		increment by 5000000;
+ alter sequence 		FMW1221_SOAINFRA.SEQ_TENANTROLES		increment by 5000000;
+ alter sequence 		FMW1221_SOAINFRA.SEQ_TENANTS		increment by 5000000;
+ alter sequence 		FMW1221_SOAINFRA.SEQ_USERS		increment by 5000000;
+ alter sequence 		FMW1221_SOAINFRA.SEQ_USERSROLES		increment by 5000000;
+ alter sequence 		FMW1221_SOAINFRA.SOA_HEALTHCHECK_REQID_SEQ		increment by 5000000;
+ alter sequence 		FMW1221_SOAINFRA.SOA_PURGE_SEQ		increment by 5000000;
+ alter sequence 		FMW1221_SOAINFRA.UPGRADE_RUN_SEQ		increment by 5000000;
+ alter sequence 		FMW1221_SOAINFRA.WFAPPROVALGROUPIDSEQ		increment by 5000000;
+ alter sequence 		FMW1221_SOAINFRA.WFTASKSEQ		increment by 5000000;
+ alter sequence 		FMW1221_SOAINFRA.AQ$_IP_QTAB_N		increment by 5000000;
+ alter sequence 		FMW1221_SOAINFRA.CAVS_ROUTING_SETUP_DETAIL_ID		increment by 5000000;
+ 
+ --change to 1
+  alter sequence 		FMW1221_SOAINFRA.ADAPTER_REPORT_SEQUENCE		increment by 5000000;
+ alter sequence 		FMW1221_SOAINFRA.ADAPTER_REPORT_SEQUENCE		increment by 1;
+ alter sequence 		FMW1221_SOAINFRA.AIA_ERROR_NOTIFICATIONS_S		increment by 1;
+ alter sequence 		FMW1221_SOAINFRA.AIA_MSG_ORDER_SEQ		increment by 1;
+ alter sequence 		FMW1221_SOAINFRA.AIA_OID_SEQ		increment by 1;
+ alter sequence 		FMW1221_SOAINFRA.AIA_SYSTEMS_S		increment by 1;
+alter sequence 		FMW1221_SOAINFRA.AQ$_EDN_AQJMS_TOPIC_TABLE_N		increment by 1;
+ alter sequence 		FMW1221_SOAINFRA.AQ$_EDN_EVENT_QUEUE_TABLE_N		increment by 1;
+ alter sequence 		FMW1221_SOAINFRA.AQ$_EDN_OAOO_DELIVERY_TABLE_N		increment by 1;
+ alter sequence 		FMW1221_SOAINFRA.B2B_SEQUENCECOUNTER		increment by 1;
+ alter sequence 		FMW1221_SOAINFRA.CAVS_DEFINITION_ID		increment by 1;
+ alter sequence 		FMW1221_SOAINFRA.CAVS_GROUP_DEFINITION_ID		increment by 1;
+ alter sequence 		FMW1221_SOAINFRA.CAVS_GROUP_INSTANCE_ID		increment by 1;
+ alter sequence 		FMW1221_SOAINFRA.CAVS_INSTANCE_ID		increment by 1;
+ alter sequence 		FMW1221_SOAINFRA.CAVS_ROUTING_SETUP_DETAIL_ID	increment by 1;
+ alter sequence 		FMW1221_SOAINFRA.CAVS_ROUTING_SETUP_ID		increment by 1;
+ alter sequence 		FMW1221_SOAINFRA.EDN_LOG_EVENT_SEQ		increment by 1;
+ alter sequence 		FMW1221_SOAINFRA.EDN_LOG_SEQ		increment by 1;
+ alter sequence 		FMW1221_SOAINFRA.EDN_SUBSCRIPTION_SEQ		increment by 1;
+ alter sequence 		FMW1221_SOAINFRA.HIBERNATE_SEQUENCE		increment by 1;
+ alter sequence 		FMW1221_SOAINFRA.PC_TASKNUMBER_SQ		increment by 1;
+ alter sequence 		FMW1221_SOAINFRA.SEQ_RESOURCES		increment by 1;
+ alter sequence 		FMW1221_SOAINFRA.SEQ_ROLES		increment by 1;
+ alter sequence 		FMW1221_SOAINFRA.SEQ_SPACES		increment by 1;
+ alter sequence 		FMW1221_SOAINFRA.SEQ_TENANTCATEGORIES		increment by 1;
+ alter sequence 		FMW1221_SOAINFRA.SEQ_TENANTROLES		increment by 1;
+ alter sequence 		FMW1221_SOAINFRA.SEQ_TENANTS		increment by 1;
+ alter sequence 		FMW1221_SOAINFRA.SEQ_USERS		increment by 1;
+ alter sequence 		FMW1221_SOAINFRA.SEQ_USERSROLES		increment by 1;
+ alter sequence 		FMW1221_SOAINFRA.SOA_HEALTHCHECK_REQID_SEQ		increment by 1;
+ alter sequence 		FMW1221_SOAINFRA.SOA_PURGE_SEQ		increment by 1;
+ alter sequence 		FMW1221_SOAINFRA.UPGRADE_RUN_SEQ		increment by 1;
+ alter sequence 		FMW1221_SOAINFRA.WFAPPROVALGROUPIDSEQ		increment by 1;
+ alter sequence 		FMW1221_SOAINFRA.WFTASKSEQ		increment by 1;
+ alter sequence 		FMW1221_SOAINFRA.AQ$_IP_QTAB_N		increment by 1;
+ alter sequence 		FMW1221_SOAINFRA.CAVS_ROUTING_SETUP_DETAIL_ID		increment by 1;
+ 
+ 
+ SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('CAVS_GROUP_INSTANCE_ID') , upper('FMW1221_SOAINFRA'))  ddl_string from dual
+  SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('CAVS_GROUP_DEFINITION_ID') , upper('FMW1221_SOAINFRA'))  ddl_string from dual
+  SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('CAVS_GROUP_DEFINITION_ID') , upper('FMW1221_SOAINFRA'))  ddl_string from dual
+
+CAVS_GROUP_INSTANCE_ID
+select sequence_name, last_number from dba_sequences where sequence_owner='FMW1221_SOAINFRA' order by 2 desc;
+
+  alter sequence 		FMW1221_SOAINFRA.CAVS_GROUP_INSTANCE_ID	increment by 5000000;
+ alter sequence 		FMW1221_SOAINFRA.CAVS_GROUP_DEFINITION_ID		increment by 5000000;
+ alter sequence 		FMW1221_SOAINFRA.CAVS_DEFINITION_ID		increment by 5000000;
+ alter sequence 		FMW1221_SOAINFRA.CAVS_INSTANCE_ID		increment by 5000000;
+ alter sequence 		FMW1221_SOAINFRA.CAVS_ROUTING_SETUP_ID		increment by 5000000;
+ alter sequence 		FMW1221_SOAINFRA.CAVS_ROUTING_SETUP_DETAIL_ID		increment by 5000000;
+
+  ---alter sequence 		FMW1221_SOAINFRA.CAVS_GROUP_INSTANCE_ID	start with 5000000 increment by 1 maxvalue 10000000;
+   drop sequence "FMW1221_SOAINFRA"."CAVS_GROUP_INSTANCE_ID";
+   drop sequence "FMW1221_SOAINFRA"."CAVS_GROUP_DEFINITION_ID";
+   drop sequence "FMW1221_SOAINFRA"."CAVS_DEFINITION_ID";
+   drop sequence "FMW1221_SOAINFRA"."CAVS_INSTANCE_ID";
+   drop sequence "FMW1221_SOAINFRA"."CAVS_ROUTING_SETUP_ID";
+   drop sequence "FMW1221_SOAINFRA"."CAVS_ROUTING_SETUP_DETAIL_ID";
+
+   CREATE SEQUENCE  "FMW1221_SOAINFRA"."CAVS_GROUP_INSTANCE_ID"  MINVALUE 5000000 MAXVALUE 100000000 INCREMENT BY 1 START WITH 5000000 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+   CREATE SEQUENCE  "FMW1221_SOAINFRA"."CAVS_GROUP_DEFINITION_ID"  MINVALUE 5000000 MAXVALUE 100000000 INCREMENT BY 1 START WITH 5000000 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+   CREATE SEQUENCE  "FMW1221_SOAINFRA"."CAVS_DEFINITION_ID"  MINVALUE 5000000 MAXVALUE 100000000 INCREMENT BY 1 START WITH 5000000 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+   CREATE SEQUENCE  "FMW1221_SOAINFRA"."CAVS_INSTANCE_ID"  MINVALUE 5000000 MAXVALUE 100000000 INCREMENT BY 1 START WITH 5000000 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+   CREATE SEQUENCE  "FMW1221_SOAINFRA"."CAVS_ROUTING_SETUP_ID"  MINVALUE 5000000 MAXVALUE 100000000 INCREMENT BY 1 START WITH 5000000 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+   CREATE SEQUENCE  "FMW1221_SOAINFRA"."CAVS_ROUTING_SETUP_DETAIL_ID"  MINVALUE 5000000 MAXVALUE 100000000 INCREMENT BY 1 START WITH 5000000 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+ 
+  
+ --FMW1221_WLS
+ select sequence_name, INCREMENT_BY,last_number from dba_sequences where sequence_owner='FMW1221_WLS' order by 2 desc;
+
+ SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('EXECUTIONINSTANCEDATA_SEQ') , upper('FMW1221_WLS'))  ddl_string from dual
+ SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('STEPEXECUTIONINSTANCEDATA_SEQ') , upper('FMW1221_WLS'))  ddl_string from dual
+ SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('SEQ_WLS_HVST_RECORDID') , upper('FMW1221_WLS'))  ddl_string from dual
+ SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('JOBINSTANCEDATA_SEQ') , upper('FMW1221_WLS'))  ddl_string from dual
+ SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('SEQ_WLS_EVENTS_RECORDID') , upper('FMW1221_WLS'))  ddl_string from dual
+
+drop sequence "FMW1221_WLS"."STEPEXECUTIONINSTANCEDATA_SEQ" 
+drop sequence "FMW1221_WLS"."EXECUTIONINSTANCEDATA_SEQ" 
+drop sequence "FMW1221_WLS"."SEQ_WLS_HVST_RECORDID" 
+drop sequence "FMW1221_WLS"."JOBINSTANCEDATA_SEQ" 
+drop sequence "FMW1221_WLS"."SEQ_WLS_EVENTS_RECORDID" 
+
+ CREATE SEQUENCE  "FMW1221_WLS"."STEPEXECUTIONINSTANCEDATA_SEQ"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 5000000 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+ CREATE SEQUENCE  "FMW1221_WLS"."EXECUTIONINSTANCEDATA_SEQ"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 5000000 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+ CREATE SEQUENCE  "FMW1221_WLS"."SEQ_WLS_HVST_RECORDID"  MINVALUE 1 MAXVALUE 99999999999999999999 INCREMENT BY 1 START WITH 5000000 NOCACHE  NOORDER  NOCYCLE  NOPARTITION 
+ CREATE SEQUENCE  "FMW1221_WLS"."JOBINSTANCEDATA_SEQ"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 5000000 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+ CREATE SEQUENCE  "FMW1221_WLS"."SEQ_WLS_EVENTS_RECORDID"  MINVALUE 1 MAXVALUE 99999999999999999999 INCREMENT BY 1 START WITH 5000000 NOCACHE  NOORDER  NOCYCLE  NOPARTITION 
+   
+   
+  alter sequence 		FMW1221_WLS.EXECUTIONINSTANCEDATA_SEQ	increment by 5000000;
+   select FMW1221_SOAINFRA.AQ$_EDN_AQJMS_TOPIC_TABLE_N.nextval from dual;
+  alter sequence 		FMW1221_WLS.STEPEXECUTIONINSTANCEDATA_SEQ	increment by 5000000;
+   select FMW1221_SOAINFRA.AQ$_EDN_AQJMS_TOPIC_TABLE_N.nextval from dual;
+  alter sequence 		FMW1221_WLS.SEQ_WLS_HVST_RECORDID	increment by 5000000;
+   select FMW1221_SOAINFRA.AQ$_EDN_AQJMS_TOPIC_TABLE_N.nextval from dual;
+  alter sequence 		FMW1221_WLS.JOBINSTANCEDATA_SEQ	increment by 5000000;
+   select FMW1221_SOAINFRA.AQ$_EDN_AQJMS_TOPIC_TABLE_N.nextval from dual;
+  alter sequence 		FMW1221_WLS.SEQ_WLS_EVENTS_RECORDID	increment by 5000000;
+   select FMW1221_SOAINFRA.AQ$_EDN_AQJMS_TOPIC_TABLE_N.nextval from dual;
+
+
+--FMW1221_OPSS
+ select sequence_name, INCREMENT_BY,last_number from dba_sequences where sequence_owner='FMW1221_OPSS' order by 2 desc;
+
+ SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('JPSATTRS_SEQ') , upper('FMW1221_OPSS'))  ddl_string from dual
+ SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('JPSDN_SEQ') , upper('FMW1221_OPSS'))  ddl_string from dual
+ SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('JPSCHANGELOG_SEQ') , upper('FMW1221_OPSS'))  ddl_string from dual
+ SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('SEQ_STMT') , upper('FMW1221_OPSS'))  ddl_string from dual
+
+drop sequence "FMW1221_OPSS"."JPSATTRS_SEQ" 
+drop sequence "FMW1221_OPSS"."JPSDN_SEQ" 
+drop sequence "FMW1221_OPSS"."JPSCHANGELOG_SEQ" 
+drop sequence "FMW1221_OPSS"."SEQ_STMT" 
+
+
+CREATE SEQUENCE  "FMW1221_OPSS"."JPSATTRS_SEQ"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 6037001 NOCACHE  NOORDER  NOCYCLE  NOPARTITION 
+CREATE SEQUENCE  "FMW1221_OPSS"."JPSDN_SEQ"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 6008714 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+CREATE SEQUENCE  "FMW1221_OPSS"."JPSCHANGELOG_SEQ"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 6001381 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+CREATE SEQUENCE  "FMW1221_OPSS"."SEQ_STMT"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 6000000 NOCACHE  NOORDER  NOCYCLE  NOPARTITION 
+
+  alter sequence 		FMW1221_OPSS.JPSATTRS_SEQ	increment by 5000000;
+  alter sequence 		FMW1221_OPSS.JPSDN_SEQ	increment by 5000000;
+  alter sequence 		FMW1221_OPSS.JPSCHANGELOG_SEQ	increment by 5000000;
+  alter sequence 		FMW1221_OPSS.SEQ_STMT	increment by 5000000;
+
+--FMW1221_MFT
+ select sequence_name, last_number from dba_sequences where sequence_owner='FMW1221_MFT' order by 2 desc;
+ select sequence_name, INCREMENT_BY,last_number from dba_sequences where sequence_owner='FMW1221_MFT' order by 2 desc;
+ SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('ADAPTER_REPORT_SEQUENCE') , upper('FMW1221_MFT'))  ddl_string from dual
+ drop sequence "FMW1221_MFT"."ADAPTER_REPORT_SEQUENCE" 
+CREATE SEQUENCE  "FMW1221_MFT"."ADAPTER_REPORT_SEQUENCE"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 6000000 CACHE 100 NOORDER  NOCYCLE  NOPARTITION 
+  alter sequence 		FMW1221_MFT.ADAPTER_REPORT_SEQUENCE	increment by 5000000;
+
+--FMW1221_MDS
+ select sequence_name, last_number from dba_sequences where sequence_owner='FMW1221_MDS' order by 2 desc;
+ select sequence_name, INCREMENT_BY,last_number from dba_sequences where sequence_owner='FMW1221_MDS' order by 2 desc;
+
+drop sequence 		FMW1221_MDS.MDS_CONTENT_ID_1_S 	
+drop sequence 		FMW1221_MDS.MDS_DOC_ID_1_S 	
+drop sequence 		FMW1221_MDS.MDS_DOC_ID_2_S 	
+drop sequence 		FMW1221_MDS.MDS_CONTENT_ID_2_S 	
+drop sequence 		FMW1221_MDS.MDS_PARTITION_ID_S 	
+drop sequence 		FMW1221_MDS.MDS_LINEAGE_ID_2_S 	
+drop sequence 		FMW1221_MDS.MDS_LINEAGE_ID_21_S 	
+drop sequence 		FMW1221_MDS.MDS_LINEAGE_ID_1_S 	
+drop sequence 		FMW1221_MDS.MDS_CONTENT_ID_21_S 	
+drop sequence 		FMW1221_MDS.MDS_DOC_ID_21_S 
+
+ SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('MDS_CONTENT_ID_1_S') , upper('FMW1221_MDS'))  ddl_string from dual
+ SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('MDS_DOC_ID_1_S') , upper('FMW1221_MDS'))  ddl_string from dual
+ SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('MDS_DOC_ID_2_S') , upper('FMW1221_MDS'))  ddl_string from dual
+ SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('MDS_CONTENT_ID_2_S') , upper('FMW1221_MDS'))  ddl_string from dual
+ SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('MDS_PARTITION_ID_S') , upper('FMW1221_MDS'))  ddl_string from dual
+ 
+ SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('MDS_LINEAGE_ID_2_S') , upper('FMW1221_MDS'))  ddl_string from dual
+ SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('MDS_LINEAGE_ID_21_S') , upper('FMW1221_MDS'))  ddl_string from dual
+ SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('MDS_LINEAGE_ID_1_S') , upper('FMW1221_MDS'))  ddl_string from dual
+ SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('MDS_CONTENT_ID_21_S') , upper('FMW1221_MDS'))  ddl_string from dual
+ SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('MDS_DOC_ID_21_S') , upper('FMW1221_MDS'))  ddl_string from dual
+ 
+   CREATE SEQUENCE  "FMW1221_MDS"."MDS_CONTENT_ID_1_S"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 6000660 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+   CREATE SEQUENCE  "FMW1221_MDS"."MDS_DOC_ID_1_S"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 6000446 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+   CREATE SEQUENCE  "FMW1221_MDS"."MDS_DOC_ID_2_S"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 6000342 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+   CREATE SEQUENCE  "FMW1221_MDS"."MDS_CONTENT_ID_2_S"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 6000341 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+   CREATE SEQUENCE  "FMW1221_MDS"."MDS_PARTITION_ID_S"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 6000021 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+ 
+   CREATE SEQUENCE  "FMW1221_MDS"."MDS_LINEAGE_ID_2_S"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 6000020 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+   CREATE SEQUENCE  "FMW1221_MDS"."MDS_LINEAGE_ID_21_S"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 6000000 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+   CREATE SEQUENCE  "FMW1221_MDS"."MDS_LINEAGE_ID_1_S"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 6000000 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+   CREATE SEQUENCE  "FMW1221_MDS"."MDS_CONTENT_ID_21_S"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 6000000 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+    CREATE SEQUENCE  "FMW1221_MDS"."MDS_DOC_ID_21_S"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 6000000 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+   
+ 
+  alter sequence 		FMW1221_MDS.MDS_CONTENT_ID_1_S 	increment by 5000000;
+  alter sequence 		FMW1221_MDS.MDS_DOC_ID_1_S 	increment by 5000000;
+  alter sequence 		FMW1221_MDS.MDS_DOC_ID_2_S 	increment by 5000000;
+  alter sequence 		FMW1221_MDS.MDS_CONTENT_ID_2_S 	increment by 5000000;
+  alter sequence 		FMW1221_MDS.MDS_PARTITION_ID_S 	increment by 5000000;
+  alter sequence 		FMW1221_MDS.MDS_LINEAGE_ID_2_S 	increment by 5000000;
+  alter sequence 		FMW1221_MDS.MDS_LINEAGE_ID_21_S 	increment by 5000000;
+  alter sequence 		FMW1221_MDS.MDS_LINEAGE_ID_1_S 	increment by 5000000;
+  alter sequence 		FMW1221_MDS.MDS_CONTENT_ID_21_S 	increment by 5000000;
+  alter sequence 		FMW1221_MDS.MDS_DOC_ID_21_S 	increment by 5000000;
+
+--FMW1221_IAU
+ select sequence_name, last_number from dba_sequences where sequence_owner='FMW1221_IAU' order by 2 desc;
+ select sequence_name, INCREMENT_BY,last_number from dba_sequences where sequence_owner='FMW1221_IAU' order by 2 desc;
+ SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('ID_SEQ') , upper('FMW1221_IAU'))  ddl_string from dual
+ drop sequence "FMW1221_IAU"."ID_SEQ" 
+ CREATE SEQUENCE  "FMW1221_IAU"."ID_SEQ"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 6999881 CACHE 100 NOORDER  NOCYCLE  NOPARTITION 
+ alter sequence 		FMW1221_IAU.ID_SEQ 	increment by 5000000;
+
+--FMW1221_ESS
+ select sequence_name, last_number from dba_sequences where sequence_owner='FMW1221_ESS' order by 2 desc;
+ select sequence_name, INCREMENT_BY,last_number from dba_sequences where sequence_owner='FMW1221_ESS' order by 2 desc;
+ SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('ID_SEQ') , upper('FMW1221_ESS'))  ddl_string from dual
+ drop sequence "FMW1221_ESS"."ID_SEQ" 
+ CREATE SEQUENCE  "FMW1221_ESS"."ID_SEQ"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 6000000 CACHE 100 ORDER  NOCYCLE  NOPARTITION 
+ alter sequence 		FMW1221_ESS.ID_SEQ 	increment by 5000000;
+
+   select sequence_owner,sequence_name, INCREMENT_BY,last_number from dba_sequences where sequence_owner
+   in ('FMW1221_ESS','FMW1221_IAU','FMW1221_MDS','FMW1221_MFT','FMW1221_OPSS','FMW1221_SOAINFRA','FMW1221_WLS','SOAINTERNAL','FMW1221_SOAINFRA')
+ order by 1,2,3 desc;
+
+   select sequence_owner,sequence_name, INCREMENT_BY,last_number from dba_sequences where sequence_owner
+   in ('FMW1221_SOAINFRA')
+ order by 4 desc, 3 desc ;
+
+
+WFTASKSEQ
+AIA_ERROR_NOTIFICATIONS_S
+AIA_SYSTEMS_S
+PC_TASKNUMBER_SQ
+SOA_HEALTHCHECK_REQID_SEQ
+
+SEQ_RESOURCES
+SEQ_USERSROLES
+SEQ_USERS
+SEQ_TENANTS
+SEQ_ROLES
+
+SEQ_SPACES
+SEQ_TENANTCATEGORIES
+SEQ_TENANTROLES
+SOA_PURGE_SEQ
+AQ$_EDN_AQJMS_TOPIC_TABLE_N
+
+AQ$_EDN_EVENT_QUEUE_TABLE_N
+AQ$_EDN_OAOO_DELIVERY_TABLE_N
+AQ$_IP_QTAB_N
+WFAPPROVALGROUPIDSEQ
+UPGRADE_RUN_SEQ
+
+HIBERNATE_SEQUENCE
+EDN_SUBSCRIPTION_SEQ
+EDN_LOG_SEQ
+B2B_SEQUENCECOUNTER
+AIA_OID_SEQ
+
+AIA_MSG_ORDER_SEQ
+ADAPTER_REPORT_SEQUENCE
+EDN_LOG_EVENT_SEQ
+
+ SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('WFTASKSEQ') , upper('FMW1221_SOAINFRA'))  ddl_string from dual
+  drop sequence "FMW1221_SOAINFRA"."WFTASKSEQ"
+ CREATE SEQUENCE  "FMW1221_SOAINFRA"."WFTASKSEQ"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 5000000 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+   
+  SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('AIA_ERROR_NOTIFICATIONS_S') , upper('FMW1221_SOAINFRA'))  ddl_string from dual
+  drop sequence "FMW1221_SOAINFRA"."AIA_ERROR_NOTIFICATIONS_S"
+ CREATE SEQUENCE  "FMW1221_SOAINFRA"."AIA_ERROR_NOTIFICATIONS_S"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 5000000 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+   
+   SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('AIA_ERROR_NOTIFICATIONS_S') , upper('FMW1221_SOAINFRA'))  ddl_string from dual
+  drop sequence "FMW1221_SOAINFRA"."AIA_SYSTEMS_S"
+ CREATE SEQUENCE  "FMW1221_SOAINFRA"."AIA_SYSTEMS_S"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 5000000 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+   
+     SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('PC_TASKNUMBER_SQ') , upper('FMW1221_SOAINFRA'))  ddl_string from dual
+  drop sequence "FMW1221_SOAINFRA"."PC_TASKNUMBER_SQ"
+ CREATE SEQUENCE  "FMW1221_SOAINFRA"."PC_TASKNUMBER_SQ"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 5000000 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+  
+   SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('PC_TASKNUMBER_SQ') , upper('FMW1221_SOAINFRA'))  ddl_string from dual
+  drop sequence "FMW1221_SOAINFRA"."PC_TASKNUMBER_SQ"
+ CREATE SEQUENCE  "FMW1221_SOAINFRA"."PC_TASKNUMBER_SQ"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 5000000 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+  
+  SEQ_RESOURCES
+SEQ_USERSROLES
+SEQ_USERS
+SEQ_TENANTS
+SEQ_ROLES
+
+ SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('PC_TASKNUMBER_SQ') , upper('FMW1221_SOAINFRA'))  ddl_string from dual
+  drop sequence "FMW1221_SOAINFRA"."SEQ_RESOURCES"
+ CREATE SEQUENCE  "FMW1221_SOAINFRA"."SEQ_RESOURCES"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 5000000 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+  
+   SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('PC_TASKNUMBER_SQ') , upper('FMW1221_SOAINFRA'))  ddl_string from dual
+  drop sequence "FMW1221_SOAINFRA"."SEQ_USERSROLES"
+ CREATE SEQUENCE  "FMW1221_SOAINFRA"."SEQ_USERSROLES"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 5000000 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+  
+   SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('PC_TASKNUMBER_SQ') , upper('FMW1221_SOAINFRA'))  ddl_string from dual
+  drop sequence "FMW1221_SOAINFRA"."SEQ_USERS"
+ CREATE SEQUENCE  "FMW1221_SOAINFRA"."SEQ_USERS"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 5000000 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+  
+   SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('PC_TASKNUMBER_SQ') , upper('FMW1221_SOAINFRA'))  ddl_string from dual
+  drop sequence "FMW1221_SOAINFRA"."SEQ_TENANTS"
+ CREATE SEQUENCE  "FMW1221_SOAINFRA"."SEQ_TENANTS"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 5000000 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+  
+   SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('PC_TASKNUMBER_SQ') , upper('FMW1221_SOAINFRA'))  ddl_string from dual
+  drop sequence "FMW1221_SOAINFRA"."SEQ_ROLES"
+ CREATE SEQUENCE  "FMW1221_SOAINFRA"."SEQ_ROLES"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 5000000 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+  
+SEQ_SPACES
+SEQ_TENANTCATEGORIES
+SEQ_TENANTROLES
+SOA_PURGE_SEQ
+AQ$_EDN_AQJMS_TOPIC_TABLE_N
+
+SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('PC_TASKNUMBER_SQ') , upper('FMW1221_SOAINFRA'))  ddl_string from dual
+  drop sequence "FMW1221_SOAINFRA"."SEQ_SPACES"
+ CREATE SEQUENCE  "FMW1221_SOAINFRA"."SEQ_SPACES"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 5000000 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+  
+  SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('PC_TASKNUMBER_SQ') , upper('FMW1221_SOAINFRA'))  ddl_string from dual
+  drop sequence "FMW1221_SOAINFRA"."SEQ_TENANTCATEGORIES"
+ CREATE SEQUENCE  "FMW1221_SOAINFRA"."SEQ_TENANTCATEGORIES"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 5000000 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+  
+  SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('PC_TASKNUMBER_SQ') , upper('FMW1221_SOAINFRA'))  ddl_string from dual
+  drop sequence "FMW1221_SOAINFRA"."SEQ_TENANTROLES"
+ CREATE SEQUENCE  "FMW1221_SOAINFRA"."SEQ_TENANTROLES"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 5000000 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+  
+  SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('PC_TASKNUMBER_SQ') , upper('FMW1221_SOAINFRA'))  ddl_string from dual
+  drop sequence "FMW1221_SOAINFRA"."SOA_PURGE_SEQ"
+ CREATE SEQUENCE  "FMW1221_SOAINFRA"."SOA_PURGE_SEQ"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 5000000 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+  
+  SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('PC_TASKNUMBER_SQ') , upper('FMW1221_SOAINFRA'))  ddl_string from dual
+  drop sequence "FMW1221_SOAINFRA"."AQ$_EDN_AQJMS_TOPIC_TABLE_N"
+ CREATE SEQUENCE  "FMW1221_SOAINFRA"."AQ$_EDN_AQJMS_TOPIC_TABLE_N"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 5000000 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+  
+
+AQ$_EDN_EVENT_QUEUE_TABLE_N
+AQ$_EDN_OAOO_DELIVERY_TABLE_N
+AQ$_IP_QTAB_N
+WFAPPROVALGROUPIDSEQ
+UPGRADE_RUN_SEQ
+
+ SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('PC_TASKNUMBER_SQ') , upper('FMW1221_SOAINFRA'))  ddl_string from dual
+  drop sequence "FMW1221_SOAINFRA"."AQ$_EDN_EVENT_QUEUE_TABLE_N"
+ CREATE SEQUENCE  "FMW1221_SOAINFRA"."AQ$_EDN_EVENT_QUEUE_TABLE_N"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 5000000 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+  
+   SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('PC_TASKNUMBER_SQ') , upper('FMW1221_SOAINFRA'))  ddl_string from dual
+  drop sequence "FMW1221_SOAINFRA"."AQ$_EDN_OAOO_DELIVERY_TABLE_N"
+ CREATE SEQUENCE  "FMW1221_SOAINFRA"."AQ$_EDN_OAOO_DELIVERY_TABLE_N"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 5000000 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+  
+   SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('PC_TASKNUMBER_SQ') , upper('FMW1221_SOAINFRA'))  ddl_string from dual
+  drop sequence "FMW1221_SOAINFRA"."AQ$_IP_QTAB_N"
+ CREATE SEQUENCE  "FMW1221_SOAINFRA"."AQ$_IP_QTAB_N"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 5000000 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+  
+   SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('PC_TASKNUMBER_SQ') , upper('FMW1221_SOAINFRA'))  ddl_string from dual
+  drop sequence "FMW1221_SOAINFRA"."WFAPPROVALGROUPIDSEQ"
+ CREATE SEQUENCE  "FMW1221_SOAINFRA"."WFAPPROVALGROUPIDSEQ"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 5000000 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+  
+   SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('PC_TASKNUMBER_SQ') , upper('FMW1221_SOAINFRA'))  ddl_string from dual
+  drop sequence "FMW1221_SOAINFRA"."UPGRADE_RUN_SEQ"
+ CREATE SEQUENCE  "FMW1221_SOAINFRA"."UPGRADE_RUN_SEQ"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 5000000 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+  
+  
+  HIBERNATE_SEQUENCE
+EDN_SUBSCRIPTION_SEQ
+EDN_LOG_SEQ
+B2B_SEQUENCECOUNTER
+AIA_OID_SEQ
+
+ SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('PC_TASKNUMBER_SQ') , upper('FMW1221_SOAINFRA'))  ddl_string from dual
+  drop sequence "FMW1221_SOAINFRA"."HIBERNATE_SEQUENCE"
+ CREATE SEQUENCE  "FMW1221_SOAINFRA"."HIBERNATE_SEQUENCE"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 5000000 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+  
+   SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('PC_TASKNUMBER_SQ') , upper('FMW1221_SOAINFRA'))  ddl_string from dual
+  drop sequence "FMW1221_SOAINFRA"."EDN_SUBSCRIPTION_SEQ"
+ CREATE SEQUENCE  "FMW1221_SOAINFRA"."EDN_SUBSCRIPTION_SEQ"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 5000000 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+  
+   SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('PC_TASKNUMBER_SQ') , upper('FMW1221_SOAINFRA'))  ddl_string from dual
+  drop sequence "FMW1221_SOAINFRA"."EDN_LOG_SEQ"
+ CREATE SEQUENCE  "FMW1221_SOAINFRA"."EDN_LOG_SEQ"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 5000000 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+  
+   SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('PC_TASKNUMBER_SQ') , upper('FMW1221_SOAINFRA'))  ddl_string from dual
+  drop sequence "FMW1221_SOAINFRA"."B2B_SEQUENCECOUNTER"
+ CREATE SEQUENCE  "FMW1221_SOAINFRA"."B2B_SEQUENCECOUNTER"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 5000000 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+  
+   SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('PC_TASKNUMBER_SQ') , upper('FMW1221_SOAINFRA'))  ddl_string from dual
+  drop sequence "FMW1221_SOAINFRA"."AIA_OID_SEQ"
+ CREATE SEQUENCE  "FMW1221_SOAINFRA"."AIA_OID_SEQ"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 5000000 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+  
+  
+AIA_MSG_ORDER_SEQ
+ADAPTER_REPORT_SEQUENCE
+EDN_LOG_EVENT_SEQ
+SOA_HEALTHCHECK_REQID_SEQ
+
+   SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('PC_TASKNUMBER_SQ') , upper('FMW1221_SOAINFRA'))  ddl_string from dual
+  drop sequence "FMW1221_SOAINFRA"."AIA_MSG_ORDER_SEQ"
+ CREATE SEQUENCE  "FMW1221_SOAINFRA"."AIA_MSG_ORDER_SEQ"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 5000000 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+ 
+ 
+   SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('PC_TASKNUMBER_SQ') , upper('FMW1221_SOAINFRA'))  ddl_string from dual
+  drop sequence "FMW1221_SOAINFRA"."ADAPTER_REPORT_SEQUENCE"
+ CREATE SEQUENCE  "FMW1221_SOAINFRA"."ADAPTER_REPORT_SEQUENCE"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 5000000 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+ 
+ 
+   SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('PC_TASKNUMBER_SQ') , upper('FMW1221_SOAINFRA'))  ddl_string from dual
+  drop sequence "FMW1221_SOAINFRA"."EDN_LOG_EVENT_SEQ"
+ CREATE SEQUENCE  "FMW1221_SOAINFRA"."EDN_LOG_EVENT_SEQ"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 5000000 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+ 
+ SOA_HEALTHCHECK_REQID_SEQ
+ 
+ SELECT DBMS_METADATA.GET_DDL(upper('SEQUENCE'), upper('PC_TASKNUMBER_SQ') , upper('FMW1221_SOAINFRA'))  ddl_string from dual
+  drop sequence "FMW1221_SOAINFRA"."SOA_HEALTHCHECK_REQID_SEQ"
+ CREATE SEQUENCE  "FMW1221_SOAINFRA"."SOA_HEALTHCHECK_REQID_SEQ"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 5000000 CACHE 20 NOORDER  NOCYCLE  NOPARTITION 
+
+
+   select sequence_owner,sequence_name, INCREMENT_BY,last_number from dba_sequences where sequence_owner
+   in ('FMW1221_ESS','FMW1221_IAU','FMW1221_MDS','FMW1221_MFT','FMW1221_OPSS','FMW1221_SOAINFRA','FMW1221_WLS','SOAINTERNAL','FMW1221_SOAINFRA')
+ order by 1,2,3 desc;
+ 
+  select sequence_owner,sequence_name, INCREMENT_BY,last_number from dba_sequences where sequence_owner
+   in (
+ 'SOAINTERNAL',
+'FMW1221_SOAINFRA',
+'FMW1221_ESS',
+'FMW1221_IAU',
+'FMW1221_IAU_APPEND',
+'FMW1221_IAU_VIEWER',
+'FMW1221_MDS',
+'FMW1221_MFT',
+'FMW1221_OPSS',
+'FMW1221_STB',
+'FMW1221_UMS',
+'FMW1221_WLS',
+'FMW1221_WLS_RUNTIME',
+'TLOGS',
+'JMS' )
+ order by 1,2,3 desc;
+
+
+SOAINTERNAL
+FMW1221_SOAINFRA
+FMW1221_ESS
+FMW1221_IAU
+FMW1221_IAU_APPEND
+FMW1221_IAU_VIEWER
+FMW1221_MDS
+FMW1221_MFT
+FMW1221_OPSS
+FMW1221_STB
+FMW1221_UMS
+FMW1221_WLS
+FMW1221_WLS_RUNTIME
+TLOGS
+JMS
+
+
+ 
+ 
+  select * from v$spparameter where name like '%process%'
+   select * from v$spparameter where name like '%target%'
+      select * from v$spparameter where name like '%cache%'
+      
+ select * from GG_LAG 
+ select * from GG_LAG_HISTORY 
+ select * from C022427.GG_HEARTBEAT_SEED;
+ select * from C022427.GG_HEARTBEAT;
+ select * from C022427.GG_HEARTBEAT_HISTORY;
+ 
+ select local_database, current_local_ts, remote_database, incoming_path, incoming_lag from gg_lag;
+select local_database, heartbeat_received_ts, remote_database, incoming_path, incoming_lag from gg_lag_history;
+
+
+
+
+ -----------------------------------------------
+ 
+    select * from V$GOLDENGATE_CAPTURE
+select * from  V$GG_APPLY_RECEIVER
+select * from V$GG_APPLY_READER
+select * from V$GG_APPLY_COORDINATOR order by 5
+select * from  V$GG_APPLY_SERVER order by 4
+select * from V$GOLDENGATE_TABLE_STATS
+select * from V$GOLDENGATE_CAPABILITIES
+
+
+create table oggadm1.exceptions
+(
+groupname varchar2(10)
+, grouptype varchar2(10)
+, hostname varchar2(40)
+, database_name varchar2(40)
+, table_name varchar2(61)
+, errno int
+, dberrmsg varchar2(4000)
+, optype varchar2(20)
+, errtype varchar2(20)
+, committimestamp timestamp
+, errortime timestamp
+, ggtrailfile varchar2(40)
+, filerba int
+);
+
+select * from v$sga 
+
+------------------------------------------------------------------
+select * from TLOGS.Test1to2;
+
+create table TLOGS.Test2to1 ( a number );
+insert into TLOGS.Test2to1 values(2);
+commit;
+select * from TLOGS.Test2to1;
+select count(*) from soainternal.soa_ack; --19190
+select count(*) from soainternal.soa_ack; --19191
+select count(*) from soainternal.soa_ack; --19196
+select count(*) from soainternal.soa_ack; --19205 ran 5 show 9
+
+select count(*) from fmw1221_soainfra.cube_instance; --53552
+select count(*) from fmw1221_soainfra.cube_instance; --53552
+
+select count(*) from fmw1221_soainfra.sca_flow_instance; --31670
+select count(*) from fmw1221_soainfra.sca_flow_instance; --31670
+
+
+drop table oggadm1.exceptions purge
+
+CREATE TABLE oggadm1.EXCEPTIONS
+(
+ excp_date timestamp(6) default systimestamp,
+ rep_name varchar2(10),
+ table_name varchar2(56),
+ errno number,
+ dberrmsg varchar2(4000),
+ errtype varchar2(6),
+ optype varchar2(24),
+ transind varchar2(12),
+ transimgind varchar2(8),
+ committimestamp varchar2(26),
+ reccsn number,
+ recseqno number,
+ recrba number,
+ rectranspos number,
+ reclength number,
+ logrba number,
+ logposition number,
+ grouptype varchar2(12),
+ filename varchar2(50),
+ fileno number,
+ srcrowid varchar2(40),
+ srcdbcharset varchar2(40),
+ replag number,
+ cnt_cdr_conflicts number,
+ cnt_cdr_resolutions number,
+ cnt_cdr_failed number 
+);
+
+select * from oggadm1.EXCEPTIONS;
+
+
+select * from c022427.anilk1to2
+
+select count(*)  from fmw1221_soainfra.CUBE_INSTANCE 
+select count(*) from  fmw1221_soainfra.SCA_FLOW_INSTANCE
+select count(*) from  TLOGS.
+

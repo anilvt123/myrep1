@@ -1,0 +1,36 @@
+mgr 
+
+LAGREPORTMINUTES 5 
+LAGINFOMINUTES 5 
+LAGCRITICALMINUTES 15 
+
+
+
+REPORTCOUNT EVERY 15 MINUTES, RATE 
+
+
+alter extract XVST1, integrated tranlog, begin now
+
+alter extract XVST1, integrated tranlog, begin now
+824867725
+
+start replicat R_UAT101 , aftercsn 824867725
+start replicat R_UAT102 , aftercsn 824867725
+start replicat R_UAT103 , aftercsn 824867725
+start replicat R_UAT104 , aftercsn 824867725
+start replicat R_UAT105 , aftercsn 824867725
+start replicat R_UAT106 , aftercsn 824867725
+start replicat R_UAT107 , aftercsn 824867725
+start replicat R_UAT108 , aftercsn 824867725
+start replicat R_UAT109 , aftercsn 824867725
+start replicat R_UAT110 , aftercsn 824867725
+start replicat R_UAT111 , aftercsn 824867725
+start replicat R_UAT112 , aftercsn 824867725
+start replicat R_UAT113 , aftercsn 824867725
+start replicat R_UAT114 , aftercsn 824867725
+start replicat R_UAT115 , aftercsn 824867725
+start replicat R_UAT116 , aftercsn 824867725
+
+start replicat R_UAT216 , aftercsn 824867725
+
+

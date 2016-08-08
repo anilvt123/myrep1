@@ -1,0 +1,498 @@
+-- This is created on the SOURCE system
+
+
+--SOURCE
+
+drop table &&ogg_user..heartbeat;
+-- Create table statement
+
+CREATE TABLE &&ogg_user..HEARTBEAT
+( ID NUMBER ,
+SRC_DB VARCHAR2(30),
+EXTRACT_NAME varchar2(8),
+SOURCE_COMMIT TIMESTAMP,
+TARGET_COMMIT TIMESTAMP,
+CAPTIME TIMESTAMP,
+CAPLAG NUMBER,
+PMPTIME TIMESTAMP,
+PMPGROUP VARCHAR2(8 BYTE),
+PMPLAG NUMBER,
+DELTIME TIMESTAMP,
+DELGROUP VARCHAR2(8 BYTE),
+DELLAG NUMBER,
+TOTALLAG NUMBER,
+thread number,
+update_timestamp timestamp,
+EDDLDELTASTATS number,
+EDMLDELTASTATS number,
+RDDLDELTASTATS number,
+RDMLDELTASTATS number,
+CONSTRAINT HEARTBEAT_PK PRIMARY KEY (SRC_DB) ENABLE
+);
+
+
+-- this assumes that the table is empty
+INSERT INTO &&ogg_user..HEARTBEAT (SRC_DB) select db_unique_name from
+V$database;
+commit;
+
+
+--TARGET
+
+
+DROP SEQUENCE &&ogg_user..SEQ_GGS_HEARTBEAT_ID ;
+
+CREATE SEQUENCE &&ogg_user..SEQ_GGS_HEARTBEAT_ID INCREMENT BY 1 START WITH 1 ORDER ;
+
+
+
+
+DROP TABLE &&ogg_user..GGS_HEARTBEAT;
+
+CREATE TABLE &&ogg_user..GGS_HEARTBEAT
+( ID NUMBER ,
+SRC_DB VARCHAR2(30),
+EXTRACT_NAME varchar2(8),
+SOURCE_COMMIT TIMESTAMP,
+TARGET_COMMIT TIMESTAMP,
+CAPTIME TIMESTAMP,
+CAPLAG NUMBER,
+PMPTIME TIMESTAMP,
+PMPGROUP VARCHAR2(8 BYTE),
+PMPLAG NUMBER,
+DELTIME TIMESTAMP,
+DELGROUP VARCHAR2(8 BYTE),
+DELLAG NUMBER,
+TOTALLAG NUMBER,
+thread number,
+update_timestamp timestamp,
+EDDLDELTASTATS number,
+EDMLDELTASTATS number,
+RDDLDELTASTATS number,
+RDMLDELTASTATS number,
+CONSTRAINT GGS_HEARTBEAT_PK PRIMARY KEY (DELGROUP) ENABLE
+);
+
+
+CREATE OR REPLACE TRIGGER &&ogg_user..GGS_HEARTBEAT_TRIG
+BEFORE INSERT OR UPDATE ON &&ogg_user..GGS_HEARTBEAT
+FOR EACH ROW
+BEGIN
+select seq_ggs_HEARTBEAT_id.nextval
+into :NEW.ID
+from dual;
+select systimestamp
+into :NEW.target_COMMIT
+from dual;
+select trunc(to_number(substr((:NEW.CAPTIME - :NEW.SOURCE_COMMIT ),1,
+instr(:NEW.CAPTIME - :NEW.SOURCE_COMMIT,' ')))) * 86400
++ to_number(substr((:NEW.CAPTIME - :NEW.SOURCE_COMMIT), instr((:NEW.CAPTIME -
+:NEW.SOURCE_COMMIT),' ')+1,2)) * 3600
++ to_number(substr((:NEW.CAPTIME - :NEW.SOURCE_COMMIT), instr((:NEW.CAPTIME -
+:NEW.SOURCE_COMMIT),' ')+4,2) ) * 60
++ to_number(substr((:NEW.CAPTIME - :NEW.SOURCE_COMMIT), instr((:NEW.CAPTIME -
+:NEW.SOURCE_COMMIT),' ')+7,2))
++ to_number(substr((:NEW.CAPTIME - :NEW.SOURCE_COMMIT), instr((:NEW.CAPTIME -
+:NEW.SOURCE_COMMIT),' ')+10,6)) / 1000000
+into :NEW.CAPLAG
+from dual;
+select trunc(to_number(substr((:NEW.PMPTIME - :NEW.CAPTIME),1,
+instr(:NEW.PMPTIME - :NEW.CAPTIME,' ')))) * 86400
++ to_number(substr((:NEW.PMPTIME - :NEW.CAPTIME), instr((:NEW.PMPTIME -
+:NEW.CAPTIME),' ')+1,2)) * 3600
++ to_number(substr((:NEW.PMPTIME - :NEW.CAPTIME), instr((:NEW.PMPTIME -
+:NEW.CAPTIME),' ')+4,2) ) * 60
++ to_number(substr((:NEW.PMPTIME - :NEW.CAPTIME), instr((:NEW.PMPTIME -
+:NEW.CAPTIME),' ')+7,2))
++ to_number(substr((:NEW.PMPTIME - :NEW.CAPTIME), instr((:NEW.PMPTIME -
+:NEW.CAPTIME),' ')+10,6)) / 1000000
+into :NEW.PMPLAG
+from dual;
+select trunc(to_number(substr((:NEW.DELTIME - :NEW.PMPTIME),1,
+instr(:NEW.DELTIME - :NEW.PMPTIME,' ')))) * 86400
++ to_number(substr((:NEW.DELTIME - :NEW.PMPTIME), instr((:NEW.DELTIME -
+:NEW.PMPTIME),' ')+1,2)) * 3600
++ to_number(substr((:NEW.DELTIME - :NEW.PMPTIME), instr((:NEW.DELTIME -
+:NEW.PMPTIME),' ')+4,2) ) * 60
++ to_number(substr((:NEW.DELTIME - :NEW.PMPTIME), instr((:NEW.DELTIME -
+:NEW.PMPTIME),' ')+7,2))
++ to_number(substr((:NEW.DELTIME - :NEW.PMPTIME), instr((:NEW.DELTIME -
+:NEW.PMPTIME),' ')+10,6)) / 1000000
+into :NEW.DELLAG
+from dual;
+select trunc(to_number(substr((:NEW.TARGET_COMMIT - :NEW.SOURCE_COMMIT),1,
+instr(:NEW.TARGET_COMMIT - :NEW.SOURCE_COMMIT,' ')))) * 86400
++ to_number(substr((:NEW.TARGET_COMMIT - :NEW.SOURCE_COMMIT),
+instr((:NEW.TARGET_COMMIT - :NEW.SOURCE_COMMIT),' ')+1,2)) * 3600
++ to_number(substr((:NEW.TARGET_COMMIT - :NEW.SOURCE_COMMIT),
+instr((:NEW.TARGET_COMMIT - :NEW.SOURCE_COMMIT),' ')+4,2) ) * 60
++ to_number(substr((:NEW.TARGET_COMMIT - :NEW.SOURCE_COMMIT),
+instr((:NEW.TARGET_COMMIT - :NEW.SOURCE_COMMIT),' ')+7,2))
++ to_number(substr((:NEW.TARGET_COMMIT - :NEW.SOURCE_COMMIT),
+instr((:NEW.TARGET_COMMIT - :NEW.SOURCE_COMMIT),' ')+10,6)) / 1000000
+into :NEW.TOTALLAG
+from dual;
+end ;
+
+
+ALTER TRIGGER &&ogg_user..GGS_HEARTBEAT_TRIG ENABLE;
+
+
+
+-- This is for the History heartbeat table
+
+
+DROP SEQUENCE &&ogg_user..SEQ_GGS_HEARTBEAT_HIST ;
+
+CREATE SEQUENCE &&ogg_user..SEQ_GGS_HEARTBEAT_HIST INCREMENT BY 1 START WITH 1 ORDER ;
+
+
+
+DROP TABLE &&ogg_user..GGS_HEARTBEAT_HISTORY;
+
+CREATE TABLE &&ogg_user..GGS_HEARTBEAT_HISTORY
+( ID NUMBER ,
+SRC_DB VARCHAR2(30),
+EXTRACT_NAME varchar2(8),
+SOURCE_COMMIT TIMESTAMP,
+TARGET_COMMIT TIMESTAMP,
+CAPTIME TIMESTAMP,
+CAPLAG NUMBER,
+PMPTIME TIMESTAMP,
+PMPGROUP VARCHAR2(8 BYTE),
+PMPLAG NUMBER,
+DELTIME TIMESTAMP,
+DELGROUP VARCHAR2(8 BYTE),
+DELLAG NUMBER,
+TOTALLAG NUMBER,
+thread number,
+update_timestamp timestamp,
+EDDLDELTASTATS number,
+EDMLDELTASTATS number,
+RDDLDELTASTATS number,
+RDMLDELTASTATS number
+);
+
+
+CREATE OR REPLACE TRIGGER &&ogg_user..GGS_HEARTBEAT_TRIG_HIST
+BEFORE INSERT OR UPDATE ON &&ogg_user..GGS_HEARTBEAT_HISTORY
+FOR EACH ROW
+BEGIN
+select seq_ggs_HEARTBEAT_HIST.nextval
+into :NEW.ID
+from dual;
+select systimestamp
+into :NEW.target_COMMIT
+from dual;
+select trunc(to_number(substr((:NEW.CAPTIME - :NEW.SOURCE_COMMIT ),1,
+instr(:NEW.CAPTIME - :NEW.SOURCE_COMMIT,' ')))) * 86400
++ to_number(substr((:NEW.CAPTIME - :NEW.SOURCE_COMMIT), instr((:NEW.CAPTIME -
+:NEW.SOURCE_COMMIT),' ')+1,2)) * 3600
++ to_number(substr((:NEW.CAPTIME - :NEW.SOURCE_COMMIT), instr((:NEW.CAPTIME -
+:NEW.SOURCE_COMMIT),' ')+4,2) ) * 60
++ to_number(substr((:NEW.CAPTIME - :NEW.SOURCE_COMMIT), instr((:NEW.CAPTIME -
+:NEW.SOURCE_COMMIT),' ')+7,2))
++ to_number(substr((:NEW.CAPTIME - :NEW.SOURCE_COMMIT), instr((:NEW.CAPTIME -
+:NEW.SOURCE_COMMIT),' ')+10,6)) / 1000000
+into :NEW.CAPLAG
+from dual;
+select trunc(to_number(substr((:NEW.PMPTIME - :NEW.CAPTIME),1,
+instr(:NEW.PMPTIME - :NEW.CAPTIME,' ')))) * 86400
++ to_number(substr((:NEW.PMPTIME - :NEW.CAPTIME), instr((:NEW.PMPTIME -
+:NEW.CAPTIME),' ')+1,2)) * 3600
++ to_number(substr((:NEW.PMPTIME - :NEW.CAPTIME), instr((:NEW.PMPTIME -
+:NEW.CAPTIME),' ')+4,2) ) * 60
++ to_number(substr((:NEW.PMPTIME - :NEW.CAPTIME), instr((:NEW.PMPTIME -
+:NEW.CAPTIME),' ')+7,2))
++ to_number(substr((:NEW.PMPTIME - :NEW.CAPTIME), instr((:NEW.PMPTIME -
+:NEW.CAPTIME),' ')+10,6)) / 1000000
+into :NEW.PMPLAG
+from dual;
+select trunc(to_number(substr((:NEW.DELTIME - :NEW.PMPTIME),1,
+instr(:NEW.DELTIME - :NEW.PMPTIME,' ')))) * 86400
++ to_number(substr((:NEW.DELTIME - :NEW.PMPTIME), instr((:NEW.DELTIME -
+:NEW.PMPTIME),' ')+1,2)) * 3600
++ to_number(substr((:NEW.DELTIME - :NEW.PMPTIME), instr((:NEW.DELTIME -
+:NEW.PMPTIME),' ')+4,2) ) * 60
++ to_number(substr((:NEW.DELTIME - :NEW.PMPTIME), instr((:NEW.DELTIME -
+:NEW.PMPTIME),' ')+7,2))
++ to_number(substr((:NEW.DELTIME - :NEW.PMPTIME), instr((:NEW.DELTIME -
+:NEW.PMPTIME),' ')+10,6)) / 1000000
+into :NEW.DELLAG
+from dual;
+select trunc(to_number(substr((:NEW.TARGET_COMMIT - :NEW.SOURCE_COMMIT),1,
+instr(:NEW.TARGET_COMMIT - :NEW.SOURCE_COMMIT,' ')))) * 86400
++ to_number(substr((:NEW.TARGET_COMMIT - :NEW.SOURCE_COMMIT),
+instr((:NEW.TARGET_COMMIT - :NEW.SOURCE_COMMIT),' ')+1,2)) * 3600
++ to_number(substr((:NEW.TARGET_COMMIT - :NEW.SOURCE_COMMIT),
+instr((:NEW.TARGET_COMMIT - :NEW.SOURCE_COMMIT),' ')+4,2) ) * 60
++ to_number(substr((:NEW.TARGET_COMMIT - :NEW.SOURCE_COMMIT),
+instr((:NEW.TARGET_COMMIT - :NEW.SOURCE_COMMIT),' ')+7,2))
++ to_number(substr((:NEW.TARGET_COMMIT - :NEW.SOURCE_COMMIT),
+instr((:NEW.TARGET_COMMIT - :NEW.SOURCE_COMMIT),' ')+10,6)) / 1000000
+into :NEW.TOTALLAG
+from dual;
+end ;
+
+ALTER TRIGGER &&ogg_user..GGS_HEARTBEAT_TRIG_HIST ENABLE;
+
+
+
+
+pmp_hb.prm
+
+extract PMP_hb
+userid SOURCE, password GGS
+discardfile ./dirrpt/PMP_hb.dsc, append
+rmthost coe-02, mgrport 9000
+rmttrail ./dirdat/hb
+include dirprm/HB_pmp.inc
+-- Table source.*;
+
+
+rep_hb.prm
+
+
+replicat rep_hb
+assumetargetdefs
+setenv (ORACLE_SID="db112r1")
+userid SOURCE,password GGS
+discardfile ./dirrpt/REP_hb.dsc, append
+REPORTCOUNT EVERY 5 MINUTES, RATE
+include ./dirprm/HB_Rep.inc
+--map <SOURCE_SCHEMA>.* ,target <TARGET_SCHEMA>.*;
+
+
+
+ADD TRANDATA SOURCE.HEARTBEAT
+
+
+
+grant select on v_$instance to &&ogg_user;
+grant select on v_$database to &&ogg_user;
+
+BEGIN
+ SYS.DBMS_SCHEDULER.DROP_JOB(job_name => '&&ogg_user..OGG_HB',
+ defer => false,
+ force => false);
+END;
+/
+
+
+
+
+CREATE OR REPLACE PROCEDURE &&ogg_user..gg_update_hb_tab IS
+v_thread_num NUMBER;
+v_db_unique_name VARCHAR2 (128);
+BEGIN
+SELECT db_unique_name
+INTO v_db_unique_name
+FROM v$database;
+UPDATE &&ogg_user..heartbeat
+SET update_timestamp = SYSTIMESTAMP
+,src_db = v_db_unique_name;
+COMMIT;
+END;
+/
+
+
+BEGIN
+SYS.DBMS_SCHEDULER.CREATE_JOB (
+job_name => '&&ogg_user..OGG_HB',
+job_type => 'STORED_PROCEDURE',
+job_action => '&&ogg_user..GG_UPDATE_HB_TAB',
+number_of_arguments => 0,
+start_date => NULL,
+repeat_interval => 'FREQ=MINUTELY',
+end_date => NULL,
+job_class => '"SYS"."DEFAULT_JOB_CLASS"',
+enabled => FALSE,
+auto_drop => FALSE,
+comments => 'GoldenGate',
+credential_name => NULL,
+destination_name => NULL);
+SYS.DBMS_SCHEDULER.SET_ATTRIBUTE(
+name => '&&ogg_user..OGG_HB',
+attribute => 'restartable', value => TRUE);
+SYS.DBMS_SCHEDULER.SET_ATTRIBUTE(
+name => '&&ogg_user..OGG_HB',
+attribute => 'logging_level', value => DBMS_SCHEDULER.LOGGING_OFF);
+SYS.DBMS_SCHEDULER.enable(
+name => '&&ogg_user..OGG_HB');
+END;
+/
+
+
+
+
+--You can use the following sql to check the status of the job –
+
+select
+ owner,
+ job_name,
+ job_class,
+ enabled,
+ next_run_date,
+ repeat_interval
+from
+ dba_scheduler_jobs
+where
+ owner = decode(upper('&&ogg_user'), 'ALL', owner, upper('&&ogg_user'))
+;
+
+
+
+--Extract Configuration
+
+
+ADD EXTRACT ext_hb, TRANLOG, BEGIN NOW, threads 1
+ADD EXTTRAIL ./dirdat/~Primary_trail~, EXTRACT ext_hb, MEGABYTES 100
+
+
+Include file –
+./dirprm/HB_Extract.inc
+TABLE <source schema>.HEARTBEAT,
+TOKENS (
+CAPGROUP = @GETENV ("GGENVIRONMENT", "GROUPNAME"),
+CAPTIME = @DATE ("YYYY-MM-DD HH:MI:SS.FFFFFF","JTS",@GETENV
+("JULIANTIMESTAMP")),
+EDDLDELTASTATS = @GETENV ("DELTASTATS", "DDL"),
+EDMLDELTASTATS = @GETENV ("DELTASTATS", "DML")
+);
+
+
+
+
+
+EXTRACT ext_hb
+SETENV (ORACLE_SID=ora11g)
+USERID source password ggs
+EXTTRAIL ./dirdat/db
+DISCARDFILE ./dirrpt/ext_hb.dsc, APPEND
+REPORTCOUNT EVERY 5 MINUTES, RATE
+FETCHOPTIONS, NOUSESNAPSHOT, NOUSELATESTVERSION, MISSINGROW REPORT
+STATOPTIONS REPORTFETCH
+
+-- This is the Heartbeat table
+include dirprm/HB_Extract.inc
+
+-- The implementation of this parameter varies depending on the process.
+-- TABLE source.*;
+--./dirprm/HB_Extract.inc
+
+TABLE <source schema>.HEARTBEAT,
+TOKENS (
+CAPGROUP = @GETENV ("GGENVIRONMENT", "GROUPNAME"),
+CAPTIME = @DATE ("YYYY-MM-DD HH:MI:SS.FFFFFF","JTS",@GETENV
+("JULIANTIMESTAMP")),
+EDDLDELTASTATS = @GETENV ("DELTASTATS", "DDL"),
+EDMLDELTASTATS = @GETENV ("DELTASTATS", "DML")
+);
+
+
+
+--Data Pump Configuration
+
+
+ADD EXTRACT pmp_hb, BEGIN NOW, EXTTRAILSOURCE ./dirdat/~Primary_trail~
+ADD RMTTRAIL ./dirdat/~Target_trail~, EXTRACT pmp_hb, MEGABYTES 100
+
+
+./dirprm/HB_pmp.inc
+-- HB_pmp.inc
+-- Heartbeat Table
+table <source schema>.heartbeat,
+ TOKENS (
+ PMPGROUP = @GETENV ("GGENVIRONMENT","GROUPNAME"),
+ PMPTIME = @DATE ("YYYY-MM-DD HH:MI:SS.FFFFFF","JTS",@GETENV
+("JULIANTIMESTAMP"))
+ );
+
+
+
+extract PMP_hb
+userid ~ogg_user~, password ~ogg_pass~
+discardfile ./dirrpt/PMP_hb.dsc, append
+rmthost ~target_host~, mgrport ~Target_mgr~
+rmttrail ./dirdat/~Target_trail~
+
+-- Heartbeat
+include dirprm/HB_pmp.inc
+
+--Table ~source_schema~.*;
+-- HB_pmp.inc
+
+-- Heartbeat Table
+table <source schema>.heartbeat,
+ TOKENS (
+ PMPGROUP = @GETENV ("GGENVIRONMENT","GROUPNAME"),
+ PMPTIME = @DATE ("YYYY-MM-DD HH:MI:SS.FFFFFF","JTS",@GETENV
+("JULIANTIMESTAMP"))
+ );
+
+
+
+--Replicat Configuration
+
+add replicat REP_HB exttrail ./dirdat/~Rep_PR_Trail~ nodbcheckpoint
+
+
+./dirprm/HB_Rep.inc
+dirprm/HB_Rep.inc
+-- Heartbeat table
+MAP <source schema>.HEARTBEAT, TARGET <target schema>.GGS_HEARTBEAT,
+KEYCOLS (DELGROUP),
+INSERTMISSINGUPDATES,
+COLMAP (USEDEFAULTS,
+ID = 0,
+SOURCE_COMMIT = @GETENV ("GGHEADER", "COMMITTIMESTAMP"),
+EXTRACT_NAME = @TOKEN ("CAPGROUP"),
+CAPTIME = @TOKEN ("CAPTIME"),
+PMPGROUP = @TOKEN ("PMPGROUP"),
+PMPTIME = @TOKEN ("PMPTIME"),
+DELGROUP = @GETENV ("GGENVIRONMENT", "GROUPNAME"),
+DELTIME = @DATE ("YYYY-MM-DD HH:MI:SS.FFFFFF","JTS",@GETENV
+("JULIANTIMESTAMP")),
+EDDLDELTASTATS = @TOKEN ("EDDLDELTASTATS"),
+EDMLDELTASTATS = @TOKEN ("EDMLDELTASTATS"),
+RDDLDELTASTATS = @GETENV ("DELTASTATS", "DDL"),
+RDMLDELTASTATS = @GETENV ("DELTASTATS", "DML")
+);
+MAP <source schema>.HEARTBEAT, TARGET <target schema>.GGS_HEARTBEAT_HISTORY,
+KEYCOLS (ID),
+INSERTALLRECORDS,
+COLMAP (USEDEFAULTS,
+ID = 0,
+SOURCE_COMMIT = @GETENV ("GGHEADER", "COMMITTIMESTAMP"),
+EXTRACT_NAME = @TOKEN ("CAPGROUP"),
+CAPTIME = @TOKEN ("CAPTIME"),
+PMPGROUP = @TOKEN ("PMPGROUP"),
+PMPTIME = @TOKEN ("PMPTIME"),
+DELGROUP = @GETENV ("GGENVIRONMENT", "GROUPNAME"),
+DELTIME = @DATE ("YYYY-MM-DD HH:MI:SS.FFFFFF","JTS",@GETENV
+("JULIANTIMESTAMP")),
+EDDLDELTASTATS = @TOKEN ("EDDLDELTASTATS"),
+EDMLDELTASTATS = @TOKEN ("EDMLDELTASTATS"),
+RDDLDELTASTATS = @GETENV ("DELTASTATS", "DDL"),
+RDMLDELTASTATS = @GETENV ("DELTASTATS", "DML")
+);
+
+
+replicat rep_hb
+
+assumetargetdefs
+setenv (ORACLE_SID="db112r1")
+userid SOURCE,password GGS
+discardfile ./dirrpt/REP_hb.dsc, append
+REPORTCOUNT EVERY 5 MINUTES, RATE
+include ./dirprm/HB_Rep.inc
+map <SOURCE_SCHEMA>.* ,target <TARGET_SCHEMA>.*;
+
+
+info heartbeattable
+add heartbeattable
+delete heartbeattable
+
+HEARTBEATTABLE C022427.gg_heartbeat
+
+

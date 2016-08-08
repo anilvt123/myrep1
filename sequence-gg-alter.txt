@@ -1,0 +1,48 @@
+create sequence scott.orders_seq start with 101 increment by 2 cache 20 nocycle;
+
+b. Modify sequences on target
+alter sequence scott.orders_seq increment by 1;
+select SOAINTERNAL.ISEQ$$_251738.nextval from dual;
+alter sequence SOAINTERNAL.ISEQ$$_251738.nextval increment by 2;
+
+SOA_REQUEST_SEQ
+REQID_SEQ
+TRANS_SEQ
+
+ alter sequence SOAINTERNAL.SOA_REQUEST_SEQ increment by 10000000;
+ select SOAINTERNAL.SOA_REQUEST_SEQ.nextval from dual;
+ alter sequence SOAINTERNAL.SOA_REQUEST_SEQ increment by 1;
+
+
+ alter sequence SOAINTERNAL.REQID_SEQ increment by 10000000;
+ select SOAINTERNAL.REQID_SEQ.nextval from dual;
+ alter sequence SOAINTERNAL.REQID_SEQ increment by 1;
+ 
+  alter sequence SOAINTERNAL.TRANS_SEQ increment by 10000000;
+  select SOAINTERNAL.TRANS_SEQ.nextval from dual;
+ alter sequence SOAINTERNAL.TRANS_SEQ increment by 1;
+ 
+------------------------------------------------------------------------------------------
+select * from user_tab_identity_cols where table_name = 'T1';  
+alter table t1 modify id generated always as identity (INCREMENT BY 10 CACHE 100);  
+
+
+------------------------------------------------------------------------------------------
+
+select sequence_name, last_number from dba_sequences where sequence_owner=user;
+select sequence_owner, sequence_name, last_number from dba_sequences;
+
+SELECT DBMS_METADATA.GET_DDL(upper('&OBJTYPE'), upper('&OBJNAME') , upper('&OWNER'))  ddl_string from dual
+select dbms_metadata.get_ddl('TABLE','IDENTITY_TST_TAB','RND_USER') DDL from dual;
+SELECT cust_no_seq.nextval FROM dual;
+
+
+select SEQUENCE_NAME,MIN_VALUE,MAX_VALUE,INCREMENT_BY from dba_sequences where sequence_name='ISEQ$$_92697';
+select object_name,object_type,object_id from dba_objects where object_id=92697;
+select TABLE_NAME,COLUMN_NAME,GENERATION_TYPE,IDENTITY_OPTIONS from DBA_TAB_IDENTITY_COLS where table_name='IDENTITY_TST_TAB';
+
+------------------------------------------------------------------------------------------
+
+http://oracle-study-notes.blogspot.com/2009/03/adjust-oracle-sequence-to-use-odd-and.html
+http://blog.dbvisit.com/oracle-sequences-and-replication/
+v

@@ -1,0 +1,580 @@
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1235> obey register_addextracts_UAT1.oby
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1236> DBLOGIN USERIDALIAS SOAUAT1ADM domain admin
+
+Successfully logged into database.
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1237>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1237> --register extract E_UAT101 database
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1238>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1238> --add extract E_UAT101, integrated tranlog, begin now
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1239> --Add ExtTrail ./dirdat/SOAINTERNAL/sa, Extract E_UAT101, Megabytes 10
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1240>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1240> --Add Extract P_UAT101, ExtTrailSource ./dirdat/SOAINTERNAL/sa
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1241> --Add RmtTrail ./dirdat/SOAINTERNAL/ta, Extract P_UAT101, Megabytes 10
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1242>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1242>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1242>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1242>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1242>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1242>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1242> register extract E_UAT102 database
+
+
+2016-08-01 17:48:15  INFO    OGG-02003  Extract E_UAT102 successfully registered with database at SCN 848983605.
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1243>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1243> add extract E_UAT102, integrated tranlog, begin now
+
+EXTRACT (Integrated) added.
+
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1244> Add ExtTrail ./dirdat/FMW1221_SOAINFRA/sa, Extract E_UAT102, Megabytes 10
+
+EXTTRAIL added.
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1245>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1245> Add Extract P_UAT102, ExtTrailSource ./dirdat/FMW1221_SOAINFRA/sa
+
+EXTRACT added.
+
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1246> Add RmtTrail ./dirdat/FMW1221_SOAINFRA/ta, Extract P_UAT102, Megabytes 10
+
+RMTTRAIL added.
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1247>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1247>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1247>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1247>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1247>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1247> register extract E_UAT103 database
+
+
+2016-08-01 17:48:40  INFO    OGG-02003  Extract E_UAT103 successfully registered with database at SCN 849003621.
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1248>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1248> add extract E_UAT103, integrated tranlog, begin now
+
+EXTRACT (Integrated) added.
+
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1249> Add ExtTrail ./dirdat/FMW1221_ESS/sa, Extract E_UAT103, Megabytes 10
+
+EXTTRAIL added.
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1250>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1250> Add Extract P_UAT103, ExtTrailSource ./dirdat/FMW1221_ESS/sa
+
+EXTRACT added.
+
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1251> Add RmtTrail ./dirdat/FMW1221_ESS/ta, Extract P_UAT103, Megabytes 10
+
+RMTTRAIL added.
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1252>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1252>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1252>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1252>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1252>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1252> register extract E_UAT104 database
+
+
+2016-08-01 17:49:00  INFO    OGG-02003  Extract E_UAT104 successfully registered with database at SCN 849032326.
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1253>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1253> add extract E_UAT104, integrated tranlog, begin now
+
+EXTRACT (Integrated) added.
+
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1254> Add ExtTrail ./dirdat/FMW1221_IAU/sa, Extract E_UAT104, Megabytes 10
+
+EXTTRAIL added.
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1255>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1255> Add Extract P_UAT104, ExtTrailSource ./dirdat/FMW1221_IAU/sa
+
+EXTRACT added.
+
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1256> Add RmtTrail ./dirdat/FMW1221_IAU/ta, Extract P_UAT104, Megabytes 10
+
+RMTTRAIL added.
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1257>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1257>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1257>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1257>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1257>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1257> register extract E_UAT105 database
+
+
+2016-08-01 17:49:25  INFO    OGG-02003  Extract E_UAT105 successfully registered with database at SCN 849050452.
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1258>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1258> add extract E_UAT105, integrated tranlog, begin now
+
+EXTRACT (Integrated) added.
+
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1259> Add ExtTrail ./dirdat/FMW1221_IAU_APPEND/sa, Extract E_UAT105, Megabytes 10
+
+EXTTRAIL added.
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1260>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1260>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1260> Add Extract P_UAT105, ExtTrailSource ./dirdat/FMW1221_IAU_APPEND/sa
+
+EXTRACT added.
+
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1261> Add RmtTrail ./dirdat/FMW1221_IAU_APPEND/ta, Extract P_UAT105, Megabytes 10
+
+RMTTRAIL added.
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1262>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1262>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1262>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1262>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1262> register extract E_UAT106 database
+
+
+2016-08-01 17:50:03  INFO    OGG-02003  Extract E_UAT106 successfully registered with database at SCN 849086222.
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1263>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1263> add extract E_UAT106, integrated tranlog, begin now
+
+EXTRACT (Integrated) added.
+
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1264> Add ExtTrail ./dirdat/FMW1221_IAU_VIEWER/sa, Extract E_UAT106, Megabytes 10
+
+EXTTRAIL added.
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1265>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1265> Add Extract P_UAT106, ExtTrailSource ./dirdat/FMW1221_IAU_VIEWER/sa
+
+EXTRACT added.
+
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1266> Add RmtTrail ./dirdat/FMW1221_IAU_VIEWER/ta, Extract P_UAT106, Megabytes 10
+
+RMTTRAIL added.
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1267>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1267>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1267>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1267>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1267> register extract E_UAT107 database
+
+
+2016-08-01 17:50:23  INFO    OGG-02003  Extract E_UAT107 successfully registered with database at SCN 849116198.
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1268>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1268> add extract E_UAT107, integrated tranlog, begin now
+
+EXTRACT (Integrated) added.
+
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1269> Add ExtTrail ./dirdat/FMW1221_MDS/sa, Extract E_UAT107, Megabytes 10
+
+EXTTRAIL added.
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1270>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1270> Add Extract P_UAT107, ExtTrailSource ./dirdat/FMW1221_MDS/sa
+
+EXTRACT added.
+
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1271> Add RmtTrail ./dirdat/FMW1221_MDS/ta, Extract P_UAT107, Megabytes 10
+
+RMTTRAIL added.
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1272>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1272>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1272>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1272>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1272> register extract E_UAT108 database
+
+
+2016-08-01 17:50:47  INFO    OGG-02003  Extract E_UAT108 successfully registered with database at SCN 849138660.
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1273>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1273> add extract E_UAT108, integrated tranlog, begin now
+
+EXTRACT (Integrated) added.
+
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1274> Add ExtTrail ./dirdat/FMW1221_MFT/sa, Extract E_UAT108, Megabytes 10
+
+EXTTRAIL added.
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1275>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1275>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1275> Add Extract P_UAT108, ExtTrailSource ./dirdat/FMW1221_MFT/sa
+
+EXTRACT added.
+
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1276> Add RmtTrail ./dirdat/FMW1221_MFT/ta, Extract P_UAT108, Megabytes 10
+
+RMTTRAIL added.
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1277>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1277>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1277>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1277>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1277> register extract E_UAT109 database
+
+
+2016-08-01 17:51:09  INFO    OGG-02003  Extract E_UAT109 successfully registered with database at SCN 849159445.
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1278>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1278> add extract E_UAT109, integrated tranlog, begin now
+
+EXTRACT (Integrated) added.
+
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1279> Add ExtTrail ./dirdat/FMW1221_OPSS/sa, Extract E_UAT109, Megabytes 10
+
+EXTTRAIL added.
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1280>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1280> Add Extract P_UAT109, ExtTrailSource ./dirdat/FMW1221_OPSS/sa
+
+EXTRACT added.
+
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1281> Add RmtTrail ./dirdat/FMW1221_OPSS/ta, Extract P_UAT109, Megabytes 10
+
+RMTTRAIL added.
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1282>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1282>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1282>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1282>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1282> register extract E_UAT110 database
+
+
+2016-08-01 17:51:29  INFO    OGG-02003  Extract E_UAT110 successfully registered with database at SCN 849179177.
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1283>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1283> add extract E_UAT110, integrated tranlog, begin now
+
+EXTRACT (Integrated) added.
+
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1284> Add ExtTrail ./dirdat/FMW1221_STB/sa, Extract E_UAT110, Megabytes 10
+
+EXTTRAIL added.
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1285>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1285> Add Extract P_UAT110, ExtTrailSource ./dirdat/FMW1221_STB/sa
+
+EXTRACT added.
+
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1286> Add RmtTrail ./dirdat/FMW1221_STB/ta, Extract P_UAT110, Megabytes 10
+
+RMTTRAIL added.
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1287>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1287>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1287>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1287>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1287> register extract E_UAT111 database
+
+
+2016-08-01 17:52:34  INFO    OGG-02003  Extract E_UAT111 successfully registered with database at SCN 849228500.
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1288>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1288> add extract E_UAT111, integrated tranlog, begin now
+
+EXTRACT (Integrated) added.
+
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1289> Add ExtTrail ./dirdat/FMW1221_UMS/sa, Extract E_UAT111, Megabytes 10
+
+EXTTRAIL added.
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1290>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1290>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1290> Add Extract P_UAT111, ExtTrailSource ./dirdat/FMW1221_UMS/sa
+
+EXTRACT added.
+
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1291> Add RmtTrail ./dirdat/FMW1221_UMS/ta, Extract P_UAT111, Megabytes 10
+
+RMTTRAIL added.
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1292>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1292>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1292>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1292>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1292> register extract E_UAT112 database
+
+
+2016-08-01 17:52:53  INFO    OGG-02003  Extract E_UAT112 successfully registered with database at SCN 849263179.
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1293>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1293> add extract E_UAT112, integrated tranlog, begin now
+
+EXTRACT (Integrated) added.
+
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1294> Add ExtTrail ./dirdat/FMW1221_WLS/sa, Extract E_UAT112, Megabytes 10
+
+EXTTRAIL added.
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1295>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1295>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1295> Add Extract P_UAT112, ExtTrailSource ./dirdat/FMW1221_WLS/sa
+
+EXTRACT added.
+
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1296> Add RmtTrail ./dirdat/FMW1221_WLS/ta, Extract P_UAT112, Megabytes 10
+
+RMTTRAIL added.
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1297>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1297>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1297>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1297>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1297>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1297> register extract E_UAT113 database
+
+
+2016-08-01 17:53:15  INFO    OGG-02003  Extract E_UAT113 successfully registered with database at SCN 849284317.
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1298>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1298> add extract E_UAT113, integrated tranlog, begin now
+
+EXTRACT (Integrated) added.
+
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1299> Add ExtTrail ./dirdat/FMW1221_WLS_RUNTIME/sa, Extract E_UAT113, Megabytes 10
+
+EXTTRAIL added.
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1300>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1300>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1300> Add Extract P_UAT113, ExtTrailSource ./dirdat/FMW1221_WLS_RUNTIME/sa
+
+EXTRACT added.
+
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1301> Add RmtTrail ./dirdat/FMW1221_WLS_RUNTIME/ta, Extract P_UAT113, Megabytes 10
+
+RMTTRAIL added.
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1302>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1302>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1302>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1302>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1302> register extract E_UAT114 database
+
+
+2016-08-01 17:53:35  INFO    OGG-02003  Extract E_UAT114 successfully registered with database at SCN 849304974.
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1303>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1303> add extract E_UAT114, integrated tranlog, begin now
+
+EXTRACT (Integrated) added.
+
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1304> Add ExtTrail ./dirdat/TLOGS/sa, Extract E_UAT114, Megabytes 10
+
+EXTTRAIL added.
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1305>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1305> Add Extract P_UAT114, ExtTrailSource ./dirdat/TLOGS/sa
+
+EXTRACT added.
+
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1306> Add RmtTrail ./dirdat/TLOGS/ta, Extract P_UAT114, Megabytes 10
+
+RMTTRAIL added.
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1307>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1307>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1307>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1307>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1307>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1307> register extract E_UAT115 database
+
+
+2016-08-01 17:54:00  INFO    OGG-02003  Extract E_UAT115 successfully registered with database at SCN 849326862.
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1308>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1308> add extract E_UAT115, integrated tranlog, begin now
+
+EXTRACT (Integrated) added.
+
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1309> Add ExtTrail ./dirdat/JMS/sa, Extract E_UAT115, Megabytes 10
+
+EXTTRAIL added.
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1310>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1310>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1310> Add Extract P_UAT115, ExtTrailSource ./dirdat/JMS/sa
+
+EXTRACT added.
+
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1311> Add RmtTrail ./dirdat/JMS/ta, Extract P_UAT115, Megabytes 10
+
+RMTTRAIL added.
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1312>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1312>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1312>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1312>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1312>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1312> register extract E_UAT116 database
+
+
+2016-08-01 17:54:20  INFO    OGG-02003  Extract E_UAT116 successfully registered with database at SCN 849349881.
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1313>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1313> add extract E_UAT116, integrated tranlog, begin now
+
+EXTRACT (Integrated) added.
+
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1314> Add ExtTrail ./dirdat/C022427/sa, Extract E_UAT116, Megabytes 10
+
+EXTTRAIL added.
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1315>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1315>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1315> Add Extract P_UAT116, ExtTrailSource ./dirdat/JMS/sa
+
+EXTRACT added.
+
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1316> Add RmtTrail ./dirdat/C022427/ta, Extract P_UAT116, Megabytes 10
+
+RMTTRAIL added.
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1317>
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 1317>

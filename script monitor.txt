@@ -1,0 +1,87 @@
+
+ORACLE_SID=SOAUAT2
+ORACLE_BASE=/u01/app/oracle
+ORACLE_HOME=/u01/app/oracle/product/ora1210/db_1
+OGG_HOME=/u01/app/goldengate/gg12c
+
+monitoring_gg.sh SOAUAT2 /u01/app/goldengate/gg12c 10
+
+monitoring_gg.sh SOAUAT2 /u01/app/goldengate/gg12c 10
+
+--------------------------------------------------------------------------------------------------------------------------
+
+$ cat run-monitoring-gg-shellscript-every-5-seconds.sh
+#!/bin/bash
+while true
+do
+ /u01/app/goldengate/gg12c/monitoring_gg.sh SOAUAT2 /u01/app/goldengate/gg12c 10
+ sleep 1800
+done
+
+
+http://teaching.idallen.com/cst8207/13w/notes/600_processes_and_jobs.html
+--------------------------------------------------------------------------------------------------------------------------
+
+Now, execute this shell script in the background using nohup as shown below. 
+This will keep executing the script even after you logout from your session. 
+This will execute your backup.sh shell script every 5 seconds.
+
+$ nohup ./run-monitoring-gg-shellscript-every-5-seconds.sh &
+
+nohup ./run-monitoring-gg-shellscript-SOAUAT1every-5-seconds.sh &
+nohup ./run-monitoring-gg-shellscript-SOAUAT2every-5-seconds.sh &
+
+jobs
+ps -eaf | grep shellscript
+kill 1713
+fg 1
+
+http://sridharramireddy.blogspot.com/2014/09/script-to-monitor-goldengate-monitoring.html
+--------------------------------------------------------------------------------------------------------------------------
+
+
+"ategginahalli@wmata.com,NKIyer@wmata.com,mbahraini@wmata.com,pgpillai@wmata.com,sgangadharan@wmata.com,KRamadass@wmata.com,tduraisamy@wmata.com,kcpalaparthi@wmata.com,mhuda@wmata.com,VMPanicker@wmata.com"
+
+"ategginahalli@wmata.com"
+
+--------------------------------------------------------------------------------------------------------------------------
+
+$ nohup ./run-monitoring-gg-shellscript-SOAUAT1every-5-seconds.sh &
+#!/bin/bash
+while true
+do
+ /u01/app/goldengate/gg12c/monitoring_gg.sh SOAUAT1 /u01/app/goldengate/gg12c 10
+ sleep 1800
+done
+
+--------------------------------------------------------------------------------------------------------------------------
+
+$ nohup ./run-monitoring-gg-shellscript-SOAUAT2every-5-seconds.sh &
+#!/bin/bash
+while true
+do
+ /u01/app/goldengate/gg12c/monitoring_gg.sh SOAUAT2 /u01/app/goldengate/gg12c 10
+ sleep 1800
+done
+
+--------------------------------------------------------------------------------------------------------------------------
+
+curl http://textbelt.com/text -d number=5713527275 -d "message=Anil: Golden Gate Processed stopped WMATA Support Team"
+curl http://textbelt.com/text -d number=5551551555 -d "message=hello from OSXDaily.com"
+
+
+[oragg@CTDBSOA02Sv gg12c]$ curl http://textbelt.com/text -d number=5713527275 -d "message=Anil: Golden Gate Processed stopped WMATA Support Team"
+<html>
+<head>
+<meta http-equiv="refresh" content="0; url='http://170.121.12.47/mits/access_prohibited.cfm'" />
+</head>
+</html>
+
+[oragg@CTDBSOA02Sv gg12c]$
+
+
+--------------------------------------------------------------------------------------------------------------------------
+pass
+GitHub : git135022016
+Git : git135022016
+--------------------------------------------------------------------------------------------------------------------------

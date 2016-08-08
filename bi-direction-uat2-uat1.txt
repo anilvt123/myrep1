@@ -1,0 +1,1534 @@
+
+0.
+
+-- ON SOURCE 2
+-- ON TARGET 1 
+
+mkdir ./dirdat/SOAINTERNAL
+mkdir ./dirdat/FMW1221_SOAINFRA
+mkdir ./dirdat/FMW1221_ESS
+mkdir ./dirdat/FMW1221_IAU
+mkdir ./dirdat/FMW1221_IAU_APPEND
+mkdir ./dirdat/FMW1221_IAU_VIEWER
+mkdir ./dirdat/FMW1221_MDS
+mkdir ./dirdat/FMW1221_MFT
+mkdir ./dirdat/FMW1221_OPSS
+mkdir ./dirdat/FMW1221_STB
+mkdir ./dirdat/FMW1221_UMS
+mkdir ./dirdat/FMW1221_WLS
+mkdir ./dirdat/FMW1221_WLS_RUNTIME
+mkdir ./dirdat/TLOGS
+mkdir ./dirdat/JMS
+mkdir ./dirdat/C022427
+
+----------------------------------------------------------------------------------------------------------------------------------
+	1. SOAINTERNAL
+----------------------------------------------------------------------------------------------------------------------------------
+
+-- ON SOURCE 2
+obey startup.oby
+Info SchemaTranData SOAINTERNAL    
+Add SchemaTranData SOAINTERNAL  ALLCOLS
+
+
+edit param E_UAT201
+
+-- Primary Extract from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 05/3/16
+SETENV(ORACLE_SID = "SOAUAT2")
+Extract E_UAT201
+ExtTrail ./dirdat/SOAINTERNAL/sb
+--UserID oggadm1@soauat2, Password pswd1a
+USERIDALIAS SOAUAT2ADM DOMAIN admin
+LOGALLSUPCOLS
+UPDATERECORDFORMAT COMPACT
+TranLogOptions ExcludeUser oggadm1
+TRANLOGOPTIONS INCLUDEREGIONID
+DDL INCLUDE MAPPED
+DDLOPTIONS REPORT
+GETUPDATEBEFORES
+--GETTRUNCATES
+NOCOMPRESSUPDATES
+NOCOMPRESSDELETES
+-- for SOA Application
+Table SOAINTERNAL.* ,GETBEFORECOLS (ON UPDATE ALL, ON DELETE ALL);
+
+register extract E_UAT201 database
+add extract E_UAT201, integrated tranlog, begin now
+Add ExtTrail ./dirdat/SOAINTERNAL/sb, Extract E_UAT201, Megabytes 10
+--start extract E_UAT201
+send extract E_UAT201,report
+view report E_UAT201
+
+
+-- ON SOURCE 2
+
+edit param P_UAT201
+
+-- Data pump (secondary Extract) from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 5/3/16
+Extract P_UAT201
+RmtHost ctdbsoa01sv, MGRPORT 7809
+RmtTrail ./dirdat/SOAINTERNAL/tb
+Passthru
+-- for SOA Application
+Table SOAINTERNAL.*;
+
+Add Extract P_UAT201, ExtTrailSource ./dirdat/SOAINTERNAL/sb 
+Add RmtTrail ./dirdat/SOAINTERNAL/tb, Extract P_UAT201, Megabytes 10
+--start extract P_UAT201
+send extract P_UAT201,report
+view report P_UAT201
+
+
+-- ON TARGET 1 
+
+obey startup.oby
+Info SchemaTranData SOAINTERNAL 
+Add SchemaTranData SOAINTERNAL ALLCOLS
+
+edit param R_UAT201
+
+-- Delivery from from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 5/3/16
+Replicat R_UAT201
+--UserID oggadm1@soauat2, password pswd1a
+USERIDALIAS SOAUAT1ADM domain admin
+--DDLERROR DEFAULT IGNORE
+DDLERROR DEFAULT IGNORE RETRYOP
+--ddlerror 1432 ignore
+DBOPTIONS SUPPRESSTRIGGERS
+AssumeTargetDefs
+--SourceDefs dirdef/dsalesab.def
+DiscardFile dirrpt/R_UAT201.dsc, Append
+Map SOAINTERNAL.*, Target SOAINTERNAL.*;
+
+
+Add Replicat R_UAT201, integrated, ExtTrail ./dirdat/SOAINTERNAL/tb
+--start Replicat R_UAT201,aftercsn 792848442
+
+stop Replicat R_UAT201
+start Replicat R_UAT201
+Info R_UAT201, Detail
+send REPLICAT R_UAT201,report
+view report R_UAT201
+info all
+
+----------------------------------------------------------------------------------------------------------------------------------
+	2. FMW1221_SOAINFRA
+----------------------------------------------------------------------------------------------------------------------------------
+
+
+-- ON SOURCE 2
+obey startup.oby
+Info SchemaTranData FMW1221_SOAINFRA    
+Add SchemaTranData FMW1221_SOAINFRA  ALLCOLS
+
+
+edit param E_UAT202
+
+-- Primary Extract from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 05/3/16
+SETENV(ORACLE_SID = "SOAUAT2")
+Extract E_UAT202
+ExtTrail ./dirdat/FMW1221_SOAINFRA/sb
+--UserID oggadm1@soauat2, Password pswd1a
+USERIDALIAS SOAUAT2ADM DOMAIN admin
+LOGALLSUPCOLS
+UPDATERECORDFORMAT COMPACT
+TranLogOptions ExcludeUser oggadm1
+TRANLOGOPTIONS INCLUDEREGIONID
+DDL INCLUDE MAPPED
+DDLOPTIONS REPORT
+GETUPDATEBEFORES
+--GETTRUNCATES
+NOCOMPRESSUPDATES
+NOCOMPRESSDELETES
+-- for SOA Application
+Table FMW1221_SOAINFRA.* ,GETBEFORECOLS (ON UPDATE ALL, ON DELETE ALL);
+
+register extract E_UAT202 database
+add extract E_UAT202, integrated tranlog, begin now
+Add ExtTrail ./dirdat/FMW1221_SOAINFRA/sb, Extract E_UAT202, Megabytes 10
+--start extract E_UAT202
+send extract E_UAT202,report
+view report E_UAT202
+
+
+-- ON SOURCE 2
+
+edit param P_UAT202
+
+-- Data pump (secondary Extract) from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 5/3/16
+Extract P_UAT202
+RmtHost ctdbsoa01sv, MGRPORT 7809
+RmtTrail ./dirdat/FMW1221_SOAINFRA/tb
+Passthru
+DDL INCLUDE MAPPED
+-- for SOA Application
+Table FMW1221_SOAINFRA.*;
+
+Add Extract P_UAT202, ExtTrailSource ./dirdat/FMW1221_SOAINFRA/sb 
+Add RmtTrail ./dirdat/FMW1221_SOAINFRA/tb, Extract P_UAT202, Megabytes 10
+--start extract P_UAT202
+send extract P_UAT202,report
+view report P_UAT202
+
+
+-- ON TARGET 1 
+
+obey startup.oby
+Info SchemaTranData FMW1221_SOAINFRA 
+Add SchemaTranData FMW1221_SOAINFRA ALLCOLS
+
+edit param R_UAT202
+
+-- Delivery from from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 5/3/16
+Replicat R_UAT202
+--UserID oggadm1@soauat2, password pswd1a
+USERIDALIAS SOAUAT1ADM domain admin
+--DDLERROR DEFAULT IGNORE
+DDLERROR DEFAULT IGNORE RETRYOP
+--ddlerror 1432 ignore
+DBOPTIONS SUPPRESSTRIGGERS
+AssumeTargetDefs
+--SourceDefs dirdef/dsalesab.def
+DiscardFile dirrpt/R_UAT202.dsc, Append
+Map FMW1221_SOAINFRA.*, Target FMW1221_SOAINFRA.*;
+
+
+Add Replicat R_UAT202, integrated, ExtTrail ./dirdat/FMW1221_SOAINFRA/tb
+--start Replicat R_UAT202
+--start Replicat R_UAT202,aftercsn 792848442
+--stop Replicat R_UAT202
+--start Replicat R_UAT202
+Info R_UAT202, Detail
+send REPLICAT R_UAT202,report
+view report R_UAT202
+info all
+
+stop Replicat R_UAT201
+start Replicat R_UAT201
+Info R_UAT201, Detail
+send REPLICAT R_UAT201,report
+view report R_UAT201
+info all
+
+
+----------------------------------------------------------------------------------------------------------------------------------
+	3.	FMW1221_ESS
+----------------------------------------------------------------------------------------------------------------------------------
+
+-- ON SOURCE 2
+obey startup.oby
+Info SchemaTranData FMW1221_ESS    
+Add SchemaTranData FMW1221_ESS  ALLCOLS
+
+
+edit param E_UAT203
+
+-- Primary Extract from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 05/3/16
+SETENV(ORACLE_SID = "SOAUAT2")
+Extract E_UAT203
+ExtTrail ./dirdat/FMW1221_ESS/sb
+--UserID oggadm1@soauat2, Password pswd1a
+USERIDALIAS SOAUAT2ADM DOMAIN admin
+LOGALLSUPCOLS
+UPDATERECORDFORMAT COMPACT
+TranLogOptions ExcludeUser oggadm1
+TRANLOGOPTIONS INCLUDEREGIONID
+DDL INCLUDE MAPPED
+DDLOPTIONS REPORT
+GETUPDATEBEFORES
+--GETTRUNCATES
+NOCOMPRESSUPDATES
+NOCOMPRESSDELETES
+-- for SOA Application
+Table FMW1221_ESS.* ,GETBEFORECOLS (ON UPDATE ALL, ON DELETE ALL);
+
+register extract E_UAT203 database
+add extract E_UAT203, integrated tranlog, begin now
+Add ExtTrail ./dirdat/FMW1221_ESS/sb, Extract E_UAT203, Megabytes 10
+--start extract E_UAT203
+send extract E_UAT203,report
+view report E_UAT203
+
+
+-- ON SOURCE 2
+
+edit param P_UAT203
+
+-- Data pump (secondary Extract) from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 5/3/16
+Extract P_UAT203
+RmtHost ctdbsoa01sv, MGRPORT 7809
+RmtTrail ./dirdat/FMW1221_ESS/tb
+Passthru
+-- for SOA Application
+Table FMW1221_ESS.*;
+
+Add Extract P_UAT203, ExtTrailSource ./dirdat/FMW1221_ESS/sb 
+Add RmtTrail ./dirdat/FMW1221_ESS/tb, Extract P_UAT203, Megabytes 10
+--start extract P_UAT203
+send extract P_UAT203,report
+view report P_UAT203
+
+
+-- ON TARGET 1 
+
+obey startup.oby
+Info SchemaTranData FMW1221_ESS 
+Add SchemaTranData FMW1221_ESS ALLCOLS
+
+edit param R_UAT203
+
+-- Delivery from from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 5/3/16
+Replicat R_UAT203
+--UserID oggadm1@soauat2, password pswd1a
+USERIDALIAS SOAUAT1ADM domain admin
+--DDLERROR DEFAULT IGNORE
+DDLERROR DEFAULT IGNORE RETRYOP
+--ddlerror 1432 ignore
+DBOPTIONS SUPPRESSTRIGGERS
+AssumeTargetDefs
+--SourceDefs dirdef/dsalesab.def
+DiscardFile dirrpt/R_UAT203.dsc, Append
+Map FMW1221_ESS.*, Target FMW1221_ESS.*;
+
+
+Add Replicat R_UAT203, integrated, ExtTrail ./dirdat/FMW1221_ESS/tb
+--start Replicat R_UAT203
+--start Replicat R_UAT203,aftercsn 792848442
+--stop Replicat R_UAT203
+--start Replicat R_UAT203
+Info R_UAT203, Detail
+send REPLICAT R_UAT203,report
+view report R_UAT203
+info all
+
+
+----------------------------------------------------------------------------------------------------------------------------------
+	4.	FMW1221_IAU
+----------------------------------------------------------------------------------------------------------------------------------
+
+-- ON SOURCE 2
+obey startup.oby
+Info SchemaTranData FMW1221_IAU    
+Add SchemaTranData FMW1221_IAU  ALLCOLS
+
+
+edit param E_UAT204
+
+-- Primary Extract from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 05/3/16
+SETENV(ORACLE_SID = "SOAUAT2")
+Extract E_UAT204
+ExtTrail ./dirdat/FMW1221_IAU/sb
+--UserID oggadm1@soauat2, Password pswd1a
+USERIDALIAS SOAUAT2ADM DOMAIN admin
+LOGALLSUPCOLS
+UPDATERECORDFORMAT COMPACT
+TranLogOptions ExcludeUser oggadm1
+TRANLOGOPTIONS INCLUDEREGIONID
+DDL INCLUDE MAPPED
+DDLOPTIONS REPORT
+GETUPDATEBEFORES
+--GETTRUNCATES
+NOCOMPRESSUPDATES
+NOCOMPRESSDELETES
+-- for SOA Application
+Table FMW1221_IAU.* ,GETBEFORECOLS (ON UPDATE ALL, ON DELETE ALL);
+
+register extract E_UAT204 database
+add extract E_UAT204, integrated tranlog, begin now
+Add ExtTrail ./dirdat/FMW1221_IAU/sb, Extract E_UAT204, Megabytes 10
+--start extract E_UAT204
+send extract E_UAT204,report
+view report E_UAT204
+
+
+-- ON SOURCE 2
+
+edit param P_UAT204
+
+-- Data pump (secondary Extract) from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 5/3/16
+Extract P_UAT204
+RmtHost ctdbsoa01sv, MGRPORT 7809
+RmtTrail ./dirdat/FMW1221_IAU/tb
+Passthru
+-- for SOA Application
+Table FMW1221_IAU.*;
+
+Add Extract P_UAT204, ExtTrailSource ./dirdat/FMW1221_IAU/sb 
+Add RmtTrail ./dirdat/FMW1221_IAU/tb, Extract P_UAT204, Megabytes 10
+--start extract P_UAT204
+send extract P_UAT204,report
+view report P_UAT204
+
+
+-- ON TARGET 1 
+
+obey startup.oby
+Info SchemaTranData FMW1221_IAU 
+Add SchemaTranData FMW1221_IAU ALLCOLS
+
+edit param R_UAT204
+
+-- Delivery from from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 5/3/16
+Replicat R_UAT204
+--UserID oggadm1@soauat2, password pswd1a
+USERIDALIAS SOAUAT1ADM domain admin
+--DDLERROR DEFAULT IGNORE
+DDLERROR DEFAULT IGNORE RETRYOP
+--ddlerror 1432 ignore
+DBOPTIONS SUPPRESSTRIGGERS
+AssumeTargetDefs
+--SourceDefs dirdef/dsalesab.def
+DiscardFile dirrpt/R_UAT204.dsc, Append
+Map FMW1221_IAU.*, Target FMW1221_IAU.*;
+
+
+Add Replicat R_UAT204, integrated, ExtTrail ./dirdat/FMW1221_IAU/tb
+--start Replicat R_UAT204
+--start Replicat R_UAT204,aftercsn 792848442
+--stop Replicat R_UAT204
+--start Replicat R_UAT204
+Info R_UAT204, Detail
+send REPLICAT R_UAT204,report
+view report R_UAT204
+info all
+
+----------------------------------------------------------------------------------------------------------------------------------
+	5.	FMW1221_IAU_APPEND
+----------------------------------------------------------------------------------------------------------------------------------
+
+-- ON SOURCE 2
+obey startup.oby
+Info SchemaTranData FMW1221_IAU_APPEND    
+Add SchemaTranData FMW1221_IAU_APPEND  ALLCOLS
+
+
+edit param E_UAT205
+
+-- Primary Extract from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 05/3/16
+SETENV(ORACLE_SID = "SOAUAT2")
+Extract E_UAT205
+ExtTrail ./dirdat/FMW1221_IAU_APPEND/sb
+--UserID oggadm1@soauat2, Password pswd1a
+USERIDALIAS SOAUAT2ADM DOMAIN admin
+LOGALLSUPCOLS
+UPDATERECORDFORMAT COMPACT
+TranLogOptions ExcludeUser oggadm1
+TRANLOGOPTIONS INCLUDEREGIONID
+DDL INCLUDE MAPPED
+DDLOPTIONS REPORT
+GETUPDATEBEFORES
+--GETTRUNCATES
+NOCOMPRESSUPDATES
+NOCOMPRESSDELETES
+-- for SOA Application
+Table FMW1221_IAU_APPEND.* ,GETBEFORECOLS (ON UPDATE ALL, ON DELETE ALL);
+
+register extract E_UAT205 database
+add extract E_UAT205, integrated tranlog, begin now
+Add ExtTrail ./dirdat/FMW1221_IAU_APPEND/sb, Extract E_UAT205, Megabytes 10
+--start extract E_UAT205
+send extract E_UAT205,report
+view report E_UAT205
+
+
+-- ON SOURCE 2
+
+edit param P_UAT205
+
+-- Data pump (secondary Extract) from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 5/3/16
+Extract P_UAT205
+RmtHost ctdbsoa01sv, MGRPORT 7809
+RmtTrail ./dirdat/FMW1221_IAU_APPEND/tb
+Passthru
+-- for SOA Application
+Table FMW1221_IAU_APPEND.*;
+
+Add Extract P_UAT205, ExtTrailSource ./dirdat/FMW1221_IAU_APPEND/sb 
+Add RmtTrail ./dirdat/FMW1221_IAU_APPEND/tb, Extract P_UAT205, Megabytes 10
+--start extract P_UAT205
+send extract P_UAT205,report
+view report P_UAT205
+
+
+-- ON TARGET 1 
+
+obey startup.oby
+Info SchemaTranData FMW1221_IAU_APPEND 
+Add SchemaTranData FMW1221_IAU_APPEND ALLCOLS
+
+edit param R_UAT205
+
+-- Delivery from from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 5/3/16
+Replicat R_UAT205
+--UserID oggadm1@soauat2, password pswd1a
+USERIDALIAS SOAUAT1ADM domain admin
+--DDLERROR DEFAULT IGNORE
+DDLERROR DEFAULT IGNORE RETRYOP
+--ddlerror 1432 ignore
+DBOPTIONS SUPPRESSTRIGGERS
+AssumeTargetDefs
+--SourceDefs dirdef/dsalesab.def
+DiscardFile dirrpt/R_UAT205.dsc, Append
+Map FMW1221_IAU_APPEND.*, Target FMW1221_IAU_APPEND.*;
+
+
+Add Replicat R_UAT205, integrated, ExtTrail ./dirdat/FMW1221_IAU_APPEND/tb
+--start Replicat R_UAT205
+--start Replicat R_UAT205,aftercsn 792848442
+--stop Replicat R_UAT205
+--start Replicat R_UAT205
+Info R_UAT205, Detail
+send REPLICAT R_UAT205,report
+view report R_UAT205
+info all
+
+
+----------------------------------------------------------------------------------------------------------------------------------
+	6.	FMW1221_IAU_VIEWER
+----------------------------------------------------------------------------------------------------------------------------------
+
+-- ON SOURCE 2
+obey startup.oby
+Info SchemaTranData FMW1221_IAU_VIEWER    
+Add SchemaTranData FMW1221_IAU_VIEWER  ALLCOLS
+
+
+edit param E_UAT206
+
+-- Primary Extract from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 05/3/16
+SETENV(ORACLE_SID = "SOAUAT2")
+Extract E_UAT206
+ExtTrail ./dirdat/FMW1221_IAU_VIEWER/sb
+--UserID oggadm1@soauat2, Password pswd1a
+USERIDALIAS SOAUAT2ADM DOMAIN admin
+LOGALLSUPCOLS
+UPDATERECORDFORMAT COMPACT
+TranLogOptions ExcludeUser oggadm1
+TRANLOGOPTIONS INCLUDEREGIONID
+DDL INCLUDE MAPPED
+DDLOPTIONS REPORT
+GETUPDATEBEFORES
+--GETTRUNCATES
+NOCOMPRESSUPDATES
+NOCOMPRESSDELETES
+-- for SOA Application
+Table FMW1221_IAU_VIEWER.* ,GETBEFORECOLS (ON UPDATE ALL, ON DELETE ALL);
+
+register extract E_UAT206 database
+add extract E_UAT206, integrated tranlog, begin now
+Add ExtTrail ./dirdat/FMW1221_IAU_VIEWER/sb, Extract E_UAT206, Megabytes 10
+--start extract E_UAT206
+send extract E_UAT206,report
+view report E_UAT206
+
+
+-- ON SOURCE 2
+
+edit param P_UAT206
+
+-- Data pump (secondary Extract) from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 5/3/16
+Extract P_UAT206
+RmtHost ctdbsoa01sv, MGRPORT 7809
+RmtTrail ./dirdat/FMW1221_IAU_VIEWER/tb
+Passthru
+-- for SOA Application
+Table FMW1221_IAU_VIEWER.*;
+
+Add Extract P_UAT206, ExtTrailSource ./dirdat/FMW1221_IAU_VIEWER/sb 
+Add RmtTrail ./dirdat/FMW1221_IAU_VIEWER/tb, Extract P_UAT206, Megabytes 10
+--start extract P_UAT206
+send extract P_UAT206,report
+view report P_UAT206
+
+
+-- ON TARGET 1 
+
+obey startup.oby
+Info SchemaTranData FMW1221_IAU_VIEWER 
+Add SchemaTranData FMW1221_IAU_VIEWER ALLCOLS
+
+edit param R_UAT206
+
+-- Delivery from from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 5/3/16
+Replicat R_UAT206
+--UserID oggadm1@soauat2, password pswd1a
+USERIDALIAS SOAUAT1ADM domain admin
+--DDLERROR DEFAULT IGNORE
+DDLERROR DEFAULT IGNORE RETRYOP
+--ddlerror 1432 ignore
+DBOPTIONS SUPPRESSTRIGGERS
+AssumeTargetDefs
+--SourceDefs dirdef/dsalesab.def
+DiscardFile dirrpt/R_UAT206.dsc, Append
+Map FMW1221_IAU_VIEWER.*, Target FMW1221_IAU_VIEWER.*;
+
+
+Add Replicat R_UAT206, integrated, ExtTrail ./dirdat/FMW1221_IAU_VIEWER/tb
+--start Replicat R_UAT206
+--start Replicat R_UAT206,aftercsn 792848442
+--stop Replicat R_UAT206
+--start Replicat R_UAT206
+Info R_UAT206, Detail
+send REPLICAT R_UAT206,report
+view report R_UAT206
+info all
+
+
+----------------------------------------------------------------------------------------------------------------------------------
+	7.	FMW1221_MDS
+----------------------------------------------------------------------------------------------------------------------------------
+
+-- ON SOURCE 2
+obey startup.oby
+Info SchemaTranData FMW1221_MDS    
+Add SchemaTranData FMW1221_MDS  ALLCOLS
+
+
+edit param E_UAT207
+
+-- Primary Extract from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 05/3/16
+SETENV(ORACLE_SID = "SOAUAT2")
+Extract E_UAT207
+ExtTrail ./dirdat/FMW1221_MDS/sb
+--UserID oggadm1@soauat2, Password pswd1a
+USERIDALIAS SOAUAT2ADM DOMAIN admin
+LOGALLSUPCOLS
+UPDATERECORDFORMAT COMPACT
+TranLogOptions ExcludeUser oggadm1
+TRANLOGOPTIONS INCLUDEREGIONID
+DDL INCLUDE MAPPED
+DDLOPTIONS REPORT
+GETUPDATEBEFORES
+--GETTRUNCATES
+NOCOMPRESSUPDATES
+NOCOMPRESSDELETES
+-- for SOA Application
+Table FMW1221_MDS.* ,GETBEFORECOLS (ON UPDATE ALL, ON DELETE ALL);
+
+register extract E_UAT207 database
+add extract E_UAT207, integrated tranlog, begin now
+Add ExtTrail ./dirdat/FMW1221_MDS/sb, Extract E_UAT207, Megabytes 10
+--start extract E_UAT207
+send extract E_UAT207,report
+view report E_UAT207
+
+
+-- ON SOURCE 2
+
+edit param P_UAT207
+
+-- Data pump (secondary Extract) from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 5/3/16
+Extract P_UAT207
+RmtHost ctdbsoa01sv, MGRPORT 7809
+RmtTrail ./dirdat/FMW1221_MDS/tb
+Passthru
+-- for SOA Application
+Table FMW1221_MDS.*;
+
+Add Extract P_UAT207, ExtTrailSource ./dirdat/FMW1221_MDS/sb 
+Add RmtTrail ./dirdat/FMW1221_MDS/tb, Extract P_UAT207, Megabytes 10
+--start extract P_UAT207
+send extract P_UAT207,report
+view report P_UAT207
+
+
+-- ON TARGET 1 
+
+obey startup.oby
+Info SchemaTranData FMW1221_MDS 
+Add SchemaTranData FMW1221_MDS ALLCOLS
+
+edit param R_UAT207
+
+-- Delivery from from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 5/3/16
+Replicat R_UAT207
+--UserID oggadm1@soauat2, password pswd1a
+USERIDALIAS SOAUAT1ADM domain admin
+--DDLERROR DEFAULT IGNORE
+DDLERROR DEFAULT IGNORE RETRYOP
+--ddlerror 1432 ignore
+DBOPTIONS SUPPRESSTRIGGERS
+AssumeTargetDefs
+--SourceDefs dirdef/dsalesab.def
+DiscardFile dirrpt/R_UAT207.dsc, Append
+Map FMW1221_MDS.*, Target FMW1221_MDS.*;
+
+
+Add Replicat R_UAT207, integrated, ExtTrail ./dirdat/FMW1221_MDS/tb
+--start Replicat R_UAT207
+--start Replicat R_UAT207,aftercsn 792848442
+--stop Replicat R_UAT207
+--start Replicat R_UAT207
+Info R_UAT207, Detail
+send REPLICAT R_UAT207,report
+view report R_UAT207
+info all
+
+----------------------------------------------------------------------------------------------------------------------------------
+	8.	FMW1221_MFT
+----------------------------------------------------------------------------------------------------------------------------------
+
+-- ON SOURCE 2
+obey startup.oby
+Info SchemaTranData FMW1221_MFT    
+Add SchemaTranData FMW1221_MFT  ALLCOLS
+
+
+edit param E_UAT208
+
+-- Primary Extract from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 05/3/16
+SETENV(ORACLE_SID = "SOAUAT2")
+Extract E_UAT208
+ExtTrail ./dirdat/FMW1221_MFT/sb
+--UserID oggadm1@soauat2, Password pswd1a
+USERIDALIAS SOAUAT2ADM DOMAIN admin
+LOGALLSUPCOLS
+UPDATERECORDFORMAT COMPACT
+TranLogOptions ExcludeUser oggadm1
+TRANLOGOPTIONS INCLUDEREGIONID
+DDL INCLUDE MAPPED
+DDLOPTIONS REPORT
+GETUPDATEBEFORES
+--GETTRUNCATES
+NOCOMPRESSUPDATES
+NOCOMPRESSDELETES
+-- for SOA Application
+Table FMW1221_MFT.* ,GETBEFORECOLS (ON UPDATE ALL, ON DELETE ALL);
+
+register extract E_UAT208 database
+add extract E_UAT208, integrated tranlog, begin now
+Add ExtTrail ./dirdat/FMW1221_MFT/sb, Extract E_UAT208, Megabytes 10
+--start extract E_UAT208
+send extract E_UAT208,report
+view report E_UAT208
+
+
+-- ON SOURCE 2
+
+edit param P_UAT208
+
+-- Data pump (secondary Extract) from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 5/3/16
+Extract P_UAT208
+RmtHost ctdbsoa01sv, MGRPORT 7809
+RmtTrail ./dirdat/FMW1221_MFT/tb
+Passthru
+-- for SOA Application
+Table FMW1221_MFT.*;
+
+Add Extract P_UAT208, ExtTrailSource ./dirdat/FMW1221_MFT/sb 
+Add RmtTrail ./dirdat/FMW1221_MFT/tb, Extract P_UAT208, Megabytes 10
+--start extract P_UAT208
+send extract P_UAT208,report
+view report P_UAT208
+
+
+-- ON TARGET 1 
+
+obey startup.oby
+Info SchemaTranData FMW1221_MFT 
+Add SchemaTranData FMW1221_MFT ALLCOLS
+
+edit param R_UAT208
+
+-- Delivery from from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 5/3/16
+Replicat R_UAT208
+--UserID oggadm1@soauat2, password pswd1a
+USERIDALIAS SOAUAT1ADM domain admin
+--DDLERROR DEFAULT IGNORE
+DDLERROR DEFAULT IGNORE RETRYOP
+--ddlerror 1432 ignore
+DBOPTIONS SUPPRESSTRIGGERS
+AssumeTargetDefs
+--SourceDefs dirdef/dsalesab.def
+DiscardFile dirrpt/R_UAT208.dsc, Append
+Map FMW1221_MFT.*, Target FMW1221_MFT.*;
+
+
+Add Replicat R_UAT208, integrated, ExtTrail ./dirdat/FMW1221_MFT/tb
+--start Replicat R_UAT208
+--start Replicat R_UAT208,aftercsn 792848442
+--stop Replicat R_UAT208
+--start Replicat R_UAT208
+Info R_UAT208, Detail
+send REPLICAT R_UAT208,report
+view report R_UAT208
+info all
+
+----------------------------------------------------------------------------------------------------------------------------------
+	9.	FMW1221_OPSS
+----------------------------------------------------------------------------------------------------------------------------------
+
+-- ON SOURCE 2
+obey startup.oby
+Info SchemaTranData FMW1221_OPSS    
+Add SchemaTranData FMW1221_OPSS  ALLCOLS
+
+
+edit param E_UAT209
+
+-- Primary Extract from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 05/3/16
+SETENV(ORACLE_SID = "SOAUAT2")
+Extract E_UAT209
+ExtTrail ./dirdat/FMW1221_OPSS/sb
+--UserID oggadm1@soauat2, Password pswd1a
+USERIDALIAS SOAUAT2ADM DOMAIN admin
+LOGALLSUPCOLS
+UPDATERECORDFORMAT COMPACT
+TranLogOptions ExcludeUser oggadm1
+TRANLOGOPTIONS INCLUDEREGIONID
+DDL INCLUDE MAPPED
+DDLOPTIONS REPORT
+GETUPDATEBEFORES
+--GETTRUNCATES
+NOCOMPRESSUPDATES
+NOCOMPRESSDELETES
+-- for SOA Application
+Table FMW1221_OPSS.* ,GETBEFORECOLS (ON UPDATE ALL, ON DELETE ALL);
+
+register extract E_UAT209 database
+add extract E_UAT209, integrated tranlog, begin now
+Add ExtTrail ./dirdat/FMW1221_OPSS/sb, Extract E_UAT209, Megabytes 10
+--start extract E_UAT209
+send extract E_UAT209,report
+view report E_UAT209
+
+
+-- ON SOURCE 2
+
+edit param P_UAT209
+
+-- Data pump (secondary Extract) from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 5/3/16
+Extract P_UAT209
+RmtHost ctdbsoa01sv, MGRPORT 7809
+RmtTrail ./dirdat/FMW1221_OPSS/tb
+Passthru
+-- for SOA Application
+Table FMW1221_OPSS.*;
+
+Add Extract P_UAT209, ExtTrailSource ./dirdat/FMW1221_OPSS/sb 
+Add RmtTrail ./dirdat/FMW1221_OPSS/tb, Extract P_UAT209, Megabytes 10
+--start extract P_UAT209
+send extract P_UAT209,report
+view report P_UAT209
+
+
+-- ON TARGET 1 
+
+obey startup.oby
+Info SchemaTranData FMW1221_OPSS 
+Add SchemaTranData FMW1221_OPSS ALLCOLS
+
+edit param R_UAT209
+
+-- Delivery from from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 5/3/16
+Replicat R_UAT209
+--UserID oggadm1@soauat2, password pswd1a
+USERIDALIAS SOAUAT1ADM domain admin
+--DDLERROR DEFAULT IGNORE
+DDLERROR DEFAULT IGNORE RETRYOP
+--ddlerror 1432 ignore
+DBOPTIONS SUPPRESSTRIGGERS
+AssumeTargetDefs
+--SourceDefs dirdef/dsalesab.def
+DiscardFile dirrpt/R_UAT209.dsc, Append
+Map FMW1221_OPSS.*, Target FMW1221_OPSS.*;
+
+
+Add Replicat R_UAT209, integrated, ExtTrail ./dirdat/FMW1221_OPSS/tb
+--start Replicat R_UAT209
+--start Replicat R_UAT209,aftercsn 792848442
+--stop Replicat R_UAT209
+--start Replicat R_UAT209
+Info R_UAT209, Detail
+send REPLICAT R_UAT209,report
+view report R_UAT209
+info all
+
+
+----------------------------------------------------------------------------------------------------------------------------------
+	10.	FMW1221_STB
+----------------------------------------------------------------------------------------------------------------------------------
+
+-- ON SOURCE 2
+obey startup.oby
+Info SchemaTranData FMW1221_STB    
+Add SchemaTranData FMW1221_STB  ALLCOLS
+
+
+edit param E_UAT210
+
+-- Primary Extract from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 05/3/16
+SETENV(ORACLE_SID = "SOAUAT2")
+Extract E_UAT210
+ExtTrail ./dirdat/FMW1221_STB/sb
+--UserID oggadm1@soauat2, Password pswd1a
+USERIDALIAS SOAUAT2ADM DOMAIN admin
+LOGALLSUPCOLS
+UPDATERECORDFORMAT COMPACT
+TranLogOptions ExcludeUser oggadm1
+TRANLOGOPTIONS INCLUDEREGIONID
+DDL INCLUDE MAPPED
+DDLOPTIONS REPORT
+GETUPDATEBEFORES
+--GETTRUNCATES
+NOCOMPRESSUPDATES
+NOCOMPRESSDELETES
+-- for SOA Application
+Table FMW1221_STB.* ,GETBEFORECOLS (ON UPDATE ALL, ON DELETE ALL);
+
+register extract E_UAT210 database
+add extract E_UAT210, integrated tranlog, begin now
+Add ExtTrail ./dirdat/FMW1221_STB/sb, Extract E_UAT210, Megabytes 10
+--start extract E_UAT210
+send extract E_UAT210,report
+view report E_UAT210
+
+
+-- ON SOURCE 2
+
+edit param P_UAT210
+
+-- Data pump (secondary Extract) from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 5/3/16
+Extract P_UAT210
+RmtHost ctdbsoa01sv, MGRPORT 7809
+RmtTrail ./dirdat/FMW1221_STB/tb
+Passthru
+-- for SOA Application
+Table FMW1221_STB.*;
+
+Add Extract P_UAT210, ExtTrailSource ./dirdat/FMW1221_STB/sb 
+Add RmtTrail ./dirdat/FMW1221_STB/tb, Extract P_UAT210, Megabytes 10
+--start extract P_UAT210
+send extract P_UAT210,report
+view report P_UAT210
+
+
+-- ON TARGET 1 
+
+obey startup.oby
+Info SchemaTranData FMW1221_STB 
+Add SchemaTranData FMW1221_STB ALLCOLS
+
+edit param R_UAT210
+
+-- Delivery from from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 5/3/16
+Replicat R_UAT210
+--UserID oggadm1@soauat2, password pswd1a
+USERIDALIAS SOAUAT1ADM domain admin
+--DDLERROR DEFAULT IGNORE
+DDLERROR DEFAULT IGNORE RETRYOP
+--ddlerror 1432 ignore
+DBOPTIONS SUPPRESSTRIGGERS
+AssumeTargetDefs
+--SourceDefs dirdef/dsalesab.def
+DiscardFile dirrpt/R_UAT210.dsc, Append
+Map FMW1221_STB.*, Target FMW1221_STB.*;
+
+
+Add Replicat R_UAT210, integrated, ExtTrail ./dirdat/FMW1221_STB/tb
+--start Replicat R_UAT210
+--start Replicat R_UAT210,aftercsn 792848442
+--stop Replicat R_UAT210
+--start Replicat R_UAT210
+Info R_UAT210, Detail
+send REPLICAT R_UAT210,report
+view report R_UAT210
+info all
+
+
+----------------------------------------------------------------------------------------------------------------------------------
+	11.	FMW1221_UMS
+----------------------------------------------------------------------------------------------------------------------------------
+
+-- ON SOURCE 2
+obey startup.oby
+Info SchemaTranData FMW1221_UMS    
+Add SchemaTranData FMW1221_UMS  ALLCOLS
+
+
+edit param E_UAT211
+
+-- Primary Extract from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 05/3/16
+SETENV(ORACLE_SID = "SOAUAT2")
+Extract E_UAT211
+ExtTrail ./dirdat/FMW1221_UMS/sb
+--UserID oggadm1@soauat2, Password pswd1a
+USERIDALIAS SOAUAT2ADM DOMAIN admin
+LOGALLSUPCOLS
+UPDATERECORDFORMAT COMPACT
+TranLogOptions ExcludeUser oggadm1
+TRANLOGOPTIONS INCLUDEREGIONID
+DDL INCLUDE MAPPED
+DDLOPTIONS REPORT
+GETUPDATEBEFORES
+--GETTRUNCATES
+NOCOMPRESSUPDATES
+NOCOMPRESSDELETES
+-- for SOA Application
+Table FMW1221_UMS.* ,GETBEFORECOLS (ON UPDATE ALL, ON DELETE ALL);
+
+register extract E_UAT211 database
+add extract E_UAT211, integrated tranlog, begin now
+Add ExtTrail ./dirdat/FMW1221_UMS/sb, Extract E_UAT211, Megabytes 10
+--start extract E_UAT211
+send extract E_UAT211,report
+view report E_UAT211
+
+
+-- ON SOURCE 2
+
+edit param P_UAT211
+
+-- Data pump (secondary Extract) from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 5/3/16
+Extract P_UAT211
+RmtHost ctdbsoa01sv, MGRPORT 7809
+RmtTrail ./dirdat/FMW1221_UMS/tb
+Passthru
+-- for SOA Application
+Table FMW1221_UMS.*;
+
+Add Extract P_UAT211, ExtTrailSource ./dirdat/FMW1221_UMS/sb 
+Add RmtTrail ./dirdat/FMW1221_UMS/tb, Extract P_UAT211, Megabytes 10
+--start extract P_UAT211
+send extract P_UAT211,report
+view report P_UAT211
+
+
+-- ON TARGET 1 
+
+obey startup.oby
+Info SchemaTranData FMW1221_UMS 
+Add SchemaTranData FMW1221_UMS ALLCOLS
+
+edit param R_UAT211
+
+-- Delivery from from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 5/3/16
+Replicat R_UAT211
+--UserID oggadm1@soauat2, password pswd1a
+USERIDALIAS SOAUAT1ADM domain admin
+--DDLERROR DEFAULT IGNORE
+DDLERROR DEFAULT IGNORE RETRYOP
+--ddlerror 1432 ignore
+DBOPTIONS SUPPRESSTRIGGERS
+AssumeTargetDefs
+--SourceDefs dirdef/dsalesab.def
+DiscardFile dirrpt/R_UAT211.dsc, Append
+Map FMW1221_UMS.*, Target FMW1221_UMS.*;
+
+
+Add Replicat R_UAT211, integrated, ExtTrail ./dirdat/FMW1221_UMS/tb
+--start Replicat R_UAT211
+--start Replicat R_UAT211,aftercsn 792848442
+--stop Replicat R_UAT211
+--start Replicat R_UAT211
+Info R_UAT211, Detail
+send REPLICAT R_UAT211,report
+view report R_UAT211
+info all
+
+----------------------------------------------------------------------------------------------------------------------------------
+	12.	FMW1221_WLS
+----------------------------------------------------------------------------------------------------------------------------------
+
+-- ON SOURCE 2
+obey startup.oby
+Info SchemaTranData FMW1221_WLS    
+Add SchemaTranData FMW1221_WLS  ALLCOLS
+
+
+edit param E_UAT212
+
+-- Primary Extract from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 05/3/16
+SETENV(ORACLE_SID = "SOAUAT2")
+Extract E_UAT212
+ExtTrail ./dirdat/FMW1221_WLS/sb
+--UserID oggadm1@soauat2, Password pswd1a
+USERIDALIAS SOAUAT2ADM DOMAIN admin
+LOGALLSUPCOLS
+UPDATERECORDFORMAT COMPACT
+TranLogOptions ExcludeUser oggadm1
+TRANLOGOPTIONS INCLUDEREGIONID
+DDL INCLUDE MAPPED
+DDLOPTIONS REPORT
+GETUPDATEBEFORES
+--GETTRUNCATES
+NOCOMPRESSUPDATES
+NOCOMPRESSDELETES
+-- for SOA Application
+Table FMW1221_WLS.* ,GETBEFORECOLS (ON UPDATE ALL, ON DELETE ALL);
+
+register extract E_UAT212 database
+add extract E_UAT212, integrated tranlog, begin now
+Add ExtTrail ./dirdat/FMW1221_WLS/sb, Extract E_UAT212, Megabytes 10
+--start extract E_UAT212
+send extract E_UAT212,report
+view report E_UAT212
+
+
+-- ON SOURCE 2
+
+edit param P_UAT212
+
+-- Data pump (secondary Extract) from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 5/3/16
+Extract P_UAT212
+RmtHost ctdbsoa01sv, MGRPORT 7809
+RmtTrail ./dirdat/FMW1221_WLS/tb
+Passthru
+-- for SOA Application
+Table FMW1221_WLS.*;
+
+Add Extract P_UAT212, ExtTrailSource ./dirdat/FMW1221_WLS/sb 
+Add RmtTrail ./dirdat/FMW1221_WLS/tb, Extract P_UAT212, Megabytes 10
+--start extract P_UAT212
+send extract P_UAT212,report
+view report P_UAT212
+
+
+-- ON TARGET 1 
+
+obey startup.oby
+Info SchemaTranData FMW1221_WLS 
+Add SchemaTranData FMW1221_WLS ALLCOLS
+
+edit param R_UAT212
+
+-- Delivery from from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 5/3/16
+Replicat R_UAT212
+--UserID oggadm1@soauat2, password pswd1a
+USERIDALIAS SOAUAT1ADM domain admin
+--DDLERROR DEFAULT IGNORE
+DDLERROR DEFAULT IGNORE RETRYOP
+--ddlerror 1432 ignore
+DBOPTIONS SUPPRESSTRIGGERS
+AssumeTargetDefs
+--SourceDefs dirdef/dsalesab.def
+DiscardFile dirrpt/R_UAT212.dsc, Append
+Map FMW1221_WLS.*, Target FMW1221_WLS.*;
+
+
+Add Replicat R_UAT212, integrated, ExtTrail ./dirdat/FMW1221_WLS/tb
+--start Replicat R_UAT212
+--start Replicat R_UAT212,aftercsn 792848442
+--stop Replicat R_UAT212
+--start Replicat R_UAT212
+Info R_UAT212, Detail
+send REPLICAT R_UAT212,report
+view report R_UAT212
+info all
+
+----------------------------------------------------------------------------------------------------------------------------------
+	13.	FMW1221_WLS_RUNTIME
+----------------------------------------------------------------------------------------------------------------------------------
+
+-- ON SOURCE 2
+obey startup.oby
+Info SchemaTranData FMW1221_WLS_RUNTIME    
+Add SchemaTranData FMW1221_WLS_RUNTIME  ALLCOLS
+
+
+edit param E_UAT213
+
+-- Primary Extract from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 05/3/16
+SETENV(ORACLE_SID = "SOAUAT2")
+Extract E_UAT213
+ExtTrail ./dirdat/FMW1221_WLS_RUNTIME/sb
+--UserID oggadm1@soauat2, Password pswd1a
+USERIDALIAS SOAUAT2ADM DOMAIN admin
+LOGALLSUPCOLS
+UPDATERECORDFORMAT COMPACT
+TranLogOptions ExcludeUser oggadm1
+TRANLOGOPTIONS INCLUDEREGIONID
+DDL INCLUDE MAPPED
+DDLOPTIONS REPORT
+GETUPDATEBEFORES
+--GETTRUNCATES
+NOCOMPRESSUPDATES
+NOCOMPRESSDELETES
+-- for SOA Application
+Table FMW1221_WLS_RUNTIME.* ,GETBEFORECOLS (ON UPDATE ALL, ON DELETE ALL);
+
+register extract E_UAT213 database
+add extract E_UAT213, integrated tranlog, begin now
+Add ExtTrail ./dirdat/FMW1221_WLS_RUNTIME/sb, Extract E_UAT213, Megabytes 10
+--start extract E_UAT213
+send extract E_UAT213,report
+view report E_UAT213
+
+
+-- ON SOURCE 2
+
+edit param P_UAT213
+
+-- Data pump (secondary Extract) from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 5/3/16
+Extract P_UAT213
+RmtHost ctdbsoa01sv, MGRPORT 7809
+RmtTrail ./dirdat/FMW1221_WLS_RUNTIME/tb
+Passthru
+-- for SOA Application
+Table FMW1221_WLS_RUNTIME.*;
+
+Add Extract P_UAT213, ExtTrailSource ./dirdat/FMW1221_WLS_RUNTIME/sb 
+Add RmtTrail ./dirdat/FMW1221_WLS_RUNTIME/tb, Extract P_UAT213, Megabytes 10
+--start extract P_UAT213
+send extract P_UAT213,report
+view report P_UAT213
+
+
+-- ON TARGET 1 
+
+obey startup.oby
+Info SchemaTranData FMW1221_WLS_RUNTIME 
+Add SchemaTranData FMW1221_WLS_RUNTIME ALLCOLS
+
+edit param R_UAT213
+
+-- Delivery from from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 5/3/16
+Replicat R_UAT213
+--UserID oggadm1@soauat2, password pswd1a
+USERIDALIAS SOAUAT1ADM domain admin
+--DDLERROR DEFAULT IGNORE
+DDLERROR DEFAULT IGNORE RETRYOP
+--ddlerror 1432 ignore
+DBOPTIONS SUPPRESSTRIGGERS
+AssumeTargetDefs
+--SourceDefs dirdef/dsalesab.def
+DiscardFile dirrpt/R_UAT213.dsc, Append
+Map FMW1221_WLS_RUNTIME.*, Target FMW1221_WLS_RUNTIME.*;
+
+
+Add Replicat R_UAT213, integrated, ExtTrail ./dirdat/FMW1221_WLS_RUNTIME/tb
+--start Replicat R_UAT213
+--start Replicat R_UAT213,aftercsn 792848442
+--stop Replicat R_UAT213
+--start Replicat R_UAT213
+Info R_UAT213, Detail
+send REPLICAT R_UAT213,report
+view report R_UAT213
+info all
+
+
+----------------------------------------------------------------------------------------------------------------------------------
+	14.	TLOGS
+----------------------------------------------------------------------------------------------------------------------------------
+
+-- ON SOURCE 2
+obey startup.oby
+Info SchemaTranData TLOGS    
+Add SchemaTranData TLOGS  ALLCOLS
+
+
+edit param E_UAT214
+
+-- Primary Extract from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 05/3/16
+SETENV(ORACLE_SID = "SOAUAT2")
+Extract E_UAT214
+ExtTrail ./dirdat/TLOGS/sb
+--UserID oggadm1@soauat2, Password pswd1a
+USERIDALIAS SOAUAT2ADM DOMAIN admin
+LOGALLSUPCOLS
+UPDATERECORDFORMAT COMPACT
+TranLogOptions ExcludeUser oggadm1
+TRANLOGOPTIONS INCLUDEREGIONID
+DDL INCLUDE MAPPED
+DDLOPTIONS REPORT
+GETUPDATEBEFORES
+GETTRUNCATES
+NOCOMPRESSUPDATES
+NOCOMPRESSDELETES
+-- for SOA Application
+Table TLOGS.* ,GETBEFORECOLS (ON UPDATE ALL, ON DELETE ALL);
+
+register extract E_UAT214 database
+add extract E_UAT214, integrated tranlog, begin now
+Add ExtTrail ./dirdat/TLOGS/sb, Extract E_UAT214, Megabytes 10
+--start extract E_UAT214
+send extract E_UAT214,report
+view report E_UAT214
+
+
+-- ON SOURCE 2
+
+edit param P_UAT214
+
+-- Data pump (secondary Extract) from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 5/3/16
+Extract P_UAT214
+RmtHost ctdbsoa01sv, MGRPORT 7809
+RmtTrail ./dirdat/TLOGS/tb
+Passthru
+-- for SOA Application
+Table TLOGS.*;
+
+Add Extract P_UAT214, ExtTrailSource ./dirdat/TLOGS/sb 
+Add RmtTrail ./dirdat/TLOGS/tb, Extract P_UAT214, Megabytes 10
+--start extract P_UAT214
+send extract P_UAT214,report
+view report P_UAT214
+
+
+-- ON TARGET 1 
+
+obey startup.oby
+Info SchemaTranData TLOGS 
+Add SchemaTranData TLOGS ALLCOLS
+
+edit param R_UAT214
+
+-- Delivery from from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 5/3/16
+Replicat R_UAT214
+--UserID oggadm1@soauat2, password pswd1a
+USERIDALIAS SOAUAT1ADM domain admin
+--DDLERROR DEFAULT IGNORE
+DDLERROR DEFAULT IGNORE RETRYOP
+--ddlerror 1432 ignore
+DBOPTIONS SUPPRESSTRIGGERS
+AssumeTargetDefs
+--SourceDefs dirdef/dsalesab.def
+DiscardFile dirrpt/R_UAT214.dsc, Append
+Map TLOGS.*, Target TLOGS.*;
+
+
+Add Replicat R_UAT214, integrated, ExtTrail ./dirdat/TLOGS/tb
+--start Replicat R_UAT214
+--start Replicat R_UAT214,aftercsn 792848442
+--stop Replicat R_UAT214
+--start Replicat R_UAT214
+Info R_UAT214, Detail
+send REPLICAT R_UAT214,report
+view report R_UAT214
+info all
+
+
+----------------------------------------------------------------------------------------------------------------------------------
+	15.	JMS
+----------------------------------------------------------------------------------------------------------------------------------
+
+-- ON SOURCE 2
+obey startup.oby
+Info SchemaTranData JMS    
+Add SchemaTranData JMS  ALLCOLS
+
+
+edit param E_UAT215
+
+-- Primary Extract from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 05/3/16
+SETENV(ORACLE_SID = "SOAUAT2")
+Extract E_UAT215
+ExtTrail ./dirdat/JMS/sb
+--UserID oggadm1@soauat2, Password pswd1a
+USERIDALIAS SOAUAT2ADM DOMAIN admin
+LOGALLSUPCOLS
+UPDATERECORDFORMAT COMPACT
+TranLogOptions ExcludeUser oggadm1
+TRANLOGOPTIONS INCLUDEREGIONID
+DDL INCLUDE MAPPED
+DDLOPTIONS REPORT
+GETUPDATEBEFORES
+--GETTRUNCATES
+NOCOMPRESSUPDATES
+NOCOMPRESSDELETES
+-- for SOA Application
+Table JMS.* ,GETBEFORECOLS (ON UPDATE ALL, ON DELETE ALL);
+
+register extract E_UAT215 database
+add extract E_UAT215, integrated tranlog, begin now
+Add ExtTrail ./dirdat/JMS/sb, Extract E_UAT215, Megabytes 10
+--start extract E_UAT215
+send extract E_UAT215,report
+view report E_UAT215
+
+
+-- ON SOURCE 2
+
+edit param P_UAT215
+
+-- Data pump (secondary Extract) from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 5/3/16
+Extract P_UAT215
+RmtHost ctdbsoa01sv, MGRPORT 7809
+RmtTrail ./dirdat/JMS/tb
+Passthru
+-- for SOA Application
+Table JMS.*;
+
+Add Extract P_UAT215, ExtTrailSource ./dirdat/JMS/sb 
+Add RmtTrail ./dirdat/JMS/tb, Extract P_UAT215, Megabytes 10
+--start extract P_UAT215
+send extract P_UAT215,report
+view report P_UAT215
+
+
+-- ON TARGET 1 
+
+obey startup.oby
+Info SchemaTranData JMS 
+Add SchemaTranData JMS ALLCOLS
+
+edit param R_UAT215
+
+-- Delivery from from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 5/3/16
+Replicat R_UAT215
+--UserID oggadm1@soauat2, password pswd1a
+USERIDALIAS SOAUAT1ADM domain admin
+--DDLERROR DEFAULT IGNORE
+DDLERROR DEFAULT IGNORE RETRYOP
+--ddlerror 1432 ignore
+DBOPTIONS SUPPRESSTRIGGERS
+AssumeTargetDefs
+--SourceDefs dirdef/dsalesab.def
+DiscardFile dirrpt/R_UAT215.dsc, Append
+Map JMS.*, Target JMS.*;
+
+
+Add Replicat R_UAT215, integrated, ExtTrail ./dirdat/JMS/tb
+--start Replicat R_UAT215
+--start Replicat R_UAT215,aftercsn 792848442
+--stop Replicat R_UAT215
+--start Replicat R_UAT215
+Info R_UAT215, Detail
+send REPLICAT R_UAT215,report
+view report R_UAT215
+info all
+
+
+----------------------------------------------------------------------------------------------------------------------------------
+	16.	C022427
+----------------------------------------------------------------------------------------------------------------------------------
+
+-- ON SOURCE 2
+obey startup.oby
+Info SchemaTranData C022427    
+Add SchemaTranData C022427  ALLCOLS
+
+
+edit param E_UAT216
+
+-- Primary Extract from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 05/3/16
+SETENV(ORACLE_SID = "SOAUAT2")
+Extract E_UAT216
+ExtTrail ./dirdat/C022427/sb
+--UserID oggadm1@soauat2, Password pswd1a
+USERIDALIAS SOAUAT2ADM DOMAIN admin
+LOGALLSUPCOLS
+UPDATERECORDFORMAT COMPACT
+TranLogOptions ExcludeUser oggadm1
+TRANLOGOPTIONS INCLUDEREGIONID
+DDL INCLUDE MAPPED
+DDLOPTIONS REPORT
+GETUPDATEBEFORES
+--GETTRUNCATES
+NOCOMPRESSUPDATES
+NOCOMPRESSDELETES
+REPORTCOUNT EVERY 10 MINUTES, RATE
+-- for SOA Application
+Table C022427.* ,GETBEFORECOLS (ON UPDATE ALL, ON DELETE ALL);
+
+register extract E_UAT216 database
+add extract E_UAT216, integrated tranlog, begin now
+Add ExtTrail ./dirdat/C022427/sb, Extract E_UAT216, Megabytes 10
+--start extract E_UAT216
+send extract E_UAT216,report
+view report E_UAT216
+
+
+-- ON SOURCE 2
+
+edit param P_UAT216
+
+-- Data pump (secondary Extract) from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 5/3/16
+Extract P_UAT216
+RmtHost ctdbsoa01sv, MGRPORT 7809
+RmtTrail ./dirdat/C022427/tb
+Passthru
+--DDL INCLUDE MAPPED
+-- for SOA Application
+Table C022427.*;
+
+Add Extract P_UAT216, ExtTrailSource ./dirdat/C022427/sb 
+Add RmtTrail ./dirdat/C022427/tb, Extract P_UAT216, Megabytes 10
+--start extract P_UAT216
+send extract P_UAT216,report
+view report P_UAT216
+
+
+-- ON TARGET 1 
+
+obey startup.oby
+Info SchemaTranData C022427 
+Add SchemaTranData C022427 ALLCOLS
+
+edit param R_UAT216
+
+-- Delivery from from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 5/3/16
+Replicat R_UAT216
+--UserID oggadm1@soauat2, password pswd1a
+USERIDALIAS SOAUAT1ADM domain admin
+--DDLERROR DEFAULT IGNORE
+DDLERROR DEFAULT IGNORE RETRYOP
+--ddlerror 1432 ignore
+DBOPTIONS SUPPRESSTRIGGERS
+ASSUMETARGETDEFS
+--SourceDefs dirdef/dsalesab.def
+DiscardFile dirrpt/R_UAT216.dsc, Append
+REPORTCOUNT EVERY 10 MINUTES, RATE
+Map C022427.*, Target C022427.*;
+
+
+Add Replicat R_UAT216, integrated, ExtTrail ./dirdat/C022427/tb
+--start Replicat R_UAT216
+--start Replicat R_UAT216,aftercsn 792848442
+--stop Replicat R_UAT216
+--start Replicat R_UAT216
+Info R_UAT216, Detail
+send REPLICAT R_UAT216,report
+view report R_UAT216
+info all
+
+
+----------------------------------------------------------------------------------------------------------------------------------

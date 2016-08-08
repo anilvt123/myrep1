@@ -1,0 +1,89 @@
+-- ON SOURCE 2
+obey startup.oby
+Info SchemaTranData C022427    
+Add SchemaTranData C022427  ALLCOLS
+
+
+edit param E_UAT216
+
+-- Primary Extract from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 05/3/16
+SETENV(ORACLE_SID = "SOAUAT2")
+Extract E_UAT216
+ExtTrail ./dirdat/C022427/sb
+--UserID oggadm1@soauat2, Password pswd1a
+USERIDALIAS SOAUAT2ADM DOMAIN admin
+LOGALLSUPCOLS
+UPDATERECORDFORMAT COMPACT
+TranLogOptions ExcludeUser oggadm1
+TRANLOGOPTIONS INCLUDEREGIONID
+DDL INCLUDE MAPPED
+DDLOPTIONS REPORT
+GETUPDATEBEFORES
+GETTRUNCATES
+NOCOMPRESSUPDATES
+NOCOMPRESSDELETES
+-- for SOA Application
+Table C022427.* ,GETBEFORECOLS (ON UPDATE ALL, ON DELETE ALL);
+
+register extract E_UAT216 database
+add extract E_UAT216, integrated tranlog, begin now
+Add ExtTrail ./dirdat/C022427/sb, Extract E_UAT216, Megabytes 10
+--start extract E_UAT216
+send extract E_UAT216,report
+view report E_UAT216
+
+
+-- ON SOURCE 2
+
+edit param P_UAT216
+
+-- Data pump (secondary Extract) from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 5/3/16
+Extract P_UAT216
+RmtHost ctdbsoa01sv, MGRPORT 7809
+RmtTrail ./dirdat/C022427/tb
+Passthru
+DDL INCLUDE MAPPED
+-- for SOA Application
+Table C022427.*;
+
+Add Extract P_UAT216, ExtTrailSource ./dirdat/C022427/sb 
+Add RmtTrail ./dirdat/C022427/tb, Extract P_UAT216, Megabytes 10
+--start extract P_UAT216
+send extract P_UAT216,report
+view report P_UAT216
+
+
+-- ON TARGET 1 
+
+obey startup.oby
+Info SchemaTranData C022427 
+Add SchemaTranData C022427 ALLCOLS
+
+edit param R_UAT216
+
+-- Delivery from from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 5/3/16
+Replicat R_UAT216
+--UserID oggadm1@soauat2, password pswd1a
+USERIDALIAS SOAUAT1ADM domain admin
+--DDLERROR DEFAULT IGNORE
+DDLERROR DEFAULT IGNORE RETRYOP
+--ddlerror 1432 ignore
+DBOPTIONS SUPPRESSTRIGGERS
+AssumeTargetDefs
+--SourceDefs dirdef/dsalesab.def
+DiscardFile dirrpt/R_UAT216.dsc, Append
+Map C022427.*, Target C022427.*;
+
+
+Add Replicat R_UAT216, integrated, ExtTrail ./dirdat/C022427/tb
+--start Replicat R_UAT216
+--start Replicat R_UAT216,aftercsn 792848442
+--stop Replicat R_UAT216
+--start Replicat R_UAT216
+Info R_UAT216, Detail
+send REPLICAT R_UAT216,report
+view report R_UAT216
+info all

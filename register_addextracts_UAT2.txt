@@ -1,0 +1,215 @@
+===============================================================================
+TARGET
+
+DBLOGIN USERIDALIAS SOAUAT2ADM domain admin
+
+unregister extract E_UAT201 database
+unregister extract E_UAT202 database
+unregister extract E_UAT203 database
+unregister extract E_UAT204 database
+unregister extract E_UAT205 database
+unregister extract E_UAT206 database
+unregister extract E_UAT207 database
+unregister extract E_UAT208 database
+unregister extract E_UAT209 database
+unregister extract E_UAT210 database
+unregister extract E_UAT211 database
+unregister extract E_UAT212 database
+unregister extract E_UAT213 database
+unregister extract E_UAT214 database
+unregister extract E_UAT215 database
+unregister extract E_UAT216 database
+
+===============================================================================
+
+register extract E_UAT201 database
+
+add extract E_UAT201, integrated tranlog, begin now
+Add ExtTrail ./dirdat/SOAINTERNAL/sb, Extract E_UAT201, Megabytes 10
+
+Add Extract P_UAT201, ExtTrailSource ./dirdat/SOAINTERNAL/sb 
+Add RmtTrail ./dirdat/SOAINTERNAL/tb, Extract P_UAT201, Megabytes 10
+
+
+
+register extract E_UAT202 database
+
+add extract E_UAT202, integrated tranlog, begin now
+Add ExtTrail ./dirdat/FMW1221_SOAINFRA/sb, Extract E_UAT202, Megabytes 10
+
+Add Extract P_UAT202, ExtTrailSource ./dirdat/FMW1221_SOAINFRA/sb 
+Add RmtTrail ./dirdat/FMW1221_SOAINFRA/tb, Extract P_UAT202, Megabytes 10
+
+
+
+
+
+register extract E_UAT203 database
+
+add extract E_UAT203, integrated tranlog, begin now
+Add ExtTrail ./dirdat/FMW1221_ESS/sb, Extract E_UAT203, Megabytes 10
+
+Add Extract P_UAT203, ExtTrailSource ./dirdat/FMW1221_ESS/sb 
+Add RmtTrail ./dirdat/FMW1221_ESS/tb, Extract P_UAT203, Megabytes 10
+
+
+
+
+
+register extract E_UAT204 database
+
+add extract E_UAT204, integrated tranlog, begin now
+Add ExtTrail ./dirdat/FMW1221_IAU/sb, Extract E_UAT204, Megabytes 10
+
+Add Extract P_UAT204, ExtTrailSource ./dirdat/FMW1221_IAU/sb 
+Add RmtTrail ./dirdat/FMW1221_IAU/tb, Extract P_UAT204, Megabytes 10
+
+
+
+
+
+register extract E_UAT205 database
+
+add extract E_UAT205, integrated tranlog, begin now
+Add ExtTrail ./dirdat/FMW1221_IAU_APPEND/sb, Extract E_UAT205, Megabytes 10
+
+
+Add Extract P_UAT205, ExtTrailSource ./dirdat/FMW1221_IAU_APPEND/sb 
+Add RmtTrail ./dirdat/FMW1221_IAU_APPEND/tb, Extract P_UAT205, Megabytes 10
+
+
+
+
+register extract E_UAT206 database
+
+add extract E_UAT206, integrated tranlog, begin now
+Add ExtTrail ./dirdat/FMW1221_IAU_VIEWER/sb, Extract E_UAT206, Megabytes 10
+
+Add Extract P_UAT206, ExtTrailSource ./dirdat/FMW1221_IAU_VIEWER/sb 
+Add RmtTrail ./dirdat/FMW1221_IAU_VIEWER/tb, Extract P_UAT206, Megabytes 10
+
+
+
+
+register extract E_UAT207 database
+
+add extract E_UAT207, integrated tranlog, begin now
+Add ExtTrail ./dirdat/FMW1221_MDS/sb, Extract E_UAT207, Megabytes 10
+
+Add Extract P_UAT207, ExtTrailSource ./dirdat/FMW1221_MDS/sb 
+Add RmtTrail ./dirdat/FMW1221_MDS/tb, Extract P_UAT207, Megabytes 10
+
+
+
+
+register extract E_UAT208 database
+
+add extract E_UAT208, integrated tranlog, begin now
+Add ExtTrail ./dirdat/FMW1221_MFT/sb, Extract E_UAT208, Megabytes 10
+
+
+Add Extract P_UAT208, ExtTrailSource ./dirdat/FMW1221_MFT/sb 
+Add RmtTrail ./dirdat/FMW1221_MFT/tb, Extract P_UAT208, Megabytes 10
+
+
+
+
+register extract E_UAT209 database
+
+add extract E_UAT209, integrated tranlog, begin now
+Add ExtTrail ./dirdat/FMW1221_OPSS/sb, Extract E_UAT209, Megabytes 10
+
+Add Extract P_UAT209, ExtTrailSource ./dirdat/FMW1221_OPSS/sb 
+Add RmtTrail ./dirdat/FMW1221_OPSS/tb, Extract P_UAT209, Megabytes 10
+
+
+
+
+register extract E_UAT210 database
+
+add extract E_UAT210, integrated tranlog, begin now
+Add ExtTrail ./dirdat/FMW1221_STB/sb, Extract E_UAT210, Megabytes 10
+
+Add Extract P_UAT210, ExtTrailSource ./dirdat/FMW1221_STB/sb 
+Add RmtTrail ./dirdat/FMW1221_STB/tb, Extract P_UAT210, Megabytes 10
+
+
+
+
+register extract E_UAT211 database
+
+add extract E_UAT211, integrated tranlog, begin now
+Add ExtTrail ./dirdat/FMW1221_UMS/sb, Extract E_UAT211, Megabytes 10
+
+
+Add Extract P_UAT211, ExtTrailSource ./dirdat/FMW1221_UMS/sb 
+Add RmtTrail ./dirdat/FMW1221_UMS/tb, Extract P_UAT211, Megabytes 10
+
+
+
+
+register extract E_UAT212 database
+
+add extract E_UAT212, integrated tranlog, begin now
+Add ExtTrail ./dirdat/FMW1221_WLS/sb, Extract E_UAT212, Megabytes 10
+
+
+Add Extract P_UAT212, ExtTrailSource ./dirdat/FMW1221_WLS/sb 
+Add RmtTrail ./dirdat/FMW1221_WLS/tb, Extract P_UAT212, Megabytes 10
+
+
+
+
+
+register extract E_UAT213 database
+
+add extract E_UAT213, integrated tranlog, begin now
+Add ExtTrail ./dirdat/FMW1221_WLS_RUNTIME/sb, Extract E_UAT213, Megabytes 10
+
+
+Add Extract P_UAT213, ExtTrailSource ./dirdat/FMW1221_WLS_RUNTIME/sb 
+Add RmtTrail ./dirdat/FMW1221_WLS_RUNTIME/tb, Extract P_UAT213, Megabytes 10
+
+
+
+
+register extract E_UAT214 database
+
+add extract E_UAT214, integrated tranlog, begin now
+Add ExtTrail ./dirdat/TLOGS/sb, Extract E_UAT214, Megabytes 10
+
+Add Extract P_UAT214, ExtTrailSource ./dirdat/TLOGS/sb 
+Add RmtTrail ./dirdat/TLOGS/tb, Extract P_UAT214, Megabytes 10
+
+
+
+
+
+register extract E_UAT215 database
+
+add extract E_UAT215, integrated tranlog, begin now
+Add ExtTrail ./dirdat/JMS/sb, Extract E_UAT215, Megabytes 10
+
+
+Add Extract P_UAT215, ExtTrailSource ./dirdat/JMS/sb 
+Add RmtTrail ./dirdat/JMS/tb, Extract P_UAT215, Megabytes 10
+
+
+
+
+
+register extract E_UAT216 database
+
+add extract E_UAT216, integrated tranlog, begin now
+Add ExtTrail ./dirdat/C022427/sb, Extract E_UAT216, Megabytes 10
+
+
+Add Extract P_UAT216, ExtTrailSource ./dirdat/JMS/sb 
+Add RmtTrail ./dirdat/C022427/tb, Extract P_UAT216, Megabytes 10
+
+
+
+
+
+
+

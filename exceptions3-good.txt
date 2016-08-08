@@ -1,0 +1,147 @@
+
+
+1.
+
+drop table oggadm1.exceptions purge
+
+CREATE TABLE oggadm1.EXCEPTIONS
+(
+ excp_date timestamp(6) default systimestamp,
+ rep_name varchar2(10),
+ table_name varchar2(56),
+ errno number,
+ dberrmsg varchar2(4000),
+ errtype varchar2(6),
+ optype varchar2(24),
+ transind varchar2(12),
+ transimgind varchar2(8),
+ committimestamp varchar2(26),
+ reccsn number,
+ recseqno number,
+ recrba number,
+ rectranspos number,
+ reclength number,
+ logrba number,
+ logposition number,
+ grouptype varchar2(12),
+ filename varchar2(50),
+ fileno number,
+ srcrowid varchar2(40),
+ srcdbcharset varchar2(40),
+ replag number,
+ cnt_cdr_conflicts number,
+ cnt_cdr_resolutions number,
+ cnt_cdr_failed number 
+);
+
+select * from oggadm1.EXCEPTIONS;
+
+
+2.
+
+INCLUDE ./dirmac/exception_handler.mac
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 103> sh cat ./dirmac/exception_handler.mac
+
+
+ MACRO #mapschemas
+ PARAMS ( #source, #target )
+ BEGIN
+        MAP #source.*, TARGET #target.* ;
+ END;
+
+MACRO #exception_handler
+PARAMS (#source, #target)
+BEGIN
+MAP #source.* , TARGET #target.*,  &
+MAPEXCEPTION (TARGET oggadm1.EXCEPTIONS, &
+EXCEPTIONSONLY, INSERTALLRECORDS, COLMAP  &
+( &
+ excp_date =       @DATENOW(), &
+ rep_name =        @GETENV ('GGENVIRONMENT', 'GROUPNAME'), &
+ table_name =      @GETENV ('GGHEADER', 'TABLENAME'), &
+ errno =           @GETENV ('LASTERR', 'DBERRNUM'), &
+ dberrmsg   =      @GETENV ('LASTERR', 'DBERRMSG') , &
+ errtype =         @GETENV ('LASTERR', 'ERRTYPE'), &
+ optype =          @GETENV ('LASTERR', 'OPTYPE'), &
+ transind =        @GETENV ('GGHEADER', 'TRANSACTIONINDICATOR'), &
+ transimgind     = @GETENV ('GGHEADER', 'BEFOREAFTERINDICATOR'), &
+ committimestamp = @GETENV ('GGHEADER', 'COMMITTIMESTAMP'), &
+ reccsn =          @GETENV ('TRANSACTION', 'CSN'), &
+ recseqno =        @GETENV ('RECORD', 'FILESEQNO'), &
+ recrba =          @GETENV ('RECORD', 'FILERBA'), &
+ rectranspos =     @GETENV ('RECORD', 'RSN'), &
+ reclength =       @GETENV ('GGHEADAER', 'RECORDLENGTH'), &
+ logrba =          @GETENV ('GGHEADER', 'LOGRBA'), &
+ logposition =     @GETENV ('GGHEADER', 'LOGPOSITION'), &
+ grouptype =       @GETENV ('GGENVIRONMENT', 'GROUPTYPE'), &
+ filename =        @GETENV ('GGFILEHEADER', 'FILENAME'), &
+ fileno =          @GETENV ('GGFILEHEADER', 'FILESEQNO'), &
+ srcrowid =        @GETENV ('TRANSACTION', 'CSN'), &
+ srcdbcharset =    @GETENV ('GGFILEHEADER', 'DBCHARSET'), &
+ replag =          @GETENV ('LAG', 'SEC'), &
+ cnt_cdr_conflicts =   @GETENV ('DELTASTATS','TABLE', @GETENV ('GGHEADER', 'TABLENAME'),'CDR_CONFLICTS') , &
+ cnt_cdr_resolutions = @GETENV ('DELTASTATS','TABLE', @GETENV ('GGHEADER', 'TABLENAME'),'CDR_RESOLUTIONS_SUCCEEDED') , &
+ cnt_cdr_failed =      @GETENV ('DELTASTATS','TABLE', @GETENV ('GGHEADER', 'TABLENAME'),'CDR_RESOLUTIONS_FAILED')));
+ END;
+
+
+MACRO #global_exception_table
+BEGIN
+    TARGET oggadm1.EXCEPTIONS
+END;
+
+
+
+3.
+
+MACRO #R_REPERROR
+BEGIN
+REPERROR (DEFAULT, EXCEPTION)
+REPERROR (DEFAULT2, ABEND)
+END;
+
+
+REPERROR(DEFAULT, DISCARD)
+REPERROR(DEFAULT2, DISCARD)
+
+REPERROR (DEFAULT, EXCEPTION)
+REPERROR (DEFAULT2, ABEND)
+
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 74> view param R_UAT215
+
+-- Delivery from from ctdbsoa02sv to ctdbsoa01sv
+-- Created by James Palliparambil 5/3/16
+
+Replicat R_UAT215
+
+INCLUDE ./dirmac/exception_handler.mac
+
+--UserID oggadm1@soauat2, password pswd1a
+USERIDALIAS SOAUAT1ADM domain admin
+--DDLERROR DEFAULT IGNORE
+DDLERROR DEFAULT IGNORE RETRYOP
+--ddlerror 1432 ignore
+DBOPTIONS SUPPRESSTRIGGERS
+AssumeTargetDefs
+--SourceDefs dirdef/dsalesab.def
+DiscardFile dirrpt/R_UAT215.dsc, Append
+
+REPERROR (DEFAULT, EXCEPTION)
+REPERROR (DEFAULT2, ABEND)
+
+--Map JMS.*, Target JMS.*;
+
+--#mapschemas(JMS,JMS);
+
+#exception_handler(JMS,JMS);
+
+
+http://oraclegoldengatereplication.blogspot.com/2015/06/goldengate-exception-table-reporting.html
+
+
+http://oraclegoldengatereplication.blogspot.com/2014/09/include-files-variables-and-macros.html
+
+
+

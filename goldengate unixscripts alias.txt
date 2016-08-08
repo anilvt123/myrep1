@@ -1,0 +1,16 @@
+
+--monitor the amount of memory used by the Oracle GoldenGate processes.
+
+sh ps -C replicat -O rss | awk '{print $2/1024, "MB", $12}' | sort -k 2
+
+--monitor the amount of virtual memory used by the Oracle GoldenGate processes.
+
+sh  ps -C replicat -O vsz | awk '{print $2/1024, "MB", $12}' | sort -k 2
+  
+  
+
+
+http://www.zhongweicheng.com/?p=1615
+
+http://sridharramireddy.blogspot.com/2014/09/script-to-monitor-goldengate-monitoring.html
+

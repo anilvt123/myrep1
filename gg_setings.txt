@@ -1,0 +1,177 @@
+MACRO #gg_extract_report_settings
+BEGIN
+STATOPTIONS RESETREPORTSTATS
+REPORT AT 00:01
+REPORTROLLOVER AT 00:05
+REPORTCOUNT EVERY 1 MINUTES, RATE
+DISCARDROLLOVER at 02:00 ON SUNDAY
+WARNLONGTRANS 20M, CHECKINTERVAL 10M
+END;
+
+MACRO #gg_dpump_report_settings
+BEGIN
+STATOPTIONS RESETREPORTSTATS
+REPORT AT 00:01
+REPORTROLLOVER AT 00:05
+REPORTCOUNT EVERY 1 MINUTES, RATE
+DISCARDROLLOVER at 02:00 ON SUNDAY
+END;
+
+MACRO #gg_replicat_report_settings
+BEGIN
+STATOPTIONS RESETREPORTSTATS
+REPORT AT 00:01
+REPORTROLLOVER AT 00:05
+REPORTCOUNT EVERY 1 MINUTES, RATE
+DISCARDROLLOVER at 02:00 ON SUNDAY
+END;
+
+
+MACRO #gg_extract_settings
+BEGIN
+LOGALLSUPCOLS
+UPDATERECORDFORMAT COMPACT
+TRANLOGOPTIONS EXCLUDEUSER OGGADM1
+TRANLOGOPTIONS INCLUDEREGIONID
+DDL INCLUDE MAPPED
+DDLOPTIONS REPORT
+GETUPDATEBEFORES
+GETTRUNCATES
+NOCOMPRESSUPDATES
+NOCOMPRESSDELETES
+END;
+
+MACRO #gg_replicat_settings
+BEGIN
+ASSUMETARGETDEFS
+--DDLERROR DEFAULT IGNORE
+--DDLERROR DEFAULT IGNORE RETRYOP
+--ddlerror 1432 ignore
+DBOPTIONS SUPPRESSTRIGGERS
+GROUPTRANSOPS 1000
+END;
+
+
+MACRO #r_reperror
+BEGIN
+REPERROR (DEFAULT, EXCEPTION)
+REPERROR (DEFAULT2, ABEND)
+END;
+
+
+
+
+
+
+
+— DDL options
+DDL INCLUDE ALL, EXCLUDE OBJNAME “<schema name>.<object name>”
+DDLOPTIONS REPORT
+
+
+--TRANLOGOPTIONS DBLOGREADER, DBLOGREADER BUFSIZE [x], BUFSIZE [y] 
+
+--DDL replication parameters 
+--DDL INCLUDE ALL, EXCLUDE OBJNAME "<schema name>.<object name> " 
+
+--for automatic supplemental logging of DDL (FOR PDB and ADD SCHEMATRANDATA must be done before):
+DDLOPTIONS ADDSCHEMATRANDATA 
+
+--DDL FOR Bi-directional support:
+DDLOPTIONS GETREPLICATES, GETAPPLOPS
+
+--Default DDLOPTIONS:
+--DDLOPTIONS GETAPPLOPS, IGNOREREPLICATES
+
+
+MACRO #fetchfromschemas
+PARAMS ( #source )
+BEGIN
+Table #source.* ,GETBEFORECOLS (ON UPDATE ALL, ON DELETE ALL);
+END;
+
+-----------------------------------------------------------------------------------------
+Database Language and Character Set:
+NLS_LANGUAGE     = "AMERICAN"
+NLS_TERRITORY    = "AMERICA"
+NLS_CHARACTERSET = "AL32UTF8"
+NLS_LANG="AMERICAN_AMERICA.AL32UTF8" 
+SQL> SHOW PARAMETER NLS_LANGUAGE; 
+SELECT name, value$ from SYS.PROPS$ WHERE name='NLS_CHARACTERSET'; 
+SELECT * from NLS_DATABASE_PARAMETERS; 
+SELECT * FROM NLS_INSTANCE_PARAMETERS; 
+SETENV (ORACLE_HOME="/u01/app/oracle/product/ora1210/db_1")
+SETENV (NLS_LANG="AMERICAN_AMERICA.AL32UTF8")
+
+
+MACRO #setenvUAT1
+PARAMS ( #source )
+BEGIN
+SETENV (ORACLE_SID = "SOAUAT1")
+SETENV (ORACLE_HOME="/u01/app/oracle/product/ora1210/db_1")
+SETENV (NLS_LANG="AMERICAN_AMERICA.AL32UTF8")
+END;
+
+
+MACRO #dpumpfromschemas
+PARAMS ( #source )
+BEGIN
+Table #source.* ;
+END;
+
+-----------------------------------------------------------------------------------------
+Extract E_UAT116
+
+INCLUDE ./dirmac/exception_handler.mac
+
+SETENV (ORACLE_SID = "SOAUAT1")
+SETENV (ORACLE_HOME="/u01/app/oracle/product/ora1210/db_1")
+SETENV (NLS_LANG="AMERICAN_AMERICA.AL32UTF8")
+
+--UserID oggadm1@SOAUAT1, Password pswd1a
+USERIDALIAS SOAUAT1ADM DOMAIN admin
+
+ExtTrail ./dirdat/C022427/sa
+
+#gg_extract_report_settings();
+
+#gg_extract_settings();
+
+#fetchfromschemas(C022427);
+
+-----------------------------------------------------------------------------------------
+Extract P_UAT101
+
+INCLUDE ./dirmac/exception_handler.mac
+
+RMTHOST ctdbsoa02sv, MGRPORT 7809
+RMTTRAIL ./dirdat/C022427/ta
+
+PASSTHRU
+
+#gg_dpump_report_settings();
+
+#dpumpfromschemas(C022427);
+-----------------------------------------------------------------------------------------
+
+Replicat R_UAT101
+
+INCLUDE ./dirmac/exception_handler.mac
+
+
+--UserID oggadm1@soauat2, password pswd1a
+USERIDALIAS SOAUAT2ADM domain admin
+
+DiscardFile dirrpt/R_UAT101.dsc, Append
+
+#gg_replicat_report_settings();
+
+#r_reperror();
+
+#gg_replicat_settings();
+
+#exception_handler(FMW1221_UMS,FMW1221_UMS);
+
+
+-----------------------------------------------------------------------------------------
+

@@ -1,0 +1,216 @@
+sh cat ggserr.log | egrep 'ERROR'
+ps -eo pid,%mem,rss,vsz,args|egrep '(extract|PID)'|grep -v grep|grep -v E_UAT*|cut -c-150
+
+cat ./dirprm/p_uat116.prm
+cat ./dirprm/e_uat101.prm
+alter replicat R_UAT116, exttrail ./dirdat/C022427/ta
+ALTER REPLICAT R_UAT116 , EXTSEQNO 000000003, EXTRBA 16292
+
+alter replicat R_UAT116, exttrail ./dirdat/C022427/ta
+ALTER REPLICAT R_UAT116 , EXTSEQNO 000000003, EXTRBA 16292
+
+./dirdat/FMW1221_SOAINFRA/
+stats REPLICAT R_UAT115
+stats REPLICAT R_UAT115 reportrate hr
+send REPLICAT R_UAT115 , getlag
+ send manager childstatus
+ This normal stop will wait and checkpoint recovery's work when recovery has finished.
+ To force Extract to stop now, use the SEND EXTRACT P_UAT216, FORCESTOP command..
+SEND EXTRACT P_UAT216, FORCESTOP 
+
+SELECT DECODE(archived, 'YES', 1, 0),       status  FROM v$log WHERE thread# = :ora_thread AND       sequence# = :ora_seq_no
+SELECT  name    FROM gv$archived_log   WHERE sequence# = :ora_seq_no AND         thread# = :ora_thread AND         resetlogs_id = :ora_resetlog_id AND         archived = 'YES' AND         deleted = 'NO' AND         name not like '+%'         AND standby_dest = 'NO';
+SELECT lf.member,        DECODE(l.status, 'CURRENT', 1, 0),        DECODE(l.archived, 'YES', 1, 0)   FROM v$logfile lf, v$log l  WHERE lf.group# = l.group# AND        l.thread# = :ora_thread AND        l.sequence# = :ora_seq_no AND        lf.member not like '+%' AND        rownum = 1 AND        (lf.status NOT IN        ('INVALID','INCOMPLETE') OR        lf.status is null)
+
+ ggsci> SHELL shell_command   -- To execute shell commands from within GGSCI interface
+ ggsci> shell ls -l dirdat/* 
+ ggsci> shell dir dirprm/*
+ ggsci> shell rm ./dat*
+
+ VERSIONS
+
+ send extract E_UAT216 GETPARAMINFO
+
+
+ INFO ALL
+ info ER *UAT*
+ info ER E_UAT*
+ info ER E_UAT1*
+ info extract E_UAT101
+ info extract E_UAT101, detail
+ info extract E_UAT101, showch
+ info extract E_UAT101, tasks
+ 
+ info exttrail ./dirdat/C022427/sa
+ info trandata C022427.big_table
+ info trandata C022427.Trig_test
+ info checkpointtable 
+ info checkpointtable oggadm1.oggchkpt
+ info tracetable
+  
+ info replicat R_UAT116
+ info replicat R_UAT102, detail
+ info replicat R_UAT116, detail, allprocesses
+ info replicat R_UAT116, tasks
+ info replicat R_UAT102, showch
+ info rmttrail ./dirdat/C022427/ta
+
+send extract E_UAT101,STATUS
+send extract E_UAT101,GETLAG
+send extract E_UAT101,GETTCPSTATS
+send extract E_UAT101,LOGSTATS
+send extract E_UAT101,REPORT
+send extract E_UAT101,SHOWTRANS
+send extract E_UAT101,SHOWTRANS COUNT 2
+send extract E_UAT101,DURATION 5
+send extract E_UAT101,SKIPTRANS
+send extract E_UAT101, showtrans count 10
+send extract E_UAT101, skiptrans 5.17.27634 thread 2
+send extract E_UAT101 tltrace file file_name ddlinclude
+send extract E_UAT101, rollover
+send extract E_UAT101  stop
+send extract E_UAT101, vammessage control:suspend
+send extract E_UAT101, tranlogoptions transcleanupfrequency 15
+
+
+--SEND MANAGER [CHILDSTATUS [DEBUG]] [GETPORTINFO [DETAIL]] [GETPURGEOLDEXTRACTS]   
+-- To retrieve the status of the active Manager process or to retrieve dynamic port information as configured in the Manager parameter file
+ send manager childstatus
+ send manager childstatus debug
+ send manager getportinfo
+ send manager getportinfo detail
+ send manager getpurgeoldextracts
+
+
+list tables c022427.*
+
+edit params mgr
+edit params ./GLOBALS
+edit params E_UAT101
+edit params P_UAT116
+edit params R_UAT116
+edit params e:\gg\dirprm\replp.prm
+
+view params mgr
+view params ./GLOBALS
+view params E_UAT101
+view params P_UAT116
+view params R_UAT116
+
+VIEW GGSEVT   
+ 
+view report E_UAT101
+view report P_UAT116
+view report R_UAT116
+view report c:\ogg\dirrpt\orders.rpt
+
+
+-- STATUS EXTRACT group_name [, TASKS | ALLPROCESSES]   -- To determine whether or not Extract is running
+STATUS MANAGER   
+status extract E_UAT101
+status extract P_UAT116
+status extract E_UAT101*, tasks
+status extract *E_UAT101*, allprocesses
+
+
+-- STATS EXTRACT group_name [, statistic] [, TABLE table] [, TOTALSONLY table_specification] [, REPORTFETCH | NOREPORTFETCH]
+[, REPORTRATE HR|MIN|SEC] [, ... ]  -- To display statistics for one or more Extract group
+ stats E_UAT101
+ stats extract E_UAT101
+ stats extract E_UAT101, total, table c022427.big_table
+ stats extract E_UAT101 ,reportrate sec
+ stats extract E_UAT101, total, daily
+ stats extract E_UAT101, total, hourly, table big_table, reportrate min, reset, reportfetch
+
+
+
+
+ alter extract fin, begin 2012-02-16
+ alter extract fin, etrollover
+ alter extract fin, extseqno 26, extrba 338
+ alter extract accounts, thread 4, begin 2012-03-09
+ alter extract sales, lsn 1234:123:1
+
+
+
+ggsci> ALTER EXTTRAIL trail_name, EXTRACT group_name [, MEGABYTES n]   -- To change the attributes of a trail (on the local system)
+ggsci> alter exttrail c:\ogg\dirdat\aa, extract fin, megabytes 30
+
+ggsci> ALTER RMTTRAIL trail_name, EXTRACT group_name [, MEGABYTES n]   -- To change the attributes of a trail (on a remote system)
+ggsci> alter rmttrail c:\ogg\dirdat\et, extract fin, megabytes 25
+
+ggsci> CLEANUP EXTRACT group_name [, SAVE count]   -- To delete run history for specified Extract group
+ggsci> cleanup extract fin
+ggsci> cleanup extract e*, save 6
+
+ggsci> CLEANUP REPLICAT group_name [, SAVE count]  -- To delete run history for specified Replicat group
+ggsci> cleanup replicat fin
+ggsci> cleanup replicat *, save 10
+
+ggsci> CLEANUP CHECKPOINTTABLE [user_name.table_name]  -- To remove checkpoint records from the checkpoint table
+ggsci> cleanup checkpointtable ggs.fin_check
+
+ggsci> DELETE EXTRACT group_name [!]   -- To delete an Extract group
+ggsci> delete extract emp_ext
+ggsci> delete extract emp_ext !              -- will not ask for confirmation
+
+ggsci> DELETE REPLICAT group_name [!]   -- To delete a Replicat group
+ggsci> delete replicat emp_ext
+ggsci> delete replicat emp_ext !             -- will not ask for confirmation
+
+ggsci> DELETE EXTTRAIL trail_name    -- To delete the record of checkpoints associated with a trail on a local system
+ggsci> delete exttrail /home/ogg/dirdat/et
+
+ggsci> DELETE RMTTRAIL trail_name    -- To delete the record of checkpoints associated with a trail on a remote system
+ggsci> delete rmttrail /home/ogg/dirdat/et
+
+ggsci> DELETE TRANDATA user_name.table_names [, OLDFORMAT] [, USETRIGGER]  -- To delete logging/replication data
+ggsci> delete trandata fin.acct
+ggsci> delete trandata fin.cust*
+ggsci> delete trandata emp.hr, usetrigger
+
+ggsci> DELETE CHECKPOINTTABLE [user_name.table_name] [!]     -- To drop checkpoint table from database
+ggsci> delete checkpointtable ggs.fin_check
+
+ggsci> DELETE TRACETABLE [owner.table]   -- To delete a trace table
+ggsci> delete tracetable ora_trace
+
+ggsci> KILL EXTRACT group_name    -- To kill an Extract process running in regular or PASSIVE mode
+ggsci> kill extract fin
+
+ggsci> KILL REPLICAT group_name   -- To kill a Replicat process
+ggsci> kill replicat fin
+
+ggsci> KILL ER group_wildcard_specification   -- To forcefully terminate multiple Extract and Replicat groups as a unit
+ggsci> kill er *x*
+
+ggsci> LAG EXTRACT group_name    -- To determine a true lag time between Extract and the datasource
+ggsci> lag extract ext*
+ggsci> lag extract *
+
+ggsci> LAG REPLICAT group_name   -- To determine a true lag time between Replicat and the trail
+ggsci> lag replicat myrepl
+ggsci> lag replicat *
+
+ggsci> LAG ER group_wildcard_specification   -- To get lag information on multiple Extract and Replicat groups as a unit
+ggsci> lag er *ext*
+
+ggsci> DUMPDDL [SHOW]   -- To view the data in the Oracle GoldenGate DDL history table
+ggsci> dumpddl
+
+ggsci> HISTORY [n]   -- To view the most recently issued GGSCI commands since the session started
+ggsci> history       -- by default, shows last 10 commands
+ggsci> history 30
+
+ggsci> SET EDITOR program_name    -- To change the default text editor for the current session of GGSCI, default editors are Notepad for Windows and vi for UNIX
+ggsci> set editor wordpad
+
+ggsci> VERSIONS   -- To display operating system and database version information
+
+ggsci> FC [n | -n | string]   -- To display edit a previously issued GGSCI command and then execute it again
+ggsci> fc
+ggsci> fc 9
+ggsci> fc -3
+ggsci> fc sta
+
+

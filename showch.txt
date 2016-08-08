@@ -1,0 +1,514 @@
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 73>  info extract E_UAT101,showch
+
+EXTRACT    E_UAT101  Last Started 2016-07-29 11:02   Status RUNNING
+Checkpoint Lag       00:00:05 (updated 00:00:06 ago)
+Process ID           25371
+Log Read Checkpoint  Oracle Integrated Redo Logs
+                     2016-07-29 11:04:14
+                     SCN 0.838852580 (838852580)
+
+
+Current Checkpoint Detail:
+
+Read Checkpoint #1
+
+  Oracle Integrated Redo Log
+
+  Startup Checkpoint (starting position in the data source):
+    Timestamp: 2016-07-05 14:54:56.000000
+    SCN: Not available
+
+  Recovery Checkpoint (position of oldest unprocessed transaction in the data source):
+    Timestamp: 2016-07-29 11:04:14.000000
+    SCN: 0.838852579 (838852579)
+
+  Current Checkpoint (position of last record read in the data source):
+    Timestamp: 2016-07-29 11:04:14.000000
+    SCN: 0.838852580 (838852580)
+
+  BR Previous Recovery Checkpoint:
+    Timestamp: 2016-07-27 13:55:24.457426
+    SCN: Not available
+
+  BR Begin Recovery Checkpoint:
+    Timestamp: 2016-07-29 09:58:00.000000
+    SCN: 0.838709792 (838709792)
+
+  BR End Recovery Checkpoint:
+    Timestamp: 2016-07-29 09:58:00.000000
+    SCN: 0.838709792 (838709792)
+
+Write Checkpoint #1
+
+  GGS Log Trail
+
+  Current Checkpoint (current write position):
+    Sequence #: 11
+    RBA: 22047
+    Timestamp: 2016-07-29 11:04:19.017676
+    Extract Trail: ./dirdat/sa
+    Seqno Length: 9
+    Flip Seqno Length: No
+    Trail Type: EXTTRAIL
+
+Header:
+  Version = 2
+  Record Source = A
+  Type = 13
+  # Input Checkpoints = 1
+  # Output Checkpoints = 1
+
+File Information:
+  Block Size = 2048
+  Max Blocks = 100
+  Record Length = 2048
+  Current Offset = 0
+
+Configuration:
+  Data Source = 3
+  Transaction Integrity = 1
+  Task Type = 0
+
+Status:
+  Start Time = 2016-07-29 11:02:38
+  Last Update Time = 2016-07-29 11:04:19
+  Stop Status = A
+  Last Result = 520
+
+
+
+============================================================================================
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 75> info extract E_UAT101,detail allprocesses
+
+EXTRACT    E_UAT101  Last Started 2016-07-29 11:02   Status RUNNING
+Checkpoint Lag       00:00:01 (updated 00:00:04 ago)
+Process ID           25371
+Log Read Checkpoint  Oracle Integrated Redo Logs
+                     2016-07-29 11:06:49
+                     SCN 0.838857034 (838857034)
+
+  Target Extract Trails:
+
+  Trail Name                                       Seqno        RBA     Max MB Trail Type
+
+  ./dirdat/sa                                         11      22047         10 EXTTRAIL
+
+
+Integrated Extract outbound server first scn: 0.838393591 (838393591)
+
+Integrated Extract outbound server filtering start scn: 0.838393591 (838393591)
+
+  Extract Source                          Begin             End
+
+  Not Available                           2016-07-05 14:54  2016-07-29 11:06
+  Not Available                           2016-07-05 14:54  2016-07-29 10:21
+  Not Available                           2016-07-05 14:54  2016-07-29 10:21
+  Not Available                           2016-07-05 14:54  2016-07-29 10:21
+  Not Available                           2016-07-05 14:54  2016-07-29 10:21
+  Not Available                           2016-07-05 14:54  2016-07-27 13:52
+  Not Available                           2016-07-05 14:54  2016-07-27 13:52
+  Not Available                           2016-07-05 14:54  2016-07-25 11:50
+  Not Available                           2016-07-05 14:54  2016-07-25 11:50
+  Not Available                           2016-07-05 14:54  2016-07-25 11:50
+  Not Available                           2016-07-05 14:54  2016-07-25 11:50
+  Not Available                           2016-07-05 14:54  2016-07-20 16:02
+  Not Available                           2016-07-05 14:54  2016-07-20 16:02
+  Not Available                           2016-07-05 14:54  2016-07-20 10:43
+  Not Available                           2016-07-05 14:54  2016-07-20 10:43
+  Not Available                           2016-07-05 14:54  2016-07-15 13:22
+  Not Available                           2016-07-05 14:54  2016-07-15 13:22
+  Not Available                           2016-07-05 14:54  2016-07-15 12:21
+  Not Available                           2016-07-05 14:54  2016-07-15 12:21
+  Not Available                           2016-07-05 14:54  2016-07-15 12:10
+  Not Available                           2016-07-05 14:54  2016-07-15 12:10
+  Not Available                           2016-07-05 14:54  2016-07-14 16:24
+  Not Available                           2016-07-05 14:54  2016-07-14 16:24
+  Not Available                           2016-07-05 14:54  2016-07-14 16:07
+  Not Available                           2016-07-05 14:54  2016-07-14 16:07
+  Not Available                           * Initialized *   2016-07-05 14:54
+  Not Available                           * Initialized *   2016-07-05 14:54
+
+
+Current directory    /u01/app/goldengate/gg12c
+
+Report file          /u01/app/goldengate/gg12c/dirrpt/E_UAT101.rpt
+Parameter file       /u01/app/goldengate/gg12c/dirprm/e_uat101.prm
+Checkpoint file      /u01/app/goldengate/gg12c/dirchk/E_UAT101.cpe
+Process file         /u01/app/goldengate/gg12c/dirpcs/E_UAT101.pce
+Error log            /u01/app/goldengate/gg12c/ggserr.log
+
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 76>
+
+============================================================================================
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 76> send extract E_UAT101,STATUS
+
+Sending STATUS request to EXTRACT E_UAT101 ...
+
+
+EXTRACT E_UAT101 (PID 25371)
+  Current status: Recovery complete: Processing data
+
+  Current read position:
+  Redo thread #: 1
+  Sequence #: 30215
+  RBA: 10157632
+  Timestamp: 2016-07-29 11:08:42.000000
+  SCN: 0.838861219 (838861219)
+  Current write position:
+  Sequence #: 11
+  RBA: 22047
+  Timestamp: 2016-07-29 11:08:41.175723
+  Extract Trail: ./dirdat/sa
+
+============================================================================================
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 77> send extract E_UAT101,GETLAG
+
+Sending GETLAG request to EXTRACT E_UAT101 ...
+Last record lag 1 seconds.
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 78> send extract E_UAT101,GETTCPSTATS
+
+Sending GETTCPSTATS request to EXTRACT E_UAT101 ...
+
+No TCP connections
+.
+
+
+============================================================================================
+
+
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 88> view report E_UAT101
+
+
+***********************************************************************
+                 Oracle GoldenGate Capture for Oracle
+    Version 12.2.0.1.1 OGGCORE_12.2.0.1.0_PLATFORMS_151211.1401_FBO
+   Linux, x64, 64bit (optimized), Oracle 12c on Dec 12 2015 03:12:27
+
+Copyright (C) 1995, 2015, Oracle and/or its affiliates. All rights reserved.
+
+
+                    Starting at 2016-07-29 11:02:32
+***********************************************************************
+
+Operating System Version:
+Linux
+Version #1 SMP Fri May 6 14:54:05 EDT 2016, Release 2.6.32-642.1.1.el6.x86_64
+Node: CTDBSOA01Sv
+Machine: x86_64
+                         soft limit   hard limit
+Address Space Size   :    unlimited    unlimited
+Heap Size            :    unlimited    unlimited
+File Size            :    unlimited    unlimited
+CPU Time             :    unlimited    unlimited
+
+Process id: 25371
+
+Description:
+
+***********************************************************************
+**            Running with the following parameters                  **
+***********************************************************************
+
+2016-07-29 11:02:32  INFO    OGG-03059  Operating system character set identified as UTF-8.
+
+2016-07-29 11:02:32  INFO    OGG-02695  ANSI SQL parameter syntax is used for parameter parsing.
+
+2016-07-29 11:02:32  INFO    OGG-02095  Successfully set environment variable ORACLE_SID=SOAUAT1.
+Extract E_UAT101
+INCLUDE ./dirmac/exception_handler.mac
+MACRO #gg_extract_report_settings
+BEGIN
+STATOPTIONS RESETREPORTSTATS
+REPORT AT 00:01
+REPORTROLLOVER AT 00:05
+REPORTCOUNT EVERY 1 MINUTES, RATE
+DISCARDROLLOVER at 02:00 ON SUNDAY
+WARNLONGTRANS 20M, CHECKINTERVAL 10M
+END;
+MACRO #gg_dpump_report_settings
+BEGIN
+STATOPTIONS RESETREPORTSTATS
+REPORT AT 00:01
+REPORTROLLOVER AT 00:05
+REPORTCOUNT EVERY 1 MINUTES, RATE
+DISCARDROLLOVER at 02:00 ON SUNDAY
+END;
+MACRO #gg_replicat_report_settings
+BEGIN
+STATOPTIONS RESETREPORTSTATS
+REPORT AT 00:01
+REPORTROLLOVER AT 00:05
+REPORTCOUNT EVERY 1 MINUTES, RATE
+DISCARDROLLOVER at 02:00 ON SUNDAY
+END;
+MACRO #gg_extract_settings
+BEGIN
+LOGALLSUPCOLS
+UPDATERECORDFORMAT COMPACT
+TRANLOGOPTIONS EXCLUDEUSER OGGADM1
+TRANLOGOPTIONS INCLUDEREGIONID
+DDL INCLUDE MAPPED
+DDLOPTIONS REPORT
+GETUPDATEBEFORES
+GETTRUNCATES
+NOCOMPRESSUPDATES
+NOCOMPRESSDELETES
+END;
+MACRO #gg_replicat_settings
+BEGIN
+ASSUMETARGETDEFS
+DDLERROR DEFAULT IGNORE RETRYOP
+DBOPTIONS SUPPRESSTRIGGERS
+END;
+MACRO #r_reperror
+BEGIN
+REPERROR (DEFAULT, EXCEPTION)
+REPERROR (DEFAULT2, ABEND)
+END;
+MACRO #mapschemas
+PARAMS ( #source, #target )
+BEGIN
+MAP #source.*, TARGET #target.* ;
+END;
+MACRO #fetchfromschemas
+PARAMS ( #source )
+BEGIN
+Table #source.* ,GETBEFORECOLS (ON UPDATE ALL, ON DELETE ALL);
+END;
+MACRO #exception_handler
+PARAMS (#source, #target)
+BEGIN
+MAP #source.* , TARGET #target.*,  MAPEXCEPTION (TARGET oggadm1.EXCEPTIONS, EXCEPTIONSONLY, INSERTALLRECORDS, COLMAP  ( excp_date =       @DATENOW(), rep_name =
+@GETENV ('GGENVIRONMENT', 'GROUPNAME'), table_name =      @GETENV ('GGHEADER', 'TABLENAME'), errno =           @GETENV ('LASTERR', 'DBERRNUM'), dberrmsg   =      @GETEN
+V ('LASTERR', 'DBERRMSG') , errtype =         @GETENV ('LASTERR', 'ERRTYPE'), optype =          @GETENV ('LASTERR', 'OPTYPE'), transind =        @GETENV ('GGHEADER', 'T
+RANSACTIONINDICATOR'), transimgind     = @GETENV ('GGHEADER', 'BEFOREAFTERINDICATOR'), committimestamp = @GETENV ('GGHEADER', 'COMMITTIMESTAMP'), reccsn =          @GET
+ENV ('TRANSACTION', 'CSN'), recseqno =        @GETENV ('RECORD', 'FILESEQNO'), recrba =          @GETENV ('RECORD', 'FILERBA'), rectranspos =     @GETENV ('RECORD', 'RS
+N'), reclength =       @GETENV ('GGHEADAER', 'RECORDLENGTH'), logrba =          @GETENV ('GGHEADER', 'LOGRBA'), logposition =     @GETENV ('GGHEADER', 'LOGPOSITION'), g
+rouptype =       @GETENV ('GGENVIRONMENT', 'GROUPTYPE'), filename =        @GETENV ('GGFILEHEADER', 'FILENAME'), fileno =          @GETENV ('GGFILEHEADER', 'FILESEQNO')
+, srcrowid =        @GETENV ('TRANSACTION', 'CSN'), srcdbcharset =    @GETENV ('GGFILEHEADER', 'DBCHARSET'), replag =          @GETENV ('LAG', 'SEC'), cnt_cdr_conflicts
+ =   @GETENV ('DELTASTATS','TABLE', @GETENV ('GGHEADER', 'TABLENAME'),'CDR_CONFLICTS') , cnt_cdr_resolutions = @GETENV ('DELTASTATS','TABLE', @GETENV ('GGHEADER', 'TABL
+ENAME'),'CDR_RESOLUTIONS_SUCCEEDED') , cnt_cdr_failed =      @GETENV ('DELTASTATS','TABLE', @GETENV ('GGHEADER', 'TABLENAME'),'CDR_RESOLUTIONS_FAILED')));
+END;
+MACRO #global_exception_table
+BEGIN
+TARGET oggadm1.EXCEPTIONS
+END;
+SETENV(ORACLE_SID = "SOAUAT1")
+USERIDALIAS SOAUAT1ADM DOMAIN admin
+
+2016-07-29 11:02:33  INFO    OGG-01971  The previous message, 'INFO OGG-02095', repeated 1 times.
+
+2016-07-29 11:02:33  INFO    OGG-03522  Setting session time zone to source database time zone 'GMT'.
+ExtTrail ./dirdat/sa
+#gg_extract_report_settings();
+STATOPTIONS RESETREPORTSTATS
+REPORT AT 00:01
+REPORTROLLOVER AT 00:05
+REPORTCOUNT EVERY 1 MINUTES, RATE
+DISCARDROLLOVER at 02:00 ON SUNDAY
+WARNLONGTRANS 20M, CHECKINTERVAL 10M
+#gg_extract_settings();
+LOGALLSUPCOLS
+
+2016-07-29 11:02:33  WARNING OGG-04033   LOGALLSUPCOLS has set the NOCOMPRESSDELETES and GETUPDATEBEFORES parameters on.
+UPDATERECORDFORMAT COMPACT
+TRANLOGOPTIONS EXCLUDEUSER OGGADM1
+TRANLOGOPTIONS INCLUDEREGIONID
+DDL INCLUDE MAPPED
+DDLOPTIONS REPORT
+GETUPDATEBEFORES
+GETTRUNCATES
+NOCOMPRESSUPDATES
+NOCOMPRESSDELETES
+#fetchfromschemas(SOAINTERNAL);
+Table SOAINTERNAL.* ,GETBEFORECOLS (ON UPDATE ALL, ON DELETE ALL);
+
+2016-07-29 11:02:33  INFO    OGG-00506  Both GETTRUNCATES and DDL replication are enabled.
+
+2016-07-29 11:02:33  INFO    OGG-01815  Virtual Memory Facilities for: BR
+    anon alloc: mmap(MAP_ANON)  anon free: munmap
+    file alloc: mmap(MAP_SHARED)  file free: munmap
+    target directories:
+    /u01/app/goldengate/gg12c/BR/E_UAT101.
+
+Bounded Recovery Parameter:
+BRINTERVAL = 4HOURS
+BRDIR      = /u01/app/goldengate/gg12c
+
+2016-07-29 11:02:33  INFO    OGG-01851  filecaching started: thread ID: 140376706807552.
+
+2016-07-29 11:02:33  INFO    OGG-01815  Virtual Memory Facilities for: COM
+    anon alloc: mmap(MAP_ANON)  anon free: munmap
+    file alloc: mmap(MAP_SHARED)  file free: munmap
+    target directories:
+    /u01/app/goldengate/gg12c/dirtmp.
+
+CACHEMGR virtual memory values (may have been adjusted)
+CACHEPAGEOUTSIZE (default):               8M
+PROCESS VM AVAIL FROM OS (min):         128G
+CACHESIZEMAX (strict force to disk):     96G
+
+2016-07-29 11:02:33  INFO    OGG-01639  BOUNDED RECOVERY:  ACTIVE: for object pool 1: p20521_extr.
+
+2016-07-29 11:02:33  INFO    OGG-01640  BOUNDED RECOVERY: recovery start XID: 0.0.0.
+
+2016-07-29 11:02:33  INFO    OGG-01641  BOUNDED RECOVERY: recovery start position: SeqNo: 30209, RBA: 13431312, SCN: 0.838709792 (838709792), Timestamp: 2016-07-29 09:5
+8:00.000000, Thread: 1.
+
+2016-07-29 11:02:33  INFO    OGG-01642  BOUNDED RECOVERY: recovery end position: SeqNo: 30209, RBA: 13431312, SCN: 0.838709792 (838709792), Timestamp: 2016-07-29 09:58:
+00.000000, Thread: 1.
+
+2016-07-29 11:02:33  INFO    OGG-01643  BOUNDED RECOVERY: CANCELED: for object pool 1: p20521_extr.
+
+2016-07-29 11:02:33  INFO    OGG-01579  BOUNDED RECOVERY: VALID BCP: CP.E_UAT101.000000118.
+
+2016-07-29 11:02:33  INFO    OGG-01629  BOUNDED RECOVERY: PERSISTED OBJECTS RECOVERED: <<NONE TO RECOVER>>.
+
+Database Version:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+PL/SQL Release 12.1.0.2.0 - Production
+CORE    12.1.0.2.0      Production
+TNS for Linux: Version 12.1.0.2.0 - Production
+NLSRTL Version 12.1.0.2.0 - Production
+
+Database Language and Character Set:
+NLS_LANGUAGE     = "AMERICAN"
+NLS_TERRITORY    = "AMERICA"
+NLS_CHARACTERSET = "AL32UTF8"
+
+2016-07-29 11:02:36  INFO    OGG-02248  Logmining server DDL filtering enabled.
+
+2016-07-29 11:02:37  INFO    OGG-02068  Integrated capture successfully attached to logmining server OGG$CAP_E_UAT101 using OGGCapture API.
+
+2016-07-29 11:02:37  INFO    OGG-02089  Source redo compatibility version is: 12.1.0.2.0.
+
+2016-07-29 11:02:37  INFO    OGG-02086  Integrated Dictionary will be used.
+
+2016-07-29 11:02:37  WARNING OGG-02905  Replication of OID column in object tables may diverge.
+
+2016-07-29 11:02:38  INFO    OGG-01055  Recovery initialization completed for target file ./dirdat/sa000000010, at RBA 1050168.
+
+2016-07-29 11:02:38  INFO    OGG-01478  Output file ./dirdat/sa is using format RELEASE 12.2.
+
+2016-07-29 11:02:38  INFO    OGG-01026  Rolling over remote file ./dirdat/sa000000010.
+
+2016-07-29 11:02:38  INFO    OGG-01053  Recovery completed for target file ./dirdat/sa000000011, at RBA 1475.
+
+2016-07-29 11:02:38  INFO    OGG-01057  Recovery completed for all targets.
+
+***********************************************************************
+**                     Run Time Messages                             **
+***********************************************************************
+
+
+2016-07-29 11:02:39  INFO    OGG-06508  Wildcard MAP (TABLE) resolved (entry SOAINTERNAL.*): Table "SOAINTERNAL"."SOA_REQUEST_LOG" ,GETBEFORECOLS (ON UPDATE ALL, ON DEL
+ETE ALL).
+
+2016-07-29 11:02:40  INFO    OGG-06509  Using the following key columns for source table SOAINTERNAL.SOA_REQUEST_LOG: REQUEST_ID.
+
+2016-07-29 11:02:40  INFO    OGG-06556  The following columns will not be considered for CDR : REQUEST_PAYLOAD, SYS_NC00004$.
+
+2016-07-29 11:02:40  INFO    OGG-06508  Wildcard MAP (TABLE) resolved (entry SOAINTERNAL.*): Table "SOAINTERNAL"."BSE_WORK_ORDER" ,GETBEFORECOLS (ON UPDATE ALL, ON DELE
+TE ALL).
+
+2016-07-29 11:02:40  INFO    OGG-06509  Using the following key columns for source table SOAINTERNAL.BSE_WORK_ORDER: REQUEST_ID, WORK_NUMBER.
+
+2016-07-29 11:02:40  INFO    OGG-06508  Wildcard MAP (TABLE) resolved (entry SOAINTERNAL.*): Table "SOAINTERNAL"."SOA_REQUEST_STATUS" ,GETBEFORECOLS (ON UPDATE ALL, ON
+DELETE ALL).
+
+2016-07-29 11:02:40  WARNING OGG-06439  No unique key is defined for table SOA_REQUEST_STATUS. All viable columns will be used to represent the key, but may not guarant
+ee uniqueness. KEYCOLS may be used to define the key.
+
+2016-07-29 11:02:40  INFO    OGG-06509  Using the following key columns for source table SOAINTERNAL.SOA_REQUEST_STATUS: REQUEST_STATUS_ID, CREATE_TS, STATUS, ERROR_COD
+E, ERROR_TEXT.
+
+2016-07-29 11:02:40  INFO    OGG-06508  Wildcard MAP (TABLE) resolved (entry SOAINTERNAL.*): Table "SOAINTERNAL"."SOA_ACK" ,GETBEFORECOLS (ON UPDATE ALL, ON DELETE ALL)
+.
+
+2016-07-29 11:02:40  WARNING OGG-06439  No unique key is defined for table SOA_ACK. All viable columns will be used to represent the key, but may not guarantee uniquene
+ss. KEYCOLS may be used to define the key.
+
+2016-07-29 11:02:40  INFO    OGG-06509  Using the following key columns for source table SOAINTERNAL.SOA_ACK: REQUEST_ID, SRC_APPL_ID, SRC_ACK, CREATION_TS, SRC_ACK_TS.
+
+2016-07-29 11:08:46  INFO    OGG-01021  Command received from GGSCI: STATUS.
+
+2016-07-29 11:09:43  INFO    OGG-01021  Command received from GGSCI: GETLAG.
+
+2016-07-29 11:10:02  INFO    OGG-01021  Command received from GGSCI: GETTCPSTATS.
+
+2016-07-29 11:10:23  INFO    OGG-01021  Command received from GGSCI: LOGSTATS.
+
+REDO Log Statistics
+  Bytes parsed                    0
+  Bytes output                20635
+
+                                 -- Write Operations ------------------  -- Read Operations -------------------
+Queue Name                 Size         Count       Waited     Signaled         Count       Waited     Signaled
+------------------------ ------  --------------------------------------  --------------------------------------
+AsyncReader 1 Buffers         4           357            0            0           354            8            1
+AsyncReader 1 Results         8           257            0            0           257          635          254
+IXAsyncTrans Buffers        300         37056            0            0         36757          108         3801
+IXAsyncTrans Results        316         36757            0            0         36757          528         3393
+
+
+2016-07-29 11:10:36  INFO    OGG-01021  Command received from GGSCI: REPORT.
+
+***********************************************************************
+*                   ** Run Time Statistics **                         *
+***********************************************************************
+
+
+Report at 2016-07-29 11:10:36 (activity since 2016-07-29 11:02:40)
+
+Output to ./dirdat/sa:
+
+From Table SOAINTERNAL.SOA_REQUEST_LOG:
+       #                   inserts:        12
+       #                   updates:         0
+       #                   deletes:         0
+       #                  discards:         0
+From Table SOAINTERNAL.BSE_WORK_ORDER:
+       #                   inserts:         3
+       #                   updates:         0
+       #                   deletes:         0
+       #                  discards:         0
+From Table SOAINTERNAL.SOA_REQUEST_STATUS:
+       #                   inserts:        12
+       #                   updates:         0
+       #                   deletes:         0
+       #                  discards:         0
+From Table SOAINTERNAL.SOA_ACK:
+       #                   inserts:        12
+       #                   updates:         0
+       #                   deletes:         0
+       #                  discards:         0
+
+
+DDL replication statistics:
+
+                    Operations:         0
+             Mapped operations:         0
+           Unmapped operations:         0
+              Other operations:         0
+           Excluded operations:         0
+
+
+
+
+***********************************************************************
+**                     Run Time Warnings                             **
+***********************************************************************
+
+
+2016-07-29 11:10:43  INFO    OGG-01021  Command received from GGSCI: SHOWTRANS.
+
+2016-07-29 11:10:52  INFO    OGG-01021  Command received from GGSCI: DURATION 5.
+
+
+GGSCI (CTDBSOA01Sv as oggadm1@SOAUAT1) 89>

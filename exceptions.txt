@@ -1,0 +1,646 @@
+ 
+create table ggs_admin.exceptions
+( rep_name varchar2(8)
+, table_name varchar2(61)
+, errno number
+, dberrmsg varchar2(4000)
+, optype varchar2(20)
+, errtype varchar2(20)
+, logrba number
+, logposition number
+, committimestamp timestamp
+);
+ 
+ALTER TABLE ggs_admin.exceptions ADD (
+  CONSTRAINT PK_CTS
+ PRIMARY KEY  (logrba, logposition, committimestamp) );
+ 
+ -- This starts the macro
+ MACRO #exception_handler
+ BEGIN
+ , TARGET ggs_admin.exceptions
+ , COLMAP ( rep_name = "RTARGET1"
+ , table_name = @GETENV ("GGHEADER", "TABLENAME")
+ , errno = @GETENV ("LASTERR", "DBERRNUM")
+ , dberrmsg = @GETENV ("LASTERR", "DBERRMSG")
+ , optype = @GETENV ("LASTERR", "OPTYPE")
+ , errtype = @GETENV ("LASTERR", "ERRTYPE")
+ , logrba = @GETENV ("GGHEADER", "LOGRBA")
+ , logposition = @GETENV ("GGHEADER", "LOGPOSITION")
+ , committimestamp = @GETENV ("GGHEADER", "COMMITTIMESTAMP"))
+ , INSERTALLRECORDS
+ , EXCEPTIONSONLY;
+ END;
+-- This ends the macro
+
+
+----------------------------------------------------------------------------------------------
+
+
+Creating a GoldenGate Exception Handler to Trap and Log Oracle Errors
+ 
+GoldenGate does not provide a standard exceptions handler. By default, a Replicat process will abend should any operational failure occur, and will rollback the transaction to the last known checkpoint. This may not be ideal in a production environment.
+ 
+The HANDLECOLLISIONS and NOHANDLECOLLISIONS parameters can be used to control whether or not Replicat tries to resolve duplicate-record and missing-record errors, but should these errors be ignored?
+ 
+The way to determine what error has occurred, by which Replicat, caused by what data, create an Exceptions handler.
+ 
+Steps
+
+The steps below create an Exceptions handler that will trap and log the specified Oracle error(s), but allow the Replicat to continue to process data:
+ 
+1. The first step is to create an Exceptions table, similar to the example DDL below:
+ 
+create table ggs_admin.exceptions
+( rep_name varchar2(8)
+, table_name varchar2(61)
+, errno number
+, dberrmsg varchar2(4000)
+, optype varchar2(20)
+, errtype varchar2(20)
+, logrba number
+, logposition number
+, committimestamp timestamp
+);
+ 
+ALTER TABLE ggs_admin.exceptions ADD (
+  CONSTRAINT PK_CTS
+ PRIMARY KEY
+ (logrba, logposition, committimestamp) USING INDEX PCTFREE 0 TABLESPACE MY_INDEXES);
+ 
+The Exceptions table must be created in the GoldenGate Admin user schema. It can log exception data for all Replicat processes.
+ 
+2. Edit each Replicat process parameter file and add the exception handler Macro code block.
+ 
+[oracle@linuxserver1 ggs]$ ggsci
+ 
+GGSCI (linuxserver1) 1> edit params RTARGET1
+ 
+-- This starts the macro
+MACRO #exception_handler
+BEGIN
+, TARGET ggs_admin.exceptions
+, COLMAP ( rep_name = "RTARGET1"
+, table_name = @GETENV ("GGHEADER", "TABLENAME")
+, errno = @GETENV ("LASTERR", "DBERRNUM")
+, dberrmsg = @GETENV ("LASTERR", "DBERRMSG")
+, optype = @GETENV ("LASTERR", "OPTYPE")
+, errtype = @GETENV ("LASTERR", "ERRTYPE")
+, logrba = @GETENV ("GGHEADER", "LOGRBA")
+, logposition = @GETENV ("GGHEADER", "LOGPOSITION")
+, committimestamp = @GETENV ("GGHEADER", "COMMITTIMESTAMP"))
+, INSERTALLRECORDS
+, EXCEPTIONSONLY;
+END;
+-- This ends the macro
+ 
+3. Remaining within the editor (vi), edit the MAP statements to include the #exception_handler(). Also add the REPERROR parameter to reference to the Oracle error(s) you wish to trap.
+ 
+REPERROR (DEFAULT, EXCEPTION)
+REPERROR (DEFAULT2, ABEND)
+REPERROR (-1, EXCEPTION)
+
+MAP SRC.ORDERS, TARGET TGT.ORDERS;
+MAP SRC.ORDERS #exception_handler()
+
+MAP SRC.ORDER_ITEMS, TARGET TGT.ORDER_ITEMS;
+MAP SRC.ORDER_ITEMS #exception_handler()
+
+MAP SRC.PRODUCTS, TARGET TGT.PRODUCTS;
+MAP SRC.PRODUCTS #exception_handler()
+
+MAP SRC.ORDERS, TARGET TGT.ORDERS, REPERROR (-1403, EXCEPTION);
+
+SQL> select * from ggs_admin.exceptions where rownum <= 1;
+
+----------------------------------------------------------------------------------------------
+
+Creating Exception Table
+
+CREATE TABLE GGS.GGS_EXCEPTIONS
+(
+REP_NAME VARCHAR2(8 BYTE),
+TABLE_NAME VARCHAR2(61 BYTE),
+DML_DATE TIMESTAMP(6),
+ERRNO NUMBER,
+DBERRMSG VARCHAR2(4000 BYTE),
+OPTYPE VARCHAR2(20 BYTE),
+ERRTYPE VARCHAR2(20 BYTE),
+LOGRBA NUMBER  xxx    NOT NULL,
+LOGPOSITION NUMBER NOT NULL,
+COMMITTIMESTAMP TIMESTAMP(6) NOT NULL,
+GGS_FILENAME VARCHAR2(256 BYTE),
+CDRFAIL NUMBER,
+CDRSUC NUMBER,
+CDRDETECT NUMBER
+);
+
+CREATE UNIQUE INDEX GGS.EXCEPTIONS_PK ON GGS.GGS_EXCEPTIONS (LOGRBA, LOGPOSITION, COMMITTIMESTAMP);
+
+ ALTER TABLE GGS.GGS_EXCEPTIONS ADD (CONSTRAINT EXCEPTIONS_PK PRIMARY KEY (LOGRBA, LOGPOSITION, COMMITTIMESTAMP)
+USING INDEX GGUSER.EXCEPTIONS_PK);
+
+
+GRANT DELETE, INSERT, SELECT, UPDATE ON GGS.GGS_EXCEPTIONS TO GGS;
+
+
+GGSCI> EDIT PARAMS Rep1
+REPLICAT Rep1
+USERID GGS, PASSWORD oracle
+ASSUMETARGETDEFS
+DISCARDFILE ./dirrpt/Rep1.dsc, APPEND
+REPERROR (DEFAULT, EXCEPTION)
+MAP HR.COUNTRIES, TARGET HR.COUNTRIES;
+
+---new exception handler
+MACRO #exception_handler
+BEGIN
+-- Use the same Golden Gate Exceptions Table for all exception records
+, TARGET GGUSER.EXCEPTIONS
+, COLMAP ( rep_name = @GETENV("GGENVIRONMENT", "GROUPNAME")
+, TABLE_NAME = @GETENV ("GGHEADER", "TABLENAME")
+, ERRNO = @GETENV ("LASTERR", "DBERRNUM")
+, DBERRMSG = @GETENV ("LASTERR", "DBERRMSG")
+, OPTYPE = @GETENV ("LASTERR", "OPTYPE")
+, ERRTYPE = @GETENV ("LASTERR", "ERRTYPE")
+, LOGRBA = @GETENV ("GGHEADER", "LOGRBA")
+, LOGPOSITION = @GETENV ("GGHEADER", "LOGPOSITION")
+, COMMITTIMESTAMP = @GETENV ("GGHEADER", "COMMITTIMESTAMP")
+, GGS_FILENAME = @GETENV("GGFILEHEADER", "FILENAME")
+, CDRFAIL = @GETENV("DELTASTATS","CDR_RESOLUTIONS_FAILED")
+, CDRSUC = @GETENV("DELTASTATS","CDR_RESOLUTIONS_SUCCEEDED")
+, CDRDETECT = @GETENV("DELTASTATS","CDR_CONFLICTS"))
+, INSERTALLRECORDS
+, EXCEPTIONSONLY;
+END;
+
+MAP HR.COUNTRIES #exception_handler();
+(Save and Exit File)
+
+----------------------------------------------------------------------------------------------
+
+CREATE TABLE tabExceptions
+(
+ID                     varchar2(100),
+GroupName              varchar2(8),
+TableName              varchar2(61),
+ErrorNo                number,
+dbErrorMsg             varchar2(4000),
+optype                 varchar2(20),
+Errtype                varchar2(20),
+logrba                 number,
+logposition            number,
+committimestamp        timestamp );
+
+ALTER TABLE tabExceptions ADD ( CONSTRAINT PK_CTS PRIMARY KEY (logrba, logposition, committimestamp));
+
+DDL INCLUDE ALL, EXCLUDE OBJNAME tabExceptions
+
+REPERROR (default, EXCEPTION)
+
+MAP [statement];[codenew] INSERTALLRECORDS
+MAP [SchemaName].[TableName], TARGET tabExceptions,
+EXCEPTIONSONLY,
+COLMAP (
+USEDEFAULTS,
+ID = [primary key],
+GroupName = ”[ProcessName]”,
+ErrorNo = @GETENV (“lasterr”, “dberrnum”),
+TableName=@GETENV (“ggheader”, “tablename”),
+dbErrorMsg = @GETENV (“lasterr”, “dberrmsg”),
+optype = @GETENV (“lasterr”, “optype”),
+errtype = @GETENV (“lasterr”, “errtype”),
+logrba = @GETENV (“ggheader”, “logrba”),
+logposition=@GETENV (“ggheader”,“logposition”),
+committimestamp = @GETENV (“ggheader”, “committimestamp”)
+),
+INSERTALLRECORDS,
+EXCEPTIONSONLY;
+
+----------------------------------------------------------------------------------------------
+Friday 7/22
+
+mkdir -p $OGG_HOME/dirmac
+> cd $OGG_HOME/dirmac
+> touch <library_name>.mac 
+> vi <library_name>.mac 
+
+
+http://blog.perftuning.com/oracle-goldengate-generic-conflict-exception-handler
+
+
+ --Table Mappings
+INCLUDE ./dirmac/ops_info.mac
+
+--Specify error handling rules:
+REPERROR(default, discard)
+REPERROR(default2, discard)
+
+
+MACRO #EH_DISCARD
+BEGIN
+REPERROR(DEFAULT, DISCARD)
+REPERROR(DEFAULT2, DISCARD)
+END;
+
+
+The CDR hander is setup in a macros file I called dirprm\generic.mac and included the following:
+
+MACRO #conflict
+BEGIN
+, COMPARECOLS (ON UPDATE ALL, ON DELETE ALL),
+RESOLVECONFLICT (INSERTROWEXISTS, (DEFAULT, DISCARD)),
+RESOLVECONFLICT (UPDATEROWEXISTS, (DEFAULT, DISCARD)),
+RESOLVECONFLICT (UPDATEROWMISSING, (DEFAULT, DISCARD)),
+RESOLVECONFLICT (DELETEROWEXISTS, (DEFAULT, DISCARD)),
+RESOLVECONFLICT (DELETEROWMISSING, (DEFAULT, DISCARD))
+END;
+
+
+The exceptions handling macro is also included in the file .\dirprm\generic.mac and looks like this:
+
+MACRO #exceptions
+BEGIN
+, TARGET ogg.exceptions                 -- on Oracle ggadmin.exceptions
+, EXCEPTIONSONLY
+, COLMAP (
+groupname = @GETENV ('GGENVIRONMENT', 'GROUPNAME')
+, grouptype = @GETENV ('GGENVIRONMENT', 'GROUPTYPE')
+, hostname = @GETENV ('GGENVIRONMENT', 'HOSTNAME')
+, database_name = @GETENV ('DBENVIRONMENT', 'DBNAME')
+, table_name = @GETENV ('GGHEADER', 'TABLENAME')
+, errno = @GETENV ('LASTERR', 'DBERRNUM')
+, dberrmsg = @GETENV ('LASTERR', 'DBERRMSG')
+, optype = @GETENV ('LASTERR', 'OPTYPE')
+, errtype = @GETENV ('LASTERR', 'ERRTYPE')
+, committimestamp = @GETENV ('GGHEADER', 'COMMITTIMESTAMP')
+, errortime = @DATENOW()
+, ggtrailfile = @GETENV ('GGFILEHEADER', 'FILENAME')
+, filerba = @GETENV ('RECORD', 'FILERBA')
+)
+, INSERTALLRECORDS
+END;
+
+In order for the exception handling to be used, I had to include the macro file in my replicat parameter file by adding the line:
+
+                INCLUDE .\dirprm\generic.mac
+
+
+The table creation script for Oracle is:
+--oggadm1.oggchkpt
+create table oggadm1.exceptions
+(
+groupname varchar2(10)
+, grouptype varchar2(10)
+, hostname varchar2(40)
+, database_name varchar2(40)
+, table_name varchar2(61)
+, errno int
+, dberrmsg varchar2(4000)
+, optype varchar2(20)
+, errtype varchar2(20)
+, committimestamp timestamp
+, errortime timestamp
+, ggtrailfile varchar2(40)
+, filerba int
+);
+
+For conflict resolution to work, before images must be taken for update and delete statements.  This is placed in the extract file:
+
+TABLE soe.* GETBEFORECOLS( ON UPDATE ALL, ON DELETE ALL), FETCHCOLS(*);
+
+The CDR and exceptions handlers are setup via macros in the replicat file:
+
+MAP SOE.TEST1, TARGET SOE.TEST1 #conflict();
+MAP SOE.TEST1 #exceptions();
+
+--Extract
+--TABLE soe.* GETBEFORECOLS( ON UPDATE ALL, ON DELETE ALL), FETCHCOLS(*);
+--Replicat
+--MAP SOE.TEST1, TARGET SOE.TEST1 #conflict();
+--MAP SOE.TEST1 #exceptions();
+
+
+
+----------------------------------------------------------------------------------------------
+
+http://oraclegoldengatereplication.blogspot.com/2015/06/goldengate-exception-table-reporting.html
+
+-- Create the Global Exception Table:
+
+CREATE TABLE EXCEPTIONS
+(
+ excp_date timestamp(6) default systimestamp,
+ rep_name varchar2(10),
+ table_name varchar2(56),
+ errno number,
+ errtype varchar2(6),
+ optype varchar2(24),
+ transind varchar2(12),
+ transimgind varchar2(8),
+ committimestamp varchar2(26),
+ reccsn number,
+ recseqno number,
+ recrba number,
+ rectranspos number,
+ reclength number,
+ logrba number,
+ logposition number,
+ grouptype varchar2(12),
+ filename varchar2(50),
+ fileno number,
+ srcrowid varchar2(40),
+ srcdbcharset varchar2(40),
+ replag number,
+ cnt_cdr_conflicts number,
+ cnt_cdr_resolutions number,
+ cnt_cdr_failed number 
+);
+
+     -- Set error mode for GoldenGate (changing default of "ABEND")
+
+      REPERROR (DEFAULT, EXCEPTION)
+      -- REPERROR (DEFAULT, TRANSEXCEPTION) 
+     REPERROR (DEFAULT2, ABEND)
+     -- Set error codes that cause exception processing
+     REPERROR (-1, EXCEPTION)
+     REPERROR (-1403, EXCEPTION)
+     REPERROR (-2291, EXCEPTION)
+     
+     
+     MACRO #EH_EXCEPTION_NAMED
+     BEGIN
+        REPERROR (DEFAULT, EXCEPTION)
+        REPERROR (DEFAULT2, ABEND)
+     -- REPERROR (DEFAULT, TRANSEXCEPTION) 
+     -- Set error codes that cause exception processing
+        REPERROR (-1, EXCEPTION)
+        REPERROR (-1403, EXCEPTION)
+        REPERROR (-2291, EXCEPTION)
+     END;
+
+
+     
+
+      
+  -- Set error codes that cause exception processing
+          REPERROR (-1, EXCEPTION)
+          REPERROR (-1403, EXCEPTION)
+          REPERROR (-2291, EXCEPTION)
+     
+     
+     
+     
+    -- Wildcard mappings: (uses the MAPEXCEPTION parameter to MAP)
+ 
+            Note: Notice there is a MAPEXCEPTION parameter, instead of a separate MAP statement.
+                      MAP parameters EXCEPTIONSONLY and INSERTALLRECORDS are used.
+ 
+ 
+ MAP XTEST.*, TARGET XTEST.*, MAPEXCEPTION (TARGET OGG.EXCEPTIONS, EXCEPTIONSONLY, INSERTALLRECORDS, COLMAP 
+ ( 
+ excp_date = @DATENOW(), 
+ rep_name = @GETENV ('GGENVIRONMENT', 'GROUPNAME'), 
+ table_name = @GETENV ('GGHEADER', 'TABLENAME'), 
+ errno = @GETENV ('LASTERR', 'DBERRNUM'), 
+ errtype = @GETENV ('LASTERR', 'ERRTYPE'), 
+ optype = @GETENV ('LASTERR', 'OPTYPE'), 
+ transind = @GETENV ('GGHEADER', 'TRANSACTIONINDICATOR'), 
+ transimgind = @GETENV ('GGHEADER', 'BEFOREAFTERINDICATOR'), 
+ committimestamp = @GETENV ('GGHEADER', 'COMMITTIMESTAMP'), 
+ reccsn = @GETENV ('TRANSACTION', 'CSN'), 
+ recseqno = @GETENV ('RECORD', 'FILESEQNO'), 
+ recrba = @GETENV ('RECORD', 'FILERBA'), 
+ rectranspos = @GETENV ('RECORD', 'RSN'), 
+ reclength = @GETENV ('GGHEADAER', 'RECORDLENGTH'), 
+ logrba = @GETENV ('GGHEADER', 'LOGRBA'), 
+ logposition = @GETENV ('GGHEADER', 'LOGPOSITION'), 
+ grouptype = @GETENV ('GGENVIRONMENT', 'GROUPTYPE'), 
+ filename = @GETENV ('GGFILEHEADER', 'FILENAME'), 
+ fileno = @GETENV ('GGFILEHEADER', 'FILESEQNO'), 
+ srcrowid = @GETENV ('TRANSACTION', 'CSN'), 
+ srcdbcharset = @GETENV ('GGFILEHEADER', 'DBCHARSET'), 
+ replag = @GETENV ('LAG', 'SEC'), 
+ cnt_cdr_conflicts = @GETENV ('DELTASTATS','TABLE', @GETENV ('GGHEADER', 'TABLENAME'),'CDR_CONFLICTS'), cnt_cdr_resolutions = @GETENV ('DELTASTATS','TABLE', @GETENV ('GGHEADER', 'TABLENAME'),'CDR_RESOLUTIONS_SUCCEEDED'), 
+ cnt_cdr_failed = @GETENV ('DELTASTATS','TABLE', @GETENV ('GGHEADER', 'TABLENAME'),'CDR_RESOLUTIONS_FAILED'))
+  )
+ );
+
+
+
+ -- Individual table mappings: (uses a separate MAP statement for exception processing)
+
+         Note: Notice there is no MAPEXCEPTION parameter, instead there is a separate MAP     
+                   statement.
+                   MAP statement with EXCEPTIONSONLY and INSERTALLRECORDS parameters.
+
+MAP XTEST.*, TARGET XTEST.*;
+MAP MAP XTEST.*, TARGET OGG.EXCEPTIONS, EXCEPTIONSONLY, INSERTALLRECORDS, &
+COLMAP (
+excp_date = @DATENOW(), 
+rep_name = @GETENV ('GGENVIRONMENT', 'GROUPNAME'), 
+table_name = @GETENV ('GGHEADER', 'TABLENAME'), 
+errno = @GETENV ('LASTERR', 'DBERRNUM'), 
+errtype = @GETENV ('LASTERR', 'ERRTYPE'), 
+optype = @GETENV ('LASTERR', 'OPTYPE'), 
+transind = @GETENV ('GGHEADER', 'TRANSACTIONINDICATOR'), 
+transimgind = @GETENV ('GGHEADER', 'BEFOREAFTERINDICATOR'), 
+committimestamp = @GETENV ('GGHEADER', 'COMMITTIMESTAMP'), 
+reccsn = @GETENV ('TRANSACTION', 'CSN'), 
+recseqno = @GETENV ('RECORD', 'FILESEQNO'), 
+recrba = @GETENV ('RECORD', 'FILERBA'), 
+rectranspos = @GETENV ('RECORD', 'RSN'), 
+reclength = @GETENV ('GGHEADAER', 'RECORDLENGTH'), 
+logrba = @GETENV ('GGHEADER', 'LOGRBA'), 
+logposition = @GETENV ('GGHEADER', 'LOGPOSITION'), 
+grouptype = @GETENV ('GGENVIRONMENT', 'GROUPTYPE'), 
+filename = @GETENV ('GGFILEHEADER', 'FILENAME'), 
+fileno = @GETENV ('GGFILEHEADER', 'FILESEQNO'), 
+srcrowid = @GETENV ('TRANSACTION', 'CSN'), 
+srcdbcharset = @GETENV ('GGFILEHEADER', 'DBCHARSET'), 
+replag = @GETENV ('LAG', 'SEC'), 
+cnt_cdr_conflicts = @GETENV ('DELTASTATS','TABLE', @GETENV ('GGHEADER', 'TABLENAME'),'CDR_CONFLICTS'), cnt_cdr_resolutions = @GETENV ('DELTASTATS','TABLE', @GETENV ('GGHEADER', 'TABLENAME'),'CDR_RESOLUTIONS_SUCCEEDED'), 
+cnt_cdr_failed = @GETENV ('DELTASTATS','TABLE', @GETENV ('GGHEADER', 'TABLENAME'),'CDR_RESOLUTIONS_FAILED'))
+);
+
+
+
+-- Example of wildcard exception mapping with CDR rules:
+
+   When CDR is called, the exception/CDR processing will be handled (in most cases) 
+    and logged so you know where it is occurring and how often.
+
+MAP XTEST.*, TARGET XTEST.*, 
+COMPARECOLS(ON UPDATE KEYINCLUDING (OGG_TS), ON DELETE KEYINCLUDING (OGG_TS)), &
+RESOLVECONFLICT (INSERTROWEXISTS, (DEFAULT, USEMAX (OGG_TS))), 
+RESOLVECONFLICT (UPDATEROWEXISTS, (DEFAULT, USEMAX (OGG_TS))), 
+RESOLVECONFLICT (UPDATEROWMISSING,(DEFAULT, OVERWRITE)), 
+RESOLVECONFLICT (DELETEROWEXISTS, (DEFAULT, OVERWRITE)), 
+RESOLVECONFLICT (DELETEROWMISSING,(DEFAULT, DISCARD)),
+MAPEXCEPTION (TARGET OGG.EXCEPTIONS, EXCEPTIONSONLY, INSERTALLRECORDS, COLMAP ( 
+excp_date = @DATENOW(), 
+rep_name = @GETENV ('GGENVIRONMENT', 'GROUPNAME'), 
+table_name = @GETENV ('GGHEADER', 'TABLENAME'), 
+errno = @GETENV ('LASTERR', 'DBERRNUM'), 
+errtype = @GETENV ('LASTERR', 'ERRTYPE'), 
+optype = @GETENV ('LASTERR', 'OPTYPE'), 
+transind = @GETENV ('GGHEADER', 'TRANSACTIONINDICATOR'), 
+transimgind = @GETENV ('GGHEADER', 'BEFOREAFTERINDICATOR'), 
+committimestamp = @GETENV ('GGHEADER', 'COMMITTIMESTAMP'), 
+reccsn = @GETENV ('TRANSACTION', 'CSN'), 
+recseqno = @GETENV ('RECORD', 'FILESEQNO'), 
+recrba = @GETENV ('RECORD', 'FILERBA'), 
+rectranspos = @GETENV ('RECORD', 'RSN'), 
+reclength = @GETENV ('GGHEADAER', 'RECORDLENGTH'), 
+logrba = @GETENV ('GGHEADER', 'LOGRBA'), 
+logposition = @GETENV ('GGHEADER', 'LOGPOSITION'), 
+grouptype = @GETENV ('GGENVIRONMENT', 'GROUPTYPE'), 
+filename = @GETENV ('GGFILEHEADER', 'FILENAME'), 
+fileno = @GETENV ('GGFILEHEADER', 'FILESEQNO'), 
+srcrowid = @GETENV ('TRANSACTION', 'CSN'), 
+srcdbcharset = @GETENV ('GGFILEHEADER', 'DBCHARSET'), 
+replag = @GETENV ('LAG', 'SEC'), 
+cnt_cdr_conflicts = @GETENV ('DELTASTATS','TABLE', @GETENV ('GGHEADER', 'TABLENAME'),'CDR_CONFLICTS'), 
+cnt_cdr_resolutions = @GETENV ('DELTASTATS','TABLE', @GETENV ('GGHEADER', 'TABLENAME'),'CDR_RESOLUTIONS_SUCCEEDED'), 
+cnt_cdr_failed = @GETENV ('DELTASTATS','TABLE', @GETENV ('GGHEADER', 'TABLENAME'),'CDR_RESOLUTIONS_FAILED'))
+ )
+);
+
+
+One thing to note, since the mappings are so long due to the transformations (COLMAP), these are normally put into a macro
+library that has macros to do both wildcard mappings as well as individual table mappings and the call to the macro 
+helps keep the PRM files short, clean and neat. 
+Example below of calling the macro to do the mappings for a schema:
+
+   #replicateschamewithGlobalExcp (XTEST,XTEST);
+   
+   #replicatetablewithGlobalExcp (XTEST.TAB1);
+
+You can easily create additional macros which do both CDR and exception logging. CDR tries to resolve the conflict but
+the exception is still logged:
+
+   #replicateschamewithCDRandGlobalExcp (XTEST,XTEST);
+   
+   #replicatetablewithCDRandGlobalExcp (XTEST.TAB1);
+   
+   
+   
+------------------------------------------------------------
+
+Replicat File
+
+replicat rep9
+ASSUMETARGETDEFS
+userid ogg_user, password oracle
+include ./dirprm/EXCEPTION_HANDLER.mac
+REPERROR (DEFAULT, EXCEPTION)
+REPERROR (DEFAULT2, ABEND)
+REPERROR (-1, EXCEPTION)
+MAP scott.emp, TARGET scott.emp;
+MAP scott.emp #exception_handler();
+Exception Handler Macro
+
+Created in ./dirprm/EXCEPTION_HANDLER.mac:
+
+MACRO #EXCEPTION_HANDLER
+BEGIN
+, TARGET GGATE_ADMIN.ALLEXCEPTIONS
+, COLMAP ( REPLICAT_NAME = @GETENV("GGENVIRONMENT", "GROUPNAME"))
+, TABLE_NAME = @GETENV ("GGHEADER", "TABLENAME")
+, ERRNO = @GETENV ("LASTERR", "DBERRNUM")
+, DBERRMSG = @GETENV ("LASTERR", "DBERRMSG")
+, OPTYPE = @GETENV ("LASTERR", "OPTYPE")
+, ERRTYPE = @GETENV ("LASTERR", "ERRTYPE")
+, LOGRBA = @GETENV ("GGHEADER", "LOGRBA")
+, LOGPOSITION = @GETENV ("GGHEADER", "LOGPOSITION")
+, COMMITTIMESTAMP = @GETENV ("GGHEADER", "COMMITTIMESTAMP"))
+, INSERTALLRECORDS
+, EXCEPTIONSONLY;
+END;
+
+---------------------------------------------------------------------------------------------------------
+
+DDL INCLUDE MAPPED, EXCLUDE OBJNAME GGDDLUSR.EXCEPTIONS
+
+
+SETENV (NLS_LANG="AMERICAN_AMERICA.AL32UTF8")
+USERID OGG@?OGG_DB PASSWORD AACAAAAAXXXXXXAAIAWGVAABXXXXBIDPEHB ENCRYPTKEY DEFAULT
+
+DBOPTIONS DEFERREFCONST
+DBOPTIONS SUPPRESSTRIGGERS
+
+----------- end of INCLUDE file ------------
+
+---> global_parms.inc.
+
+----------- Start of Global INCLUDE file ------------
+
+COMMENT Global Parameters Include file (for all processes)
+
+
+DISCARDROLLOVER AT 00:01 ON SUNDAY
+STATOPTIONS RESETREPORTSTATS, REPORTFETCH, REPORTDETAIL
+
+REPORTCOUNT EVERY 30 MINUTES, RATE
+REPORT AT 00:00
+REPORTROLLOVER AT 00:02 ON SUNDAY
+
+ROLLOVER AT 00:00
+
+WARNLONGTRANS 1H, CHECKINTERVAL 1H
+
+---------------------------------------------------------------------------------------------------------
+
+Variables
+
+
+
+REPLICAT rep1
+
+SETENV (OGG_GROUP = "rep1")
+SETENV (OGG_DB = "DBM")
+SETENV (OGG_NUM = "1")
+SETENV (OGG_TYPE = "replicat")
+
+
+---------------------------------------------------------------------------------------------------------
+
+Replicat #1 Parameter file:
+
+-- --- Start of replicat PRM --------
+REPLICAT rep1
+SETENV (OGG_GROUP = "rep1")
+SETENV (OGG_DB = "ksdev")
+SETENV (OGG_NUM = "1")
+SETENV (OGG_TYPE = "replicat")
+-- -------- No need to edit below this line -----------
+
+-- All parameters/Include files below are based on variables set above
+
+-- Database Parameters Include file
+INCLUDE ./dirprm/db_target_?OGG_DB.inc
+
+-- Global Parameters (for all processes)
+INCLUDE ./dirprm/global_parms.inc
+
+-- Global REPERROR Error handling
+INCLUDE ./dirprm/global_error_handling.?OGG_TYPE.inc
+
+-- Global DDLOptions
+INCLUDE ./dirprm/global_ddloptions.?OGG_TYPE.inc
+
+-- Marco Include file (for replicat)
+INCLUDE ./dirprm/macros/macros_?OGG_TYPE.inc
+
+-- Include Map/Target statements
+INCLUDE ./dirprm/objects_?OGG_DB.?OGG_GROUP.?OGG_NUM.inc
+
+----- End of replicat PRM --------
+
+http://oraclegoldengatereplication.blogspot.com/2014/09/include-files-variables-and-macros.html
+
+
+-----------------------------------------------------
+
+http://www.dba-oracle.com/t_goldengate_built_in_conflict_detection.htm
+

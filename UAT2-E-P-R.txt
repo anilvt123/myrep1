@@ -1,0 +1,933 @@
+--UAT2-E-P-R
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Extract E_UAT201
+
+INCLUDE ./dirmac/exception_handler.mac
+
+SETENV (ORACLE_SID = "SOAUAT2")
+SETENV (ORACLE_HOME="/u01/app/oracle/product/ora1210/db_1")
+SETENV (NLS_LANG="AMERICAN_AMERICA.AL32UTF8")
+
+--UserID oggadm1@soauat2, Password pswd1a
+USERIDALIAS SOAUAT2ADM DOMAIN admin
+
+--ExtTrail ./dirdat/SOAINTERNAL/sb
+
+ExtTrail ./dirdat/sb
+
+#gg_extract_report_settings();
+
+#gg_extract_target_settings();
+
+#fetchfromschemas(SOAINTERNAL);
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Extract E_UAT202
+
+INCLUDE ./dirmac/exception_handler.mac
+
+SETENV (ORACLE_SID = "SOAUAT2")
+SETENV (ORACLE_HOME="/u01/app/oracle/product/ora1210/db_1")
+SETENV (NLS_LANG="AMERICAN_AMERICA.AL32UTF8")
+
+--UserID oggadm1@soauat2, Password pswd1a
+USERIDALIAS SOAUAT2ADM DOMAIN admin
+
+ExtTrail ./dirdat/FMW1221_SOAINFRA/sb
+
+#gg_extract_report_settings();
+
+#gg_extract_target_settings();
+
+#fetchfromschemas(FMW1221_SOAINFRA);
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Extract E_UAT203
+
+INCLUDE ./dirmac/exception_handler.mac
+
+SETENV (ORACLE_SID = "SOAUAT2")
+SETENV (ORACLE_HOME="/u01/app/oracle/product/ora1210/db_1")
+SETENV (NLS_LANG="AMERICAN_AMERICA.AL32UTF8")
+
+--UserID oggadm1@soauat2, Password pswd1a
+USERIDALIAS SOAUAT2ADM DOMAIN admin
+
+ExtTrail ./dirdat/FMW1221_ESS/sb
+
+#gg_extract_report_settings();
+
+#gg_extract_target_settings();
+
+#fetchfromschemas(FMW1221_ESS);
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Extract E_UAT204
+
+INCLUDE ./dirmac/exception_handler.mac
+
+SETENV (ORACLE_SID = "SOAUAT2")
+SETENV (ORACLE_HOME="/u01/app/oracle/product/ora1210/db_1")
+SETENV (NLS_LANG="AMERICAN_AMERICA.AL32UTF8")
+
+--UserID oggadm1@soauat2, Password pswd1a
+USERIDALIAS SOAUAT2ADM DOMAIN admin
+
+ExtTrail ./dirdat/FMW1221_IAU/sb
+
+#gg_extract_report_settings();
+
+#gg_extract_target_settings();
+
+#fetchfromschemas(FMW1221_IAU);
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Extract E_UAT205
+
+INCLUDE ./dirmac/exception_handler.mac
+
+SETENV (ORACLE_SID = "SOAUAT2")
+SETENV (ORACLE_HOME="/u01/app/oracle/product/ora1210/db_1")
+SETENV (NLS_LANG="AMERICAN_AMERICA.AL32UTF8")
+
+--UserID oggadm1@soauat2, Password pswd1a
+USERIDALIAS SOAUAT2ADM DOMAIN admin
+
+ExtTrail ./dirdat/FMW1221_IAU_APPEND/sb
+
+#gg_extract_report_settings();
+
+#gg_extract_target_settings();
+
+#fetchfromschemas(FMW1221_IAU_APPEND);
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Extract E_UAT206
+
+INCLUDE ./dirmac/exception_handler.mac
+
+SETENV (ORACLE_SID = "SOAUAT2")
+SETENV (ORACLE_HOME="/u01/app/oracle/product/ora1210/db_1")
+SETENV (NLS_LANG="AMERICAN_AMERICA.AL32UTF8")
+
+--UserID oggadm1@soauat2, Password pswd1a
+USERIDALIAS SOAUAT2ADM DOMAIN admin
+
+ExtTrail ./dirdat/FMW1221_IAU_VIEWER/sb
+
+#gg_extract_report_settings();
+
+#gg_extract_target_settings();
+
+#fetchfromschemas(FMW1221_IAU_VIEWER);
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Extract E_UAT207
+
+INCLUDE ./dirmac/exception_handler.mac
+
+SETENV (ORACLE_SID = "SOAUAT2")
+SETENV (ORACLE_HOME="/u01/app/oracle/product/ora1210/db_1")
+SETENV (NLS_LANG="AMERICAN_AMERICA.AL32UTF8")
+
+--UserID oggadm1@soauat2, Password pswd1a
+USERIDALIAS SOAUAT2ADM DOMAIN admin
+
+ExtTrail ./dirdat/FMW1221_MDS/sb
+
+#gg_extract_report_settings();
+
+#gg_extract_target_settings();
+
+#fetchfromschemas(FMW1221_MDS);
+
+---------------------------------------------------------------------------------------------------------------------------------------
+Extract E_UAT208
+
+INCLUDE ./dirmac/exception_handler.mac
+
+SETENV (ORACLE_SID = "SOAUAT2")
+SETENV (ORACLE_HOME="/u01/app/oracle/product/ora1210/db_1")
+SETENV (NLS_LANG="AMERICAN_AMERICA.AL32UTF8")
+
+--UserID oggadm1@soauat2, Password pswd1a
+USERIDALIAS SOAUAT2ADM DOMAIN admin
+
+ExtTrail ./dirdat/FMW1221_MFT/sb
+
+#gg_extract_report_settings();
+
+#gg_extract_target_settings();
+
+#fetchfromschemas(FMW1221_MFT);
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Extract E_UAT209
+
+INCLUDE ./dirmac/exception_handler.mac
+
+SETENV (ORACLE_SID = "SOAUAT2")
+SETENV (ORACLE_HOME="/u01/app/oracle/product/ora1210/db_1")
+SETENV (NLS_LANG="AMERICAN_AMERICA.AL32UTF8")
+
+--UserID oggadm1@soauat2, Password pswd1a
+USERIDALIAS SOAUAT2ADM DOMAIN admin
+
+ExtTrail ./dirdat/FMW1221_OPSS/sb
+
+#gg_extract_report_settings();
+
+#gg_extract_target_settings();
+
+#fetchfromschemas(FMW1221_OPSS);
+
+---------------------------------------------------------------------------------------------------------------------------------------
+Extract E_UAT210
+
+INCLUDE ./dirmac/exception_handler.mac
+
+SETENV (ORACLE_SID = "SOAUAT2")
+SETENV (ORACLE_HOME="/u01/app/oracle/product/ora1210/db_1")
+SETENV (NLS_LANG="AMERICAN_AMERICA.AL32UTF8")
+
+--UserID oggadm1@soauat2, Password pswd1a
+USERIDALIAS SOAUAT2ADM DOMAIN admin
+
+ExtTrail ./dirdat/FMW1221_STB/sb
+
+#gg_extract_report_settings();
+
+#gg_extract_target_settings();
+
+#fetchfromschemas(FMW1221_STB);
+
+---------------------------------------------------------------------------------------------------------------------------------------
+Extract E_UAT211
+
+INCLUDE ./dirmac/exception_handler.mac
+
+SETENV (ORACLE_SID = "SOAUAT2")
+SETENV (ORACLE_HOME="/u01/app/oracle/product/ora1210/db_1")
+SETENV (NLS_LANG="AMERICAN_AMERICA.AL32UTF8")
+
+--UserID oggadm1@soauat2, Password pswd1a
+USERIDALIAS SOAUAT2ADM DOMAIN admin
+
+ExtTrail ./dirdat/FMW1221_UMS/sb
+
+#gg_extract_report_settings();
+
+#gg_extract_target_settings();
+
+#fetchfromschemas(FMW1221_UMS);
+
+---------------------------------------------------------------------------------------------------------------------------------------
+Extract E_UAT212
+
+INCLUDE ./dirmac/exception_handler.mac
+
+SETENV (ORACLE_SID = "SOAUAT2")
+SETENV (ORACLE_HOME="/u01/app/oracle/product/ora1210/db_1")
+SETENV (NLS_LANG="AMERICAN_AMERICA.AL32UTF8")
+
+--UserID oggadm1@soauat2, Password pswd1a
+USERIDALIAS SOAUAT2ADM DOMAIN admin
+
+ExtTrail ./dirdat/FMW1221_WLS/sb
+
+#gg_extract_report_settings();
+
+#gg_extract_target_settings();
+
+#fetchfromschemas(FMW1221_WLS);
+
+---------------------------------------------------------------------------------------------------------------------------------------
+Extract E_UAT213
+
+INCLUDE ./dirmac/exception_handler.mac
+
+SETENV (ORACLE_SID = "SOAUAT2")
+SETENV (ORACLE_HOME="/u01/app/oracle/product/ora1210/db_1")
+SETENV (NLS_LANG="AMERICAN_AMERICA.AL32UTF8")
+
+--UserID oggadm1@soauat2, Password pswd1a
+USERIDALIAS SOAUAT2ADM DOMAIN admin
+
+ExtTrail ./dirdat/FMW1221_WLS_RUNTIME/sb
+
+#gg_extract_report_settings();
+
+#gg_extract_target_settings();
+
+#fetchfromschemas(FMW1221_WLS_RUNTIME);
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Extract E_UAT214
+
+INCLUDE ./dirmac/exception_handler.mac
+
+SETENV (ORACLE_SID = "SOAUAT2")
+SETENV (ORACLE_HOME="/u01/app/oracle/product/ora1210/db_1")
+SETENV (NLS_LANG="AMERICAN_AMERICA.AL32UTF8")
+
+--UserID oggadm1@soauat2, Password pswd1a
+USERIDALIAS SOAUAT2ADM DOMAIN admin
+
+ExtTrail ./dirdat/TLOGS/sb
+
+#gg_extract_report_settings();
+
+#gg_extract_target_settings();
+
+#fetchfromschemas(TLOGS);
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Extract E_UAT215
+
+INCLUDE ./dirmac/exception_handler.mac
+
+SETENV (ORACLE_SID = "SOAUAT2")
+SETENV (ORACLE_HOME="/u01/app/oracle/product/ora1210/db_1")
+SETENV (NLS_LANG="AMERICAN_AMERICA.AL32UTF8")
+
+--UserID oggadm1@soauat2, Password pswd1a
+USERIDALIAS SOAUAT2ADM DOMAIN admin
+
+ExtTrail ./dirdat/JMS/sb
+
+#gg_extract_report_settings();
+
+#gg_extract_target_settings();
+
+#fetchfromschemas(JMS);
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Extract E_UAT216
+
+INCLUDE ./dirmac/exception_handler.mac
+
+SETENV (ORACLE_SID = "SOAUAT2")
+SETENV (ORACLE_HOME="/u01/app/oracle/product/ora1210/db_1")
+SETENV (NLS_LANG="AMERICAN_AMERICA.AL32UTF8")
+
+ExtTrail ./dirdat/C022427/sb
+
+#gg_extract_report_settings();
+
+#gg_extract_target_settings();
+
+#fetchfromschemas(C022427);
+
+---------------------------------------------------------------------------------------------------------------------------------------
+			datapump		
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Extract P_UAT201
+
+INCLUDE ./dirmac/exception_handler.mac
+
+RMTHOST ctdbsoa01sv, MGRPORT 7809
+RMTTRAIL ./dirdat/SOAINTERNAL/tb
+
+PASSTHRU
+
+#gg_dpump_report_settings();
+
+#dpumpfromschemas(SOAINTERNAL);
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Extract P_UAT202
+
+INCLUDE ./dirmac/exception_handler.mac
+
+RMTHOST ctdbsoa01sv, MGRPORT 7809
+RMTTRAIL ./dirdat/FMW1221_SOAINFRA/tb
+
+PASSTHRU
+
+#gg_dpump_report_settings();
+
+#dpumpfromschemas(FMW1221_SOAINFRA);
+
+---------------------------------------------------------------------------------------------------------------------------------------
+Extract P_UAT203
+
+INCLUDE ./dirmac/exception_handler.mac
+
+RMTHOST ctdbsoa01sv, MGRPORT 7809
+RMTTRAIL ./dirdat/FMW1221_ESS/tb
+
+PASSTHRU
+
+#gg_dpump_report_settings();
+
+#dpumpfromschemas(FMW1221_ESS);
+
+---------------------------------------------------------------------------------------------------------------------------------------
+Extract P_UAT204
+
+INCLUDE ./dirmac/exception_handler.mac
+
+RMTHOST ctdbsoa01sv, MGRPORT 7809
+RMTTRAIL ./dirdat/FMW1221_IAU/tb
+
+PASSTHRU
+
+#gg_dpump_report_settings();
+
+#dpumpfromschemas(FMW1221_IAU);
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Extract P_UAT205
+
+INCLUDE ./dirmac/exception_handler.mac
+
+RMTHOST ctdbsoa01sv, MGRPORT 7809
+RMTTRAIL ./dirdat/FMW1221_IAU_APPEND/tb
+
+PASSTHRU
+
+#gg_dpump_report_settings();
+
+#dpumpfromschemas(FMW1221_IAU_APPEND);
+
+---------------------------------------------------------------------------------------------------------------------------------------
+Extract P_UAT206
+
+INCLUDE ./dirmac/exception_handler.mac
+
+RMTHOST ctdbsoa01sv, MGRPORT 7809
+RMTTRAIL ./dirdat/FMW1221_IAU_VIEWER/tb
+
+PASSTHRU
+
+#gg_dpump_report_settings();
+
+#dpumpfromschemas(FMW1221_IAU_VIEWER);
+
+---------------------------------------------------------------------------------------------------------------------------------------
+Extract P_UAT207
+
+INCLUDE ./dirmac/exception_handler.mac
+
+RMTHOST ctdbsoa01sv, MGRPORT 7809
+RMTTRAIL ./dirdat/FMW1221_MDS/tb
+
+PASSTHRU
+
+#gg_dpump_report_settings();
+
+#dpumpfromschemas(FMW1221_MDS);
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Extract P_UAT208
+
+INCLUDE ./dirmac/exception_handler.mac
+
+RMTHOST ctdbsoa01sv, MGRPORT 7809
+RMTTRAIL ./dirdat/FMW1221_MFT/tb
+
+PASSTHRU
+
+#gg_dpump_report_settings();
+
+#dpumpfromschemas(FMW1221_MFT);
+
+
+---------------------------------------------------------------------------------------------------------------------------------------
+Extract P_UAT209
+
+INCLUDE ./dirmac/exception_handler.mac
+
+RMTHOST ctdbsoa01sv, MGRPORT 7809
+RMTTRAIL ./dirdat/FMW1221_OPSS/tb
+
+PASSTHRU
+
+#gg_dpump_report_settings();
+
+#dpumpfromschemas(FMW1221_OPSS);
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Extract P_UAT210
+
+INCLUDE ./dirmac/exception_handler.mac
+
+RMTHOST ctdbsoa01sv, MGRPORT 7809
+RMTTRAIL ./dirdat/FMW1221_STB/tb
+
+PASSTHRU
+
+#gg_dpump_report_settings();
+
+#dpumpfromschemas(FMW1221_STB);
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Extract P_UAT211
+
+INCLUDE ./dirmac/exception_handler.mac
+
+
+RMTHOST ctdbsoa01sv, MGRPORT 7809
+RMTTRAIL ./dirdat/FMW1221_UMS/tb
+
+PASSTHRU
+
+#gg_dpump_report_settings();
+
+#dpumpfromschemas(FMW1221_UMS);
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Extract P_UAT212
+
+INCLUDE ./dirmac/exception_handler.mac
+
+
+RMTHOST ctdbsoa01sv, MGRPORT 7809
+RMTTRAIL ./dirdat/FMW1221_WLS/tb
+
+PASSTHRU
+
+#gg_dpump_report_settings();
+
+#dpumpfromschemas(FMW1221_WLS);
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Extract P_UAT213
+
+INCLUDE ./dirmac/exception_handler.mac
+
+RMTHOST ctdbsoa01sv, MGRPORT 7809
+RMTTRAIL ./dirdat/FMW1221_WLS_RUNTIME/tb
+
+PASSTHRU
+
+#gg_dpump_report_settings();
+
+#dpumpfromschemas(FMW1221_WLS_RUNTIME);
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Extract P_UAT214
+
+INCLUDE ./dirmac/exception_handler.mac
+
+RMTHOST ctdbsoa01sv, MGRPORT 7809
+RMTTRAIL ./dirdat/TLOGS/tb
+
+PASSTHRU
+
+#gg_dpump_report_settings();
+
+#dpumpfromschemas(TLOGS);
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Extract P_UAT215
+
+INCLUDE ./dirmac/exception_handler.mac
+
+RMTHOST ctdbsoa01sv, MGRPORT 7809
+RMTTRAIL ./dirdat/JMS/tb
+
+PASSTHRU
+
+#gg_dpump_report_settings();
+
+#dpumpfromschemas(JMS);
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Extract P_UAT216
+
+INCLUDE ./dirmac/exception_handler.mac
+
+
+RMTHOST ctdbsoa01sv, MGRPORT 7809
+RMTTRAIL ./dirdat/C022427/tb
+
+PASSTHRU
+
+#gg_dpump_report_settings();
+
+#dpumpfromschemas(C022427);
+
+---------------------------------------------------------------------------------------------------------------------------------------
+				REPLICAT
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Replicat R_UAT201
+
+INCLUDE ./dirmac/exception_handler.mac
+
+--UserID oggadm1@soauat1, password pswd1a
+USERIDALIAS SOAUAT1ADM domain admin
+
+--SourceDefs dirdef/dsalesab.def
+DiscardFile dirrpt/R_UAT201.dsc, Append
+
+
+#gg_replicat_report_settings();
+
+#r_reperror();
+
+#gg_replicat_settings();
+
+--Map SOAINTERNAL.*, Target SOAINTERNAL.*;
+
+#exception_handler(SOAINTERNAL,SOAINTERNAL);
+
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Replicat R_UAT202
+
+INCLUDE ./dirmac/exception_handler.mac
+
+--UserID oggadm1@soauat1, password pswd1a
+USERIDALIAS SOAUAT1ADM domain admin
+
+--SourceDefs dirdef/dsalesab.def
+DiscardFile dirrpt/R_UAT202.dsc, Append
+
+
+#gg_replicat_report_settings();
+
+#r_reperror();
+
+#gg_replicat_settings();
+
+#exception_handler(FMW1221_SOAINFRA,FMW1221_SOAINFRA);
+
+--Map FMW1221_SOAINFRA.*, Target FMW1221_SOAINFRA.*;
+
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Replicat R_UAT203
+
+INCLUDE ./dirmac/exception_handler.mac
+
+--UserID oggadm1@soauat1, password pswd1a
+USERIDALIAS SOAUAT1ADM domain admin
+
+
+--SourceDefs dirdef/dsalesab.def
+DiscardFile dirrpt/R_UAT203.dsc, Append
+
+#gg_replicat_report_settings();
+
+#r_reperror();
+
+#gg_replicat_settings();
+
+#exception_handler(FMW1221_ESS,FMW1221_ESS);
+
+--Map FMW1221_ESS.*, Target FMW1221_ESS.*;
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------
+Replicat R_UAT204
+
+INCLUDE ./dirmac/exception_handler.mac
+
+--UserID oggadm1@soauat1, password pswd1a
+USERIDALIAS SOAUAT1ADM domain admin
+
+
+--SourceDefs dirdef/dsalesab.def
+DiscardFile dirrpt/R_UAT204.dsc, Append
+
+#gg_replicat_report_settings();
+
+#r_reperror();
+
+#gg_replicat_settings();
+
+#exception_handler(FMW1221_IAU,FMW1221_IAU);
+
+--Map FMW1221_IAU.*, Target FMW1221_IAU.*;
+
+---------------------------------------------------------------------------------------------------------------------------------------
+Replicat R_UAT205
+
+INCLUDE ./dirmac/exception_handler.mac
+
+--UserID oggadm1@soauat1, password pswd1a
+USERIDALIAS SOAUAT1ADM domain admin
+
+
+--SourceDefs dirdef/dsalesab.def
+DiscardFile dirrpt/R_UAT205.dsc, Append
+
+#gg_replicat_report_settings();
+
+#r_reperror();
+
+#gg_replicat_settings();
+
+#exception_handler(FMW1221_IAU_APPEND,FMW1221_IAU_APPEND);
+
+--Map FMW1221_IAU_APPEND.*, Target FMW1221_IAU_APPEND.*;
+
+---------------------------------------------------------------------------------------------------------------------------------------
+Replicat R_UAT206
+
+INCLUDE ./dirmac/exception_handler.mac
+
+--UserID oggadm1@soauat1, password pswd1a
+
+USERIDALIAS SOAUAT1ADM domain admin
+
+DiscardFile dirrpt/R_UAT206.dsc, Append
+
+
+#gg_replicat_report_settings();
+
+#r_reperror();
+
+#gg_replicat_settings();
+
+#exception_handler(FMW1221_IAU_VIEWER,FMW1221_IAU_VIEWER);
+
+--Map FMW1221_IAU_VIEWER.*, Target FMW1221_IAU_VIEWER.*;
+
+
+---------------------------------------------------------------------------------------------------------------------------------------
+Replicat R_UAT207
+
+INCLUDE ./dirmac/exception_handler.mac
+
+--UserID oggadm1@soauat1, password pswd1a
+
+USERIDALIAS SOAUAT1ADM domain admin
+
+DiscardFile dirrpt/R_UAT207.dsc, Append
+
+#gg_replicat_report_settings();
+
+#r_reperror();
+
+#gg_replicat_settings();
+
+#exception_handler(FMW1221_MDS,FMW1221_MDS);
+
+--Map FMW1221_MDS.*, Target FMW1221_MDS.*;
+
+
+---------------------------------------------------------------------------------------------------------------------------------------
+Replicat R_UAT208
+
+INCLUDE ./dirmac/exception_handler.mac
+
+--UserID oggadm1@soauat1, password pswd1a
+USERIDALIAS SOAUAT1ADM domain admin
+
+DiscardFile dirrpt/R_UAT208.dsc, Append
+
+#gg_replicat_report_settings();
+
+#r_reperror();
+
+#gg_replicat_settings();
+
+#exception_handler(FMW1221_MFT,FMW1221_MFT);
+
+--Map FMW1221_MFT.*, Target FMW1221_MFT.*;
+
+
+---------------------------------------------------------------------------------------------------------------------------------------
+Replicat R_UAT209
+
+INCLUDE ./dirmac/exception_handler.mac
+
+--UserID oggadm1@soauat1, password pswd1a
+USERIDALIAS SOAUAT1ADM domain admin
+
+
+DiscardFile dirrpt/R_UAT209.dsc, Append
+
+
+#gg_replicat_report_settings();
+
+#r_reperror();
+
+#gg_replicat_settings();
+
+#exception_handler(FMW1221_OPSS,FMW1221_OPSS);
+
+--Map FMW1221_OPSS.*, Target FMW1221_OPSS.*;
+
+---------------------------------------------------------------------------------------------------------------------------------------
+Replicat R_UAT210
+
+INCLUDE ./dirmac/exception_handler.mac
+
+--UserID oggadm1@soauat1, password pswd1a
+USERIDALIAS SOAUAT1ADM domain admin
+
+
+DiscardFile dirrpt/R_UAT210.dsc, Append
+
+#gg_replicat_report_settings();
+
+#r_reperror();
+
+#gg_replicat_settings();
+
+#exception_handler(FMW1221_STB,FMW1221_STB);
+
+--Map FMW1221_STB.*, Target FMW1221_STB.*;
+
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Replicat R_UAT211
+
+INCLUDE ./dirmac/exception_handler.mac
+
+--UserID oggadm1@soauat1, password pswd1a
+USERIDALIAS SOAUAT1ADM domain admin
+
+
+DiscardFile dirrpt/R_UAT211.dsc, Append
+
+#gg_replicat_report_settings();
+
+#r_reperror();
+
+#gg_replicat_settings();
+
+#exception_handler(FMW1221_UMS,FMW1221_UMS);
+
+--Map FMW1221_UMS.*, Target FMW1221_UMS.*;
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------
+Replicat R_UAT212
+
+INCLUDE ./dirmac/exception_handler.mac
+
+--UserID oggadm1@soauat1, password pswd1a
+USERIDALIAS SOAUAT1ADM domain admin
+
+
+DiscardFile dirrpt/R_UAT212.dsc, Append
+
+#gg_replicat_report_settings();
+
+#r_reperror();
+
+#gg_replicat_settings();
+
+#exception_handler(FMW1221_WLS,FMW1221_WLS);
+
+--Map FMW1221_WLS.*, Target FMW1221_WLS.*;
+
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Replicat R_UAT213
+
+INCLUDE ./dirmac/exception_handler.mac
+
+--UserID oggadm1@soauat1, password pswd1a
+USERIDALIAS SOAUAT1ADM domain admin
+DiscardFile dirrpt/R_UAT213.dsc, Append
+
+#gg_replicat_report_settings();
+
+#r_reperror();
+
+#gg_replicat_settings();
+
+#exception_handler(FMW1221_WLS_RUNTIME,FMW1221_WLS_RUNTIME);
+
+--Map FMW1221_WLS_RUNTIME.*, Target FMW1221_WLS_RUNTIME.*;
+
+
+---------------------------------------------------------------------------------------------------------------------------------------
+Replicat R_UAT214
+
+INCLUDE ./dirmac/exception_handler.mac
+
+--UserID oggadm1@soauat1, password pswd1a
+USERIDALIAS SOAUAT1ADM domain admin
+
+--SourceDefs dirdef/dsalesab.def
+DiscardFile dirrpt/R_UAT214.dsc, Append
+
+
+#gg_replicat_report_settings();
+
+#r_reperror();
+
+#gg_replicat_settings();
+
+--Map TLOGS.*, Target TLOGS.*;
+#exception_handler(TLOGS,TLOGS);
+
+
+---------------------------------------------------------------------------------------------------------------------------------------
+Replicat R_UAT215
+
+INCLUDE ./dirmac/exception_handler.mac
+
+--UserID oggadm1@soauat1, password pswd1a
+USERIDALIAS SOAUAT1ADM domain admin
+
+--SourceDefs dirdef/dsalesab.def
+DiscardFile dirrpt/R_UAT215.dsc, Append
+
+#gg_replicat_report_settings();
+
+#r_reperror();
+
+#gg_replicat_settings();
+
+#exception_handler(JMS,JMS);
+
+---------------------------------------------------------------------------------------------------------------------------------------
+Replicat R_UAT216
+
+INCLUDE ./dirmac/exception_handler.mac
+
+--UserID oggadm1@soauat1, password pswd1a
+USERIDALIAS SOAUAT1ADM domain admin
+
+DiscardFile dirrpt/R_UAT216.dsc, Append
+
+#gg_replicat_report_settings();
+
+#r_reperror();
+
+#gg_replicat_settings();
+
+#exception_handler(C022427,C022427);
+
+--Map C022427.*, Target C022427.*;
+
+
+---------------------------------------------------------------------------------------------------------------------------------------

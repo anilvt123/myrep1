@@ -1,0 +1,491 @@
+sh rm -rf ./dirdat/SOAINTERNAL
+sh rm -rf ./dirdat/FMW1221_SOAINFRA
+sh rm -rf ./dirdat/FMW1221_ESS
+sh rm -rf ./dirdat/FMW1221_IAU
+sh rm -rf ./dirdat/FMW1221_IAU_APPEND
+sh rm -rf ./dirdat/FMW1221_IAU_VIEWER
+sh rm -rf ./dirdat/FMW1221_MDS
+sh rm -rf ./dirdat/FMW1221_MFT
+sh rm -rf ./dirdat/FMW1221_OPSS
+sh rm -rf ./dirdat/FMW1221_STB
+sh rm -rf ./dirdat/FMW1221_UMS
+sh rm -rf ./dirdat/FMW1221_WLS
+sh rm -rf ./dirdat/FMW1221_WLS_RUNTIME
+sh rm -rf ./dirdat/TLOGS
+sh rm -rf ./dirdat/JMS
+sh rm -rf ./dirdat/C022427
+
+sh mkdir  ./dirdat/SOAINTERNAL
+sh mkdir  ./dirdat/FMW1221_SOAINFRA
+sh mkdir  ./dirdat/FMW1221_ESS
+sh mkdir  ./dirdat/FMW1221_IAU
+sh mkdir  ./dirdat/FMW1221_IAU_APPEND
+sh mkdir  ./dirdat/FMW1221_IAU_VIEWER
+sh mkdir  ./dirdat/FMW1221_MDS
+sh mkdir  ./dirdat/FMW1221_MFT
+sh mkdir  ./dirdat/FMW1221_OPSS
+sh mkdir  ./dirdat/FMW1221_STB
+sh mkdir  ./dirdat/FMW1221_UMS
+sh mkdir  ./dirdat/FMW1221_WLS
+sh mkdir  ./dirdat/FMW1221_WLS_RUNTIME
+sh mkdir  ./dirdat/TLOGS
+sh mkdir  ./dirdat/JMS
+sh mkdir  ./dirdat/C022427
+
+
+
+1.
+
+obey startup.oby
+
+Info SchemaTranData SOAINTERNAL
+Add SchemaTranData SOAINTERNAL ALLCOLS
+
+--To Delete Extract & Replicats
+delete EXTRACT E_UAT201
+delete EXTRACT P_UAT201
+delete REPLICAT R_UAT201
+
+
+register extract E_UAT201 database
+
+add extract E_UAT201, integrated tranlog, begin now
+Add ExtTrail ./dirdat/SOAINTERNAL/sb, Extract E_UAT201, Megabytes 10
+
+Add Extract P_UAT201, ExtTrailSource ./dirdat/FMW1221_SOAINFRA/sb 
+Add RmtTrail ./dirdat/SOAINTERNAL/tb, Extract P_UAT202, Megabytes 10
+
+
+Add Replicat R_UAT201, integrated, ExtTrail ./dirdat/SOAINTERNAL/tb
+start Replicat R_UAT201,aftercsn 852308495
+
+2.
+
+obey startup.oby
+
+Info SchemaTranData FMW1221_SOAINFRA
+Add SchemaTranData FMW1221_SOAINFRA ALLCOLS
+
+
+--To Delete Extract & Replicats
+delete EXTRACT E_UAT202
+delete EXTRACT P_UAT202
+delete REPLICAT R_UAT202
+
+register extract E_UAT202 database
+
+add extract E_UAT202, integrated tranlog, begin now
+Add ExtTrail ./dirdat/FMW1221_SOAINFRA/sb, Extract E_UAT202, Megabytes 10
+
+Add Extract P_UAT202, ExtTrailSource ./dirdat/FMW1221_SOAINFRA/sb 
+Add RmtTrail ./dirdat/FMW1221_SOAINFRA/tb, Extract P_UAT202, Megabytes 10
+
+Add Replicat R_UAT202, integrated, ExtTrail ./dirdat/FMW1221_SOAINFRA/tb
+start Replicat R_UAT202,aftercsn 852308495
+
+3.
+
+obey startup.oby
+
+
+Info SchemaTranData FMW1221_ESS
+Add SchemaTranData FMW1221_ESS ALLCOLS
+
+
+-- To Delte the schemaTranData
+delete  SchemaTranData FMW1221_ESS
+
+--To Delete Extract & Replicats
+delete EXTRACT E_UAT203
+delete EXTRACT P_UAT203
+delete REPLICAT R_UAT203
+
+
+
+register extract E_UAT203 database
+
+add extract E_UAT203, integrated tranlog, begin now
+Add ExtTrail ./dirdat/FMW1221_ESS/sb, Extract E_UAT203, Megabytes 10
+
+Add Extract P_UAT203, ExtTrailSource ./dirdat/FMW1221_ESS/sb 
+Add RmtTrail ./dirdat/FMW1221_ESS/tb, Extract P_UAT203, Megabytes 10
+
+Add Replicat R_UAT203, integrated, ExtTrail ./dirdat/FMW1221_ESS/tb
+start Replicat R_UAT203 , aftercsn 852308495
+
+
+4.
+
+obey startup.oby
+
+Info SchemaTranData FMW1221_IAU
+Add SchemaTranData FMW1221_IAU ALLCOLS
+
+--To Delete Extract & Replicats
+delete EXTRACT E_UAT204
+delete EXTRACT P_UAT204
+delete REPLICAT R_UAT204
+
+
+register extract E_UAT204 database
+
+add extract E_UAT204, integrated tranlog, begin now
+Add ExtTrail ./dirdat/FMW1221_IAU/sb, Extract E_UAT204, Megabytes 10
+
+Add Extract P_UAT204, ExtTrailSource ./dirdat/FMW1221_IAU/sb 
+Add RmtTrail ./dirdat/FMW1221_IAU/tb, Extract P_UAT204, Megabytes 10
+
+Add Replicat R_UAT204, integrated, ExtTrail ./dirdat/FMW1221_IAU/tb
+start Replicat R_UAT204,aftercsn 852308495
+
+
+5.
+
+obey startup.oby
+
+Info SchemaTranData FMW1221_IAU_APPEND   
+Add SchemaTranData FMW1221_IAU_APPEND  ALLCOLS
+
+--To Delete Extract & Replicats
+delete EXTRACT E_UAT205
+delete EXTRACT P_UAT205
+delete REPLICAT R_UAT205
+
+
+register extract E_UAT205 database
+
+add extract E_UAT205, integrated tranlog, begin now
+Add ExtTrail ./dirdat/FMW1221_IAU_APPEND/sb, Extract E_UAT205, Megabytes 10
+
+
+Add Extract P_UAT205, ExtTrailSource ./dirdat/FMW1221_IAU_APPEND/sb 
+Add RmtTrail ./dirdat/FMW1221_IAU_APPEND/tb, Extract P_UAT205, Megabytes 10
+
+Add Replicat R_UAT205, integrated, ExtTrail ./dirdat/FMW1221_IAU_APPEND/tb
+start Replicat R_UAT205 , aftercsn 852308495
+
+6.
+
+
+obey startup.oby
+
+Info SchemaTranData FMW1221_IAU_VIEWER    
+Add SchemaTranData FMW1221_IAU_VIEWER  ALLCOLS
+
+register extract E_UAT206 database
+
+add extract E_UAT206, integrated tranlog, begin now
+Add ExtTrail ./dirdat/FMW1221_IAU_VIEWER/sb, Extract E_UAT206, Megabytes 10
+
+Add Extract P_UAT206, ExtTrailSource ./dirdat/FMW1221_IAU_VIEWER/sb 
+Add RmtTrail ./dirdat/FMW1221_IAU_VIEWER/tb, Extract P_UAT206, Megabytes 10
+
+Add Replicat R_UAT206, integrated, ExtTrail ./dirdat/FMW1221_IAU_VIEWER/tb
+start Replicat R_UAT206 , aftercsn 852308495
+
+
+
+7.
+
+obey startup.oby
+
+delete  SchemaTranData FMW1221_MDS
+delete EXTRACT E_UAT207
+delete EXTRACT P_UAT207
+delete REPLICAT R_UAT207
+
+
+
+Info SchemaTranData FMW1221_MDS  
+Add SchemaTranData FMW1221_MDS  ALLCOLS
+
+register extract E_UAT207 database
+
+add extract E_UAT207, integrated tranlog, begin now
+Add ExtTrail ./dirdat/FMW1221_MDS/sb, Extract E_UAT207, Megabytes 10
+
+Add Extract P_UAT207, ExtTrailSource ./dirdat/FMW1221_MDS/sb 
+Add RmtTrail ./dirdat/FMW1221_MDS/tb, Extract P_UAT207, Megabytes 10
+
+Add Replicat R_UAT207, integrated, ExtTrail ./dirdat/FMW1221_MDS/tb
+start Replicat R_UAT207, aftercsn 852308495
+
+
+8.
+
+obey startup.oby
+
+-- To Delte the schemaTranData
+info  SchemaTranData FMW1221_MFT
+delete  SchemaTranData FMW1221_MFT
+
+Info SchemaTranData FMW1221_MFT  
+Add SchemaTranData FMW1221_MFT  ALLCOLS
+
+delete EXTRACT E_UAT208
+delete EXTRACT P_UAT208
+delete REPLICAT R_UAT208
+
+Info SchemaTranData FMW1221_MFT 
+Add SchemaTranData FMW1221_MFT  ALLCOLS
+register extract E_UAT208 database
+
+add extract E_UAT208, integrated tranlog, begin now
+Add ExtTrail ./dirdat/FMW1221_MFT/sb, Extract E_UAT208, Megabytes 10
+
+
+Add Extract P_UAT208, ExtTrailSource ./dirdat/FMW1221_MFT/sb 
+Add RmtTrail ./dirdat/FMW1221_MFT/tb, Extract P_UAT208, Megabytes 10
+
+Add Replicat R_UAT208, integrated, ExtTrail ./dirdat/FMW1221_MFT/tb
+start Replicat R_UAT208, aftercsn 852308495
+
+
+9.
+
+obey startup.oby
+
+-- To Delte the schemaTranData
+info  SchemaTranData FMW1221_OPSS
+delete  SchemaTranData FMW1221_OPSS
+
+--To Delete Extract & Replicats
+
+delete EXTRACT E_UAT209
+delete EXTRACT P_UAT209
+delete REPLICAT R_UAT209
+
+
+Info SchemaTranData FMW1221_OPSS  
+Add SchemaTranData FMW1221_OPSS  ALLCOLS
+
+
+register extract E_UAT209 database
+
+add extract E_UAT209, integrated tranlog, begin now
+Add ExtTrail ./dirdat/FMW1221_OPSS/sb, Extract E_UAT209, Megabytes 10
+
+Add Extract P_UAT209, ExtTrailSource ./dirdat/FMW1221_OPSS/sb 
+Add RmtTrail ./dirdat/FMW1221_OPSS/tb, Extract P_UAT209, Megabytes 10
+
+Add Replicat R_UAT209, integrated, ExtTrail ./dirdat/FMW1221_OPSS/tb
+start Replicat R_UAT209, aftercsn 852308495
+
+
+
+10.
+
+FMW1221_STB 
+
+obey startup.oby
+
+
+-- To Delte the schemaTranData
+info  SchemaTranData FMW1221_STB
+delete  SchemaTranData FMW1221_STB
+
+--To Delete Extract & Replicats
+
+delete EXTRACT E_UAT210
+delete EXTRACT P_UAT210
+delete REPLICAT R_UAT210
+
+Info SchemaTranData FMW1221_STB 
+Add SchemaTranData FMW1221_STB  ALLCOLS
+
+register extract E_UAT210 database
+
+add extract E_UAT210, integrated tranlog, begin now
+Add ExtTrail ./dirdat/FMW1221_STB/sb, Extract E_UAT210, Megabytes 10
+
+Add Extract P_UAT210, ExtTrailSource ./dirdat/FMW1221_STB/sb 
+Add RmtTrail ./dirdat/FMW1221_STB/tb, Extract P_UAT210, Megabytes 10
+
+Add Replicat R_UAT210, integrated, ExtTrail ./dirdat/FMW1221_STB/tb
+start Replicat R_UAT210 , aftercsn 852308495
+
+
+11.
+
+obey startup.oby
+
+-- To Delte the schemaTranData
+info  SchemaTranData FMW1221_UMS
+delete  SchemaTranData FMW1221_UMS
+
+--To Delete Extract & Replicats
+
+delete EXTRACT E_UAT211
+delete EXTRACT P_UAT211
+delete REPLICAT R_UAT211
+
+
+register extract E_UAT211 database
+
+add extract E_UAT211, integrated tranlog, begin now
+Add ExtTrail ./dirdat/FMW1221_UMS/sb, Extract E_UAT211, Megabytes 10
+
+
+Add Extract P_UAT211, ExtTrailSource ./dirdat/FMW1221_UMS/sb 
+Add RmtTrail ./dirdat/FMW1221_UMS/tb, Extract P_UAT211, Megabytes 10
+
+
+Add Replicat R_UAT211, integrated, ExtTrail ./dirdat/FMW1221_UMS/tb
+start Replicat R_UAT211, aftercsn 852308495
+
+
+12.
+
+obey startup.oby
+
+
+FMW1221_WLS 
+
+-- To Delte the schemaTranData
+info  SchemaTranData FMW1221_WLS
+delete  SchemaTranData FMW1221_WLS
+
+--To Delete Extract & Replicats
+
+delete EXTRACT E_UAT212
+delete EXTRACT P_UAT212
+delete REPLICAT R_UAT212
+
+
+register extract E_UAT212 database
+
+add extract E_UAT212, integrated tranlog, begin now
+Add ExtTrail ./dirdat/FMW1221_WLS/sb, Extract E_UAT212, Megabytes 10
+
+
+Add Extract P_UAT212, ExtTrailSource ./dirdat/FMW1221_WLS/sb 
+Add RmtTrail ./dirdat/FMW1221_WLS/tb, Extract P_UAT212, Megabytes 10
+
+Add Replicat R_UAT212, integrated, ExtTrail ./dirdat/FMW1221_WLS/tb
+start Replicat R_UAT212, aftercsn 852308495
+
+
+13.
+
+obey startup.oby
+
+FMW1221_WLS_RUNTIME 
+-- To Delte the schemaTranData
+info  SchemaTranData FMW1221_WLS_RUNTIME
+delete  SchemaTranData FMW1221_WLS_RUNTIME
+
+--To Delete Extract & Replicats
+delete EXTRACT E_UAT213
+delete EXTRACT P_UAT213
+delete REPLICAT R_UAT213
+
+
+register extract E_UAT213 database
+
+add extract E_UAT213, integrated tranlog, begin now
+Add ExtTrail ./dirdat/FMW1221_WLS_RUNTIME/sb, Extract E_UAT213, Megabytes 10
+
+
+Add Extract P_UAT213, ExtTrailSource ./dirdat/FMW1221_WLS_RUNTIME/sb 
+Add RmtTrail ./dirdat/FMW1221_WLS_RUNTIME/tb, Extract P_UAT213, Megabytes 10
+
+
+Add Replicat R_UAT213, integrated, ExtTrail ./dirdat/FMW1221_WLS_RUNTIME/tb
+start Replicat R_UAT213, aftercsn 852308495
+
+
+14.
+
+obey startup.oby
+
+TLOGS 
+-- To Delte the schemaTranData
+info  SchemaTranData TLOGS
+delete  SchemaTranData TLOGS
+
+--To Delete Extract & Replicats
+
+delete EXTRACT E_UAT214
+delete EXTRACT P_UAT214
+delete REPLICAT R_UAT214
+
+
+register extract E_UAT214 database
+
+add extract E_UAT214, integrated tranlog, begin now
+Add ExtTrail ./dirdat/TLOGS/sb, Extract E_UAT214, Megabytes 10
+
+Add Extract P_UAT214, ExtTrailSource ./dirdat/TLOGS/sb 
+Add RmtTrail ./dirdat/TLOGS/tb, Extract P_UAT214, Megabytes 10
+
+
+Add Replicat R_UAT214, integrated, ExtTrail ./dirdat/TLOGS/tb
+start Replicat R_UAT214, aftercsn 852308495
+
+
+15.
+
+obey startup.oby
+
+
+JMS 
+-- To Delte the schemaTranData
+info  SchemaTranData JMS
+delete  SchemaTranData JMS
+
+--To Delete Extract & Replicats
+
+delete EXTRACT E_UAT215
+delete EXTRACT P_UAT215
+delete REPLICAT R_UAT215
+
+
+register extract E_UAT215 database
+add extract E_UAT215, integrated tranlog, begin now
+Add ExtTrail ./dirdat/JMS/sb, Extract E_UAT215, Megabytes 10
+
+
+Add Extract P_UAT215, ExtTrailSource ./dirdat/JMS/sb 
+Add RmtTrail ./dirdat/JMS/tb, Extract P_UAT215, Megabytes 10
+
+
+Add Replicat R_UAT215, integrated, ExtTrail ./dirdat/JMS/tb
+start Replicat R_UAT215, aftercsn 852308495
+
+
+16.
+
+obey startup.oby
+
+
+JMS 
+-- To Delte the schemaTranData
+info  SchemaTranData C022427
+delete  SchemaTranData C022427
+
+--To Delete Extract & Replicats
+
+delete EXTRACT E_UAT216
+delete EXTRACT P_UAT216
+delete REPLICAT R_UAT216
+
+
+register extract E_UAT216 database
+add extract E_UAT216, integrated tranlog, begin now
+Add ExtTrail ./dirdat/C022427/sb, Extract E_UAT216, Megabytes 10
+
+
+Add Extract P_UAT216, ExtTrailSource ./dirdat/C022427/sb 
+Add RmtTrail ./dirdat/C022427/tb, Extract P_UAT216, Megabytes 10
+
+
+Add Replicat R_UAT216, integrated, ExtTrail ./dirdat/C022427/tb
+start Replicat R_UAT216, aftercsn 852308495
+
+
+
+
+
+==================================================================================
+
+

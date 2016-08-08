@@ -1,0 +1,89 @@
+GGSCI (CTDBSOA02Sv as oggadm1@SOAUAT2) 261> obey unregister_extract_SOAUAT2.oby
+
+GGSCI (CTDBSOA02Sv as oggadm1@SOAUAT2) 262> DBLOGIN USERIDALIAS SOAUAT2ADM domain admin
+
+Successfully logged into database.
+
+GGSCI (CTDBSOA02Sv as oggadm1@SOAUAT2) 263>
+
+GGSCI (CTDBSOA02Sv as oggadm1@SOAUAT2) 263> unregister extract E_UAT201 database
+
+
+2016-08-01 17:43:59  INFO    OGG-01750  Successfully unregistered EXTRACT E_UAT201 from database.
+
+GGSCI (CTDBSOA02Sv as oggadm1@SOAUAT2) 264> unregister extract E_UAT202 database
+
+
+2016-08-01 17:44:04  INFO    OGG-01750  Successfully unregistered EXTRACT E_UAT202 from database.
+
+GGSCI (CTDBSOA02Sv as oggadm1@SOAUAT2) 265> unregister extract E_UAT203 database
+
+
+2016-08-01 17:44:10  INFO    OGG-01750  Successfully unregistered EXTRACT E_UAT203 from database.
+
+GGSCI (CTDBSOA02Sv as oggadm1@SOAUAT2) 266> unregister extract E_UAT204 database
+
+
+2016-08-01 17:44:16  INFO    OGG-01750  Successfully unregistered EXTRACT E_UAT204 from database.
+
+GGSCI (CTDBSOA02Sv as oggadm1@SOAUAT2) 267> unregister extract E_UAT205 database
+
+
+2016-08-01 17:44:21  INFO    OGG-01750  Successfully unregistered EXTRACT E_UAT205 from database.
+
+GGSCI (CTDBSOA02Sv as oggadm1@SOAUAT2) 268> unregister extract E_UAT206 database
+
+
+2016-08-01 17:44:27  INFO    OGG-01750  Successfully unregistered EXTRACT E_UAT206 from database.
+
+GGSCI (CTDBSOA02Sv as oggadm1@SOAUAT2) 269> unregister extract E_UAT207 database
+
+
+2016-08-01 17:44:33  INFO    OGG-01750  Successfully unregistered EXTRACT E_UAT207 from database.
+
+GGSCI (CTDBSOA02Sv as oggadm1@SOAUAT2) 270> unregister extract E_UAT208 database
+
+
+2016-08-01 17:44:39  INFO    OGG-01750  Successfully unregistered EXTRACT E_UAT208 from database.
+
+GGSCI (CTDBSOA02Sv as oggadm1@SOAUAT2) 271> unregister extract E_UAT209 database
+
+
+2016-08-01 17:44:46  INFO    OGG-01750  Successfully unregistered EXTRACT E_UAT209 from database.
+
+GGSCI (CTDBSOA02Sv as oggadm1@SOAUAT2) 272> unregister extract E_UAT210 database
+
+
+2016-08-01 17:44:51  INFO    OGG-01750  Successfully unregistered EXTRACT E_UAT210 from database.
+
+GGSCI (CTDBSOA02Sv as oggadm1@SOAUAT2) 273> unregister extract E_UAT211 database
+
+
+2016-08-01 17:44:57  INFO    OGG-01750  Successfully unregistered EXTRACT E_UAT211 from database.
+
+GGSCI (CTDBSOA02Sv as oggadm1@SOAUAT2) 274> unregister extract E_UAT212 database
+
+
+2016-08-01 17:45:04  INFO    OGG-01750  Successfully unregistered EXTRACT E_UAT212 from database.
+
+GGSCI (CTDBSOA02Sv as oggadm1@SOAUAT2) 275> unregister extract E_UAT213 database
+
+
+2016-08-01 17:45:10  INFO    OGG-01750  Successfully unregistered EXTRACT E_UAT213 from database.
+
+GGSCI (CTDBSOA02Sv as oggadm1@SOAUAT2) 276> unregister extract E_UAT214 database
+
+
+2016-08-01 17:45:15  INFO    OGG-01750  Successfully unregistered EXTRACT E_UAT214 from database.
+
+GGSCI (CTDBSOA02Sv as oggadm1@SOAUAT2) 277> unregister extract E_UAT215 database
+
+
+2016-08-01 17:45:22  INFO    OGG-01750  Successfully unregistered EXTRACT E_UAT215 from database.
+
+GGSCI (CTDBSOA02Sv as oggadm1@SOAUAT2) 278> unregister extract E_UAT216 database
+
+
+2016-08-01 17:45:28  INFO    OGG-01750  Successfully unregistered EXTRACT E_UAT216 from database.
+
+GGSCI (CTDBSOA02Sv as oggadm1@SOAUAT2) 279>

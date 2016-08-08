@@ -1,0 +1,164 @@
+-- Start replicates on UAT1 AT SCN 852308495 which was used to take exports 
+-- 852308495
+
+
+-- 1.
+
+Add Replicat R_UAT101, integrated, ExtTrail ./dirdat/SOAINTERNAL/ta
+
+--2.
+
+Add Replicat R_UAT102, integrated, ExtTrail ./dirdat/FMW1221_SOAINFRA/ta
+
+--3.
+
+Add Replicat R_UAT103, integrated, ExtTrail ./dirdat/FMW1221_ESS/ta
+
+--4.
+
+Add Replicat R_UAT104, integrated, ExtTrail ./dirdat/FMW1221_IAU/ta
+
+
+--5.
+
+Add Replicat R_UAT105, integrated, ExtTrail ./dirdat/FMW1221_IAU_APPEND/ta
+
+--6.
+
+Add Replicat R_UAT106, integrated, ExtTrail ./dirdat/FMW1221_IAU_VIEWER/ta
+
+--7.
+
+Add Replicat R_UAT107, integrated, ExtTrail ./dirdat/FMW1221_MDS/ta
+
+--8.
+
+
+Add Replicat R_UAT108, integrated, ExtTrail ./dirdat/FMW1221_MFT/ta
+
+--9.
+
+
+Add Replicat R_UAT109, integrated, ExtTrail ./dirdat/FMW1221_OPSS/ta
+
+--10.
+
+
+Add Replicat R_UAT110, integrated, ExtTrail ./dirdat/FMW1221_STB/ta
+
+--11.
+
+
+Add Replicat R_UAT111, integrated, ExtTrail ./dirdat/FMW1221_UMS/ta
+
+
+--12.
+
+
+Add Replicat R_UAT112, integrated, ExtTrail ./dirdat/FMW1221_WLS/ta
+
+
+--13.
+
+Add Replicat R_UAT113, integrated, ExtTrail ./dirdat/FMW1221_WLS_RUNTIME/ta
+
+
+--14.
+
+Add Replicat R_UAT114, integrated, ExtTrail ./dirdat/TLOGS/ta
+
+
+--15.
+
+Add Replicat R_UAT115, integrated, ExtTrail ./dirdat/JMS/ta
+
+--16.
+
+Add Replicat R_UAT116, integrated, ExtTrail ./dirdat/C022427/ta
+
+--17.
+
+Add Replicat RGGTEST1, integrated, ExtTrail ./dirdat/EGGTEST1/ta
+
+
+--
+-- Start Replicates on UAT1
+--
+
+
+-- 1.
+
+start Replicat R_UAT101,aftercsn 852308495
+
+--2.
+
+start Replicat R_UAT102,aftercsn 852308495
+
+--3.
+
+start Replicat R_UAT103 , aftercsn 852308495
+
+--4.
+
+start Replicat R_UAT104,aftercsn 852308495
+
+--5.
+
+start Replicat R_UAT105 , aftercsn 852308495
+
+--6.
+
+start Replicat R_UAT106 , aftercsn 852308495
+
+--7.
+
+start Replicat R_UAT107, aftercsn 852308495
+
+--8.
+
+start Replicat R_UAT108, aftercsn 852308495
+
+
+--9.
+
+start Replicat R_UAT109, aftercsn 852308495
+
+
+--10.
+
+start Replicat R_UAT110 , aftercsn 852308495
+
+
+--11.
+
+start Replicat R_UAT111, aftercsn 852308495
+
+
+--12.
+
+start Replicat R_UAT112, aftercsn 852308495
+
+
+--13.
+
+start Replicat R_UAT113, aftercsn 852308495
+
+--14.
+
+start Replicat R_UAT114, aftercsn 852308495
+
+--15.
+
+start Replicat R_UAT115, aftercsn 852308495
+
+--16.
+
+start Replicat R_UAT116, aftercsn 852308495
+
+--17.
+
+start Replicat RGGTEST1
+
+
+
+

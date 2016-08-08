@@ -1,0 +1,36 @@
+ADD HEARTBEATTABLE
+
+add heartbeattable
+
+HEARTBEATTABLE gg_heartbeat
+
+HEARTBEATTABLE oggadm1.gg_heartbeat
+
+GGSCI (CTDBSOA02Sv as oggadm1@SOAUAT2) 10> ADD HEARTBEATTABLE
+
+2016-07-21 17:04:47  INFO    OGG-14001  Successfully created heartbeat seed table ["GG_HEARTBEAT_SEED"].
+
+2016-07-21 17:04:47  INFO    OGG-14032  Successfully added supplemental logging for heartbeat seed table ["GG_HEARTBEAT_SEED"].
+
+2016-07-21 17:04:47  INFO    OGG-14000  Successfully created heartbeat table ["GG_HEARTBEAT"].
+
+2016-07-21 17:04:47  INFO    OGG-14033  Successfully added supplemental logging for heartbeat table ["GG_HEARTBEAT"].
+
+2016-07-21 17:04:47  INFO    OGG-14016  Successfully created heartbeat history table ["GG_HEARTBEAT_HISTORY"].
+
+2016-07-21 17:04:47  INFO    OGG-14023  Successfully created heartbeat lag view ["GG_LAG"].
+
+2016-07-21 17:04:47  INFO    OGG-14024  Successfully created heartbeat lag history view ["GG_LAG_HISTORY"].
+
+2016-07-21 17:04:47  INFO    OGG-14003  Successfully populated heartbeat seed table with [SOAUAT2].
+
+2016-07-21 17:04:47  INFO    OGG-14004  Successfully created procedure ["GG_UPDATE_HB_TAB"] to update the heartbeat tables.
+
+2016-07-21 17:04:48  INFO    OGG-14017  Successfully created procedure ["GG_PURGE_HB_TAB"] to purge the heartbeat history table.
+
+2016-07-21 17:04:48  INFO    OGG-14005  Successfully created scheduler job ["GG_UPDATE_HEARTBEATS"] to update the heartbeat tables.
+
+2016-07-21 17:04:48  INFO    OGG-14018  Successfully created scheduler job ["GG_PURGE_HEARTBEATS"] to purge the heartbeat history table.
+
+GGSCI (CTDBSOA02Sv as oggadm1@SOAUAT2) 11>
+

@@ -1,0 +1,94 @@
+---------------------------------------------------------------------------------
+-- Step1 create extract on source 
+---------------------------------------------------------------------------------
+obey startup.oby
+Info SchemaTranData C022427    
+Add SchemaTranData C022427  ALLCOLS
+
+edit param E_UAT116
+
+-- Primary Extract from ctdbsoa01sv to ctdbsoa02sv
+-- Created by Anil Tegginhalli 7/18/2016
+SETENV(ORACLE_SID = "SOAUAT1")
+Extract E_UAT116
+ExtTrail ./dirdat/C022427/sa
+LOGALLSUPCOLS
+UPDATERECORDFORMAT COMPACT
+--UserID oggadm1@SOAUAT1, Password pswd1a
+USERIDALIAS SOAUAT1ADM DOMAIN admin
+TranLogOptions ExcludeUser oggadm1
+TRANLOGOPTIONS INCLUDEREGIONID
+DDL INCLUDE MAPPED
+DDLOPTIONS REPORT
+GETUPDATEBEFORES
+GETTRUNCATES
+NOCOMPRESSUPDATES
+NOCOMPRESSDELETES
+-- for SOA Application
+Table C022427.* ,GETBEFORECOLS (ON UPDATE ALL, ON DELETE ALL);
+
+
+register extract E_UAT116 database
+add extract E_UAT116, integrated tranlog, begin now
+Add ExtTrail ./dirdat/C022427/sa, Extract E_UAT116, Megabytes 10
+start extract E_UAT116
+send extract E_UAT116,report
+view report E_UAT116
+
+---------------------------------------------------------------------------------
+-- Step2 create pump on source 
+---------------------------------------------------------------------------------
+
+Edit Param P_UAT116
+
+-- Data pump (secondary Extract) from ctdbsoa01sv to ctdbsoa02sv
+-- Created by Anil Tegginhalli 7/18/2016
+Extract P_UAT116
+--RmtHost ctdbsoa02sv, MgrPort 7809, Compress
+RmtHost ctdbsoa02sv, MGRPORT 7809
+RmtTrail ./dirdat/C022427/ta
+Passthru
+DDL INCLUDE MAPPED
+-- for SOA Application
+Table C022427.*;
+
+
+Add Extract P_UAT116, ExtTrailSource ./dirdat/C022427/sa 
+Add RmtTrail ./dirdat/C022427/ta, Extract P_UAT116, Megabytes 10
+start extract P_UAT116
+send extract P_UAT116,report
+view report P_UAT116
+
+
+---------------------------------------------------------------------------------
+-- Step3 create replicat on target 
+---------------------------------------------------------------------------------
+
+obey startup.oby
+info SchemaTranData C022427  
+Add SchemaTranData C022427 ALLCOLS
+
+Edit Param R_UAT116
+
+-- Delivery from ctdbsoa01sv to ctdbsoa02sv
+-- Created by Anil Tegginhalli 7/18/2016
+Replicat R_UAT116
+--UserID oggadm1@soauat2, password pswd1a
+USERIDALIAS SOAUAT2ADM domain admin
+AssumeTargetDefs
+DDLERROR DEFAULT IGNORE RETRYOP
+DBOPTIONS SUPPRESSTRIGGERS
+--SourceDefs dirdef/dsalesab.def
+DiscardFile dirrpt/R_UAT116.dsc, Append
+-- Map ogguser1.tcustmer, Target ogguser1.tcustmer;
+Map C022427.*, Target C022427.*;
+
+
+Add Replicat R_UAT116, integrated, ExtTrail ./dirdat/C022427/ta
+start Replicat R_UAT116 
+Info R_UAT116, Detail
+send REPLICAT R_UAT116,report
+view report R_UAT116
+
+---------------------------------------------------------------------------------
+

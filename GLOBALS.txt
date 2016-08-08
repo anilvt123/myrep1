@@ -1,0 +1,11 @@
+./dirmac/exception_handler_HBONLY.mac
+
+GGSCI (CTDBSOA02Sv as oggadm1@SOAUAT2) 168>  sh cat ./GLOBALS
+
+-- Created by James Palliparambil on ctdbsoa02sv 5/3/16
+CheckpointTable oggadm1.oggchkpt
+-- No need for checkpointtables with Integrated Trans log - JP
+-- CheckPoint table added 6/14
+--HEARTBEATTABLE C022427.gg_heartbeat
+--HEARTBEATTABLE oggadm1.gg_heartbeat
+GGSCHEMA oggadm1

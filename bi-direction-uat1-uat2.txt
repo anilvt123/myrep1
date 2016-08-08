@@ -1,0 +1,111 @@
+----------------------------------------------------------------------------------------------------------------------------------
+	1. SOAINTERNAL
+----------------------------------------------------------------------------------------------------------------------------------
+
+-- ON SOURCE 1
+
+--EXTRACT
+
+obey startup.oby
+Info SchemaTranData SOAINTERNAL    
+Add SchemaTranData SOAINTERNAL  ALLCOLS
+
+edit param E_UAT101
+
+-- Primary Extract from ctdbsoa01sv to ctdbsoa02sv
+-- Created by James palliparambil on 5/3/16
+SETENV(ORACLE_SID = "SOAUAT1")
+Extract E_UAT101
+ExtTrail ./dirdat/SOAINTERNAL/sa
+LOGALLSUPCOLS
+UPDATERECORDFORMAT COMPACT
+--UserID oggadm1@SOAUAT1, Password pswd1a
+USERIDALIAS SOAUAT1ADM DOMAIN admin
+TranLogOptions ExcludeUser oggadm1
+TRANLOGOPTIONS INCLUDEREGIONID
+DDL INCLUDE MAPPED
+DDLOPTIONS REPORT
+GETUPDATEBEFORES
+GETTRUNCATES
+NOCOMPRESSUPDATES
+NOCOMPRESSDELETES
+-- for SOA Application
+Table SOAINTERNAL.* ,GETBEFORECOLS (ON UPDATE ALL, ON DELETE ALL);
+
+
+register extract E_UAT101 database
+add extract E_UAT101, integrated tranlog, begin now
+Add ExtTrail ./dirdat/SOAINTERNAL/sa, Extract E_UAT101, Megabytes 10
+--start extract E_UAT101
+send extract E_UAT101,report
+view report E_UAT101
+
+--DATAPUMP
+
+edit param P_UAT101
+
+-- Data pump (secondary Extract) from ctdbsoa01sv to ctdbsoa02sv
+-- Created by James Palliparambil 5/3/16
+Extract P_UAT101
+--RmtHost ctdbsoa02sv, MgrPort 7809, Compress
+RmtHost ctdbsoa02sv, MGRPORT 7809
+RmtTrail ./dirdat/SOAINTERNAL/ta
+Passthru
+-- for SOA Application
+Table SOAINTERNAL.*;
+
+
+Add Extract P_UAT101, ExtTrailSource ./dirdat/SOAINTERNAL/sa
+Add RmtTrail ./dirdat/SOAINTERNAL/ta, Extract P_UAT101, Megabytes 10
+--start extract P_UAT101
+send extract P_UAT101,report
+view report P_UAT101
+
+
+--REPLICAT
+-- ON TARGET 1 
+
+obey startup.oby
+Info SchemaTranData SOAINTERNAL 
+Add SchemaTranData SOAINTERNAL ALLCOLS
+
+edit param R_UAT101
+view param R_UAT101
+
+-- Delivery from ctdbsoa01sv to ctdbsoa02sv
+-- Created by James Palliparambil 5/3/16
+Replicat R_UAT101
+--UserID oggadm1@soauat2, password pswd1a
+USERIDALIAS SOAUAT2ADM domain admin
+--DDLERROR DEFAULT IGNORE
+DDLERROR DEFAULT IGNORE RETRYOP
+--ddlerror 1432 ignore
+DBOPTIONS SUPPRESSTRIGGERS
+AssumeTargetDefs
+--SourceDefs dirdef/dsalesab.def
+DiscardFile dirrpt/R_UAT101.dsc, Append
+-- Map ogguser1.tcustmer, Target ogguser1.tcustmer;
+Map SOAINTERNAL.*,              Target SOAINTERNAL.*;
+
+
+
+kill extract R_UAT101
+delete extract R_UAT101
+cleanup extract R_UAT101
+UNREGISTER REPLICAT R_UAT101 DATABASE
+rmdir ./dirdat/SOAINTERNAL/ta
+
+Add Replicat R_UAT101, integrated, ExtTrail ./dirdat/SOAINTERNAL/ta
+--start Replicat R_UAT101,aftercsn 792848442
+
+stop Replicat R_UAT101
+start Replicat R_UAT101
+Info R_UAT101, Detail
+send REPLICAT R_UAT101,report
+view report R_UAT101
+info all
+
+----------------------------------------------------------------------------------------------------------------------------------
+	2. FMW1221_SOAINFRA
+----------------------------------------------------------------------------------------------------------------------------------
+
